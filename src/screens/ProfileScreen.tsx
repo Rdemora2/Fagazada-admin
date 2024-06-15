@@ -1,56 +1,54 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, Button, StyleSheet} from 'react-native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RouteProp} from '@react-navigation/native';
-import {RootStackParamList} from '../types/types';
 import {fetchProfile} from '../services/apiMock';
+import {ProfileScreenNavigationProp, RootStackParamList} from '../types/types';
+import {RouteProp} from '@react-navigation/native';
 
-type ProfileScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'Profile'
->;
 type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'Profile'>;
 
 type Props = {
-  navigation: ProfileScreenNavigationProp;
   route: ProfileScreenRouteProp;
+  navigation: ProfileScreenNavigationProp;
 };
 
-const ProfileScreen: React.FC<Props> = ({navigation, route}) => {
+const ProfileScreen: React.FC<Props> = ({route, navigation}) => {
   const {userId} = route.params;
-  const [profile, setProfile] = useState<{name: string; age: number} | null>(
-    null,
-  );
+  const [profile, setProfile] = useState<any>(null);
 
   useEffect(() => {
-    const getProfile = async () => {
+    const loadProfile = async () => {
       try {
-        const userProfile = await fetchProfile(userId);
-        setProfile(userProfile);
+        const data = await fetchProfile(userId);
+        setProfile(data);
       } catch (error) {
-        console.error('Erro ao buscar perfil:', error);
+        console.error('Erro ao carregar perfil:', error);
       }
     };
 
-    getProfile();
+    loadProfile();
   }, [userId]);
 
   if (!profile) {
     return (
       <View style={styles.container}>
-        <Text>Carregando...</Text>
+        <Text>Carregando perfil...</Text>
       </View>
     );
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Perfil</Text>
-      <Text>Nome: {profile.name}</Text>
-      <Text>Idade: {profile.age}</Text>
+      <Text style={styles.label}>Nome Completo: {profile.fullName}</Text>
+      <Text style={styles.label}>Email: {profile.email}</Text>
+      <Text style={styles.label}>Número de Contato: {profile.phoneNumber}</Text>
+      <Text style={styles.label}>CPF: {profile.cpf}</Text>
+      <Text style={styles.label}>Endereço: {profile.address}</Text>
+      <Text style={styles.label}>Papel: {profile.role}</Text>
       <Button
         title="Editar Perfil"
-        onPress={() => navigation.navigate('EditProfile', {userId})}
+        onPress={() => {
+          navigation.navigate('EditProfile', {userId});
+        }}
       />
     </View>
   );
@@ -59,14 +57,11 @@ const ProfileScreen: React.FC<Props> = ({navigation, route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     padding: 16,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 12,
+  label: {
+    fontSize: 16,
+    marginBottom: 8,
   },
 });
 

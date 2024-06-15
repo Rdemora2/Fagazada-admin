@@ -9,6 +9,9 @@ import CourtListScreen from './screens/CourtListScreen';
 import CourtDetailScreen from './screens/CourtDetailScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import EditProfileScreen from './screens/EditProfileScreen';
+import AddCourtScreen from './screens/AddCourtScreen';
+import EditCourtScreen from './screens/EditCourtScreen';
+import ReservationListScreen from './screens/ReservationListScreen';
 import {RootStackParamList} from './types/types';
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -25,6 +28,12 @@ const App = () => {
         <Stack.Screen name="CourtDetail" component={CourtDetailScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+        <Stack.Screen name="AddCourt" component={AddCourtScreen} />
+        <Stack.Screen name="EditCourt" component={EditCourtScreen} />
+        <Stack.Screen
+          name="ReservationList"
+          component={ReservationListScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

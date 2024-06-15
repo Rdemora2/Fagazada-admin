@@ -1,8 +1,6 @@
-// src/screens/CourtDetailScreen.tsx
-
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {CourtDetailScreenRouteProp} from '../types/types';
+import {CourtDetailScreenRouteProp, Court} from '../types/types';
 import {fetchCourtDetails} from '../services/apiMock';
 
 type Props = {
@@ -11,16 +9,12 @@ type Props = {
 
 const CourtDetailScreen: React.FC<Props> = ({route}) => {
   const {courtId} = route.params;
-  const [court, setCourt] = useState<{
-    name: string;
-    location: string;
-    description: string;
-  } | null>(null);
+  const [court, setCourt] = useState<Court | null>(null);
 
   useEffect(() => {
     const getCourtDetails = async () => {
       try {
-        const courtDetails = await fetchCourtDetails(courtId);
+        const courtDetails: Court = await fetchCourtDetails(courtId);
         setCourt(courtDetails);
       } catch (error) {
         console.error('Erro ao buscar detalhes da quadra:', error);
@@ -42,8 +36,10 @@ const CourtDetailScreen: React.FC<Props> = ({route}) => {
     <View style={styles.container}>
       <Text style={styles.title}>Detalhes da Quadra</Text>
       <Text>Nome: {court.name}</Text>
-      <Text>Localização: {court.location}</Text>
+      <Text>Tipo: {court.type}</Text>
       <Text>Descrição: {court.description}</Text>
+      <Text>Endereço: {court.address}</Text>
+      <Text>Horário de Funcionamento: {court.workingHours}</Text>
     </View>
   );
 };

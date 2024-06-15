@@ -1,44 +1,62 @@
-import React, {useState, useEffect} from 'react';
-import {View, TextInput, Button, StyleSheet} from 'react-native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RouteProp} from '@react-navigation/native';
-import {RootStackParamList} from '../types/types';
-import {fetchProfile, updateProfile} from '../services/apiMock';
-
-type EditProfileScreenNavigationProp = StackNavigationProp<
+import React, {useEffect, useState} from 'react';
+import {View, TextInput, Button, StyleSheet, Text} from 'react-native';
+import {updateProfile, fetchProfile} from '../services/apiMock';
+import {
+  EditProfileScreenNavigationProp,
   RootStackParamList,
-  'EditProfile'
->;
+} from '../types/types';
+import {RouteProp} from '@react-navigation/native';
+
 type EditProfileScreenRouteProp = RouteProp<RootStackParamList, 'EditProfile'>;
 
 type Props = {
-  navigation: EditProfileScreenNavigationProp;
   route: EditProfileScreenRouteProp;
+  navigation: EditProfileScreenNavigationProp;
 };
 
-const EditProfileScreen: React.FC<Props> = ({navigation, route}) => {
+const EditProfileScreen: React.FC<Props> = ({route, navigation}) => {
   const {userId} = route.params;
-  const [name, setName] = useState('');
-  const [age, setAge] = useState<number | string>('');
+  const [fullName, setFullName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [nickname, setNickname] = useState<string | undefined>('');
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
+  const [cpf, setCpf] = useState<string>('');
+  const [address, setAddress] = useState<string>('');
+  const [photo, setPhoto] = useState<string | undefined>('');
+  const [role, setRole] = useState<string>('');
 
   useEffect(() => {
-    const getProfile = async () => {
+    const loadProfile = async () => {
       try {
-        const userProfile = await fetchProfile(userId);
-        setName(userProfile.name);
-        setAge(userProfile.age);
+        const data = await fetchProfile(userId);
+        setFullName(data.fullName);
+        setEmail(data.email);
+        setNickname(data.nickname);
+        setPhoneNumber(data.phoneNumber);
+        setCpf(data.cpf);
+        setAddress(data.address);
+        setPhoto(data.photo);
+        setRole(data.role);
       } catch (error) {
-        console.error('Erro ao buscar perfil:', error);
+        console.error('Erro ao carregar perfil:', error);
       }
     };
 
-    getProfile();
+    loadProfile();
   }, [userId]);
 
-  const handleSave = async () => {
+  const handleSubmit = async () => {
     try {
-      await updateProfile(userId, {name, age: Number(age)});
-      navigation.goBack();
+      await updateProfile(userId, {
+        fullName,
+        nickname,
+        phoneNumber,
+        cpf,
+        address,
+        photo,
+        role,
+      });
+      navigation.navigate('Profile', {userId});
     } catch (error) {
       console.error('Erro ao atualizar perfil:', error);
     }
@@ -46,20 +64,56 @@ const EditProfileScreen: React.FC<Props> = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.label}>Nome Completo</Text>
       <TextInput
         style={styles.input}
-        placeholder="Nome"
-        value={name}
-        onChangeText={setName}
+        value={fullName}
+        onChangeText={text => setFullName(text)}
       />
+      <Text style={styles.label}>Email</Text>
       <TextInput
         style={styles.input}
-        placeholder="Idade"
-        value={age.toString()}
-        onChangeText={text => setAge(Number(text))}
-        keyboardType="numeric"
+        value={email}
+        onChangeText={text => setEmail(text)}
       />
-      <Button title="Salvar" onPress={handleSave} />
+      <Text style={styles.label}>Apelido (opcional)</Text>
+      <TextInput
+        style={styles.input}
+        value={nickname || ''}
+        onChangeText={text => setNickname(text)}
+      />
+      <Text style={styles.label}>Número de Contato</Text>
+      <TextInput
+        style={styles.input}
+        value={phoneNumber}
+        onChangeText={text => setPhoneNumber(text)}
+      />
+      <Text style={styles.label}>CPF</Text>
+      <TextInput
+        style={styles.input}
+        value={cpf}
+        onChangeText={text => setCpf(text)}
+      />
+      <Text style={styles.label}>Endereço</Text>
+      <TextInput
+        style={styles.input}
+        value={address}
+        onChangeText={text => setAddress(text)}
+      />
+      <Text style={styles.label}>URL da Foto</Text>
+      <TextInput
+        style={styles.input}
+        value={photo || ''}
+        onChangeText={text => setPhoto(text)}
+      />
+      <Text style={styles.label}>Papel</Text>
+      <TextInput
+        style={styles.input}
+        value={role}
+        onChangeText={text => setRole(text)}
+        placeholder="dono, gestor ou professor"
+      />
+      <Button title="Atualizar Perfil" onPress={handleSubmit} />
     </View>
   );
 };
@@ -67,8 +121,11 @@ const EditProfileScreen: React.FC<Props> = ({navigation, route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     padding: 16,
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 8,
   },
   input: {
     height: 40,

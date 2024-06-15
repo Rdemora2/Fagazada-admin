@@ -1,33 +1,63 @@
-// src/services/apiMock.ts
+import {Court, Reservation, User} from '../types/types';
 
-const users = [
+const users: User[] = [
   {
     id: 1,
     email: 'user1@example.com',
     password: 'password1',
-    profile: {name: 'User One', age: 30},
+    fullName: 'User One',
+    nickname: 'U1',
+    phoneNumber: '123456789',
+    cpf: '123.456.789-00',
+    address: 'Rua A, 123',
+    photo: '',
+    role: 'dono',
   },
   {
     id: 2,
     email: 'user2@example.com',
     password: 'password2',
-    profile: {name: 'User Two', age: 25},
+    fullName: 'User Two',
+    phoneNumber: '987654321',
+    cpf: '987.654.321-00',
+    address: 'Rua B, 456',
+    photo: '',
+    role: 'gestor',
   },
 ];
 
-const courts = [
+const courts: Court[] = [
   {
-    id: '1',
+    id: 1,
     name: 'Quadra 1',
-    location: 'Rua A, 123',
+    type: 'tenis',
     description: 'Quadra de tênis',
+    photos: [],
+    availability: [],
+    hourlyRate: 50,
+    bookingPeriods: ['morning', 'afternoon'],
+    address: 'Rua A, 123',
+    workingHours: '8:00 - 18:00',
+    optionalServices: ['professor', 'aluguel de bolas'],
   },
   {
-    id: '2',
+    id: 2,
     name: 'Quadra 2',
-    location: 'Rua B, 456',
+    type: 'basquete',
     description: 'Quadra de basquete',
+    photos: [],
+    availability: [],
+    hourlyRate: 60,
+    bookingPeriods: ['morning', 'evening'],
+    address: 'Rua B, 456',
+    workingHours: '10:00 - 22:00',
+    optionalServices: ['aluguel de bolas'],
   },
+];
+
+const reservations: Reservation[] = [
+  {id: 1, courtId: 1, userId: 1, date: '2023-07-01', status: 'pending'},
+  {id: 2, courtId: 2, userId: 2, date: '2023-07-02', status: 'confirmed'},
 ];
 
 export const login = async (email: string, password: string) => {
@@ -44,7 +74,17 @@ export const login = async (email: string, password: string) => {
   return user;
 };
 
-export const register = async (email: string, password: string) => {
+export const register = async (
+  email: string,
+  password: string,
+  fullName: string,
+  nickname: string,
+  phoneNumber: string,
+  cpf: string,
+  address: string,
+  photo: string,
+  role: string,
+) => {
   await new Promise(resolve => setTimeout(resolve, 1000));
 
   const existingUser = users.find(user => user.email === email);
@@ -57,7 +97,14 @@ export const register = async (email: string, password: string) => {
     id: users.length + 1,
     email,
     password,
-    profile: {name: '', age: 0},
+    fullName,
+    nickname,
+    phoneNumber,
+    cpf,
+    address,
+    photo,
+    role,
+    profile: {name: fullName, age: 0},
   };
   users.push(newUser);
 
@@ -73,12 +120,20 @@ export const fetchProfile = async (userId: number) => {
     throw new Error('Usuário não encontrado');
   }
 
-  return user.profile;
+  return user;
 };
 
 export const updateProfile = async (
   userId: number,
-  profile: {name: string; age: number},
+  profile: {
+    fullName: string;
+    nickname?: string;
+    phoneNumber: string;
+    cpf: string;
+    address: string;
+    photo?: string;
+    role: string;
+  },
 ) => {
   await new Promise(resolve => setTimeout(resolve, 1000));
 
@@ -88,9 +143,15 @@ export const updateProfile = async (
     throw new Error('Usuário não encontrado');
   }
 
-  user.profile = profile;
+  user.fullName = profile.fullName;
+  user.nickname = profile.nickname;
+  user.phoneNumber = profile.phoneNumber;
+  user.cpf = profile.cpf;
+  user.address = profile.address;
+  user.photo = profile.photo;
+  user.role = profile.role;
 
-  return user.profile;
+  return user;
 };
 
 export const fetchCourts = async () => {
@@ -99,7 +160,7 @@ export const fetchCourts = async () => {
   return courts;
 };
 
-export const fetchCourtDetails = async (courtId: string) => {
+export const fetchCourtDetails = async (courtId: number) => {
   await new Promise(resolve => setTimeout(resolve, 1000));
 
   const court = courts.find(court => court.id === courtId);
@@ -109,4 +170,53 @@ export const fetchCourtDetails = async (courtId: string) => {
   }
 
   return court;
+};
+
+export const addCourt = async (court: Omit<Court, 'id'>) => {
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  const newCourt = {...court, id: courts.length + 1};
+  courts.push(newCourt);
+
+  return newCourt;
+};
+
+export const updateCourt = async (
+  courtId: number,
+  updatedDetails: Partial<Court>,
+) => {
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  const courtIndex = courts.findIndex(court => court.id === courtId);
+
+  if (courtIndex === -1) {
+    throw new Error('Quadra não encontrada');
+  }
+
+  courts[courtIndex] = {...courts[courtIndex], ...updatedDetails};
+
+  return courts[courtIndex];
+};
+
+export const fetchReservations = async (userId: number) => {
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  return reservations.filter(reservation => reservation.userId === userId);
+};
+
+export const updateReservationStatus = async (
+  reservationId: number,
+  status: 'pending' | 'confirmed',
+) => {
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  const reservation = reservations.find(res => res.id === reservationId);
+
+  if (!reservation) {
+    throw new Error('Reserva não encontrada');
+  }
+
+  reservation.status = status;
+
+  return reservation;
 };
