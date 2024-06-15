@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Image} from 'react-native';
 import {CourtDetailScreenRouteProp, Court} from '../types/types';
 import {fetchCourtDetails} from '../services/apiMock';
 
@@ -40,6 +40,12 @@ const CourtDetailScreen: React.FC<Props> = ({route}) => {
       <Text>Descrição: {court.description}</Text>
       <Text>Endereço: {court.address}</Text>
       <Text>Horário de Funcionamento: {court.workingHours}</Text>
+      <Text style={styles.title}>Fotos:</Text>
+      <View style={styles.photoContainer}>
+        {court.photos.map((photo, index) => (
+          <Image key={index} source={{uri: photo}} style={styles.photo} />
+        ))}
+      </View>
     </View>
   );
 };
@@ -55,6 +61,17 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 12,
+  },
+  photoContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 10,
+  },
+  photo: {
+    width: 200,
+    height: 150,
+    resizeMode: 'cover',
+    marginHorizontal: 5,
   },
 });
 
