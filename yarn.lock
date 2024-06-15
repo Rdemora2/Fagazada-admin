@@ -1662,6 +1662,14 @@
 "@types/prop-types@*":
   version "15.7.12"
 
+"@types/react-native-snap-carousel@^3.8.11":
+  version "3.8.11"
+  resolved "https://registry.npmjs.org/@types/react-native-snap-carousel/-/react-native-snap-carousel-3.8.11.tgz"
+  integrity sha512-9VrAJ4PlPCzQCpyQ95vjeR9V4Osbgvfc+tSGhLkt3FDNWWNxwbgUQONFbNQznoPU/Qd69PFVWtabPTgtjZjWPg==
+  dependencies:
+    "@types/react" "*"
+    react-native "*"
+
 "@types/react-native@^0.73.0":
   version "0.73.0"
   resolved "https://registry.npmjs.org/@types/react-native/-/react-native-0.73.0.tgz"
