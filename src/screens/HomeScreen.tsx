@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Button, FlatList, StyleSheet} from 'react-native';
+import {View, StyleSheet, FlatList} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {fetchCourts} from '../services/apiMock';
 import {RootStackParamList, Court} from '../types/types';
+import HomeCard from '../components/HomeCard';
 import {HomeScreenNavigationProp} from '../types/types'; // Importe o tipo correto de navegação
 import {RouteProp} from '@react-navigation/native';
 
@@ -34,14 +35,7 @@ const HomeScreen: React.FC<Props> = ({route}) => {
   };
 
   const renderItem = ({item}: {item: Court}) => (
-    <View style={styles.item}>
-      <Text style={styles.title}>{item.name}</Text>
-      <Text>{item.description}</Text>
-      <Button
-        title="Ver Detalhes da Quadra"
-        onPress={() => handleCourtDetail(item.id)}
-      />
-    </View>
+    <HomeCard court={item} onPress={handleCourtDetail} />
   );
 
   return (
@@ -59,18 +53,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-  },
-  item: {
-    marginBottom: 20,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    borderRadius: 5,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 5,
   },
 });
 
