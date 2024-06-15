@@ -18,7 +18,7 @@ const RegisterScreen: React.FC<Props> = ({navigation}) => {
         'Sucesso',
         `Usuário ${newUser.email} registrado com sucesso.`,
       );
-      navigation.navigate('Login');
+      navigation.navigate('Home');
     } catch (error) {
       if (error instanceof Error) {
         console.error('Erro ao registrar:', error.message);
