@@ -1,5 +1,11 @@
 import React, {useState} from 'react';
-import {View, TextInput, Button, StyleSheet, Alert} from 'react-native';
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+} from 'react-native';
 import {LoginScreenNavigationProp} from '../types/types';
 import {login} from '../services/apiMock';
 
@@ -24,8 +30,13 @@ const LoginScreen: React.FC<Props> = ({navigation}) => {
     }
   };
 
+  const handleNavigateToRegister = () => {
+    navigation.navigate('Register');
+  };
+
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Login</Text>
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -39,7 +50,14 @@ const LoginScreen: React.FC<Props> = ({navigation}) => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title="Login" onPress={handleLogin} />
+      <TouchableOpacity style={styles.buttonContainer} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Entrar</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={handleNavigateToRegister}>
+        <Text style={styles.registerText}>
+          Não tem uma conta? Cadastre-se aqui
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -48,14 +66,42 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f6f6f6',
     padding: 16,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 24,
+    color: '#00786A',
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    width: '100%',
     borderWidth: 1,
+    borderColor: '#E66901',
+    paddingHorizontal: 10,
     marginBottom: 12,
-    padding: 8,
+    borderRadius: 16,
+    backgroundColor: '#fff',
+  },
+  buttonContainer: {
+    width: '100%',
+    marginTop: 12,
+    backgroundColor: '#00786A',
+    paddingVertical: 12,
+    borderRadius: 16,
+  },
+  buttonText: {
+    textAlign: 'center',
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  registerText: {
+    marginTop: 16,
+    color: '#E66901',
   },
 });
 
