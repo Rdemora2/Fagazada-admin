@@ -4,10 +4,10 @@ import {useNavigation} from '@react-navigation/native';
 import {fetchCourts} from '../services/apiMock';
 import {RootStackParamList, Court} from '../types/types';
 import HomeCard from '../components/HomeCard';
-import {HomeScreenNavigationProp} from '../types/types'; // Importe o tipo correto de navegação
+import {HomeScreenNavigationProp} from '../types/types';
 import {RouteProp} from '@react-navigation/native';
 
-type HomeScreenRouteProp = RouteProp<RootStackParamList, 'Home'>; // Defina o tipo correto de RouteProp para 'Home'
+type HomeScreenRouteProp = RouteProp<RootStackParamList, 'Home'>;
 
 type Props = {
   route: HomeScreenRouteProp;
