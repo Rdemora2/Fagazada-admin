@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet, Button, Image, FlatList} from 'react-native';
 import {CourtDetailScreenRouteProp, Court} from '../types/types';
 import {fetchCourtDetails} from '../services/apiMock';
 
@@ -34,18 +34,29 @@ const CourtDetailScreen: React.FC<Props> = ({route}) => {
 
   return (
     <View style={styles.container}>
+      <FlatList
+        data={court.photos}
+        renderItem={({item}) => (
+          <View style={styles.carouselItem}>
+            <Image source={{uri: item}} style={styles.carouselImage} />
+          </View>
+        )}
+        keyExtractor={(item, index) => index.toString()}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+      />
       <Text style={styles.title}>Detalhes da Quadra</Text>
       <Text>Nome: {court.name}</Text>
       <Text>Tipo: {court.type}</Text>
       <Text>Descrição: {court.description}</Text>
       <Text>Endereço: {court.address}</Text>
       <Text>Horário de Funcionamento: {court.workingHours}</Text>
-      <Text style={styles.title}>Fotos:</Text>
-      <View style={styles.photoContainer}>
-        {court.photos.map((photo, index) => (
-          <Image key={index} source={{uri: photo}} style={styles.photo} />
-        ))}
-      </View>
+      <Button
+        title="Editar"
+        onPress={() => {
+          console.log('Editar quadra');
+        }}
+      />
     </View>
   );
 };
@@ -53,7 +64,6 @@ const CourtDetailScreen: React.FC<Props> = ({route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
   },
@@ -62,16 +72,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 12,
   },
-  photoContainer: {
-    flexDirection: 'row',
+  carouselItem: {
+    width: 350,
+    height: 200,
     justifyContent: 'center',
-    marginTop: 10,
+    alignItems: 'center',
+    marginHorizontal: 10,
   },
-  photo: {
-    width: 200,
-    height: 150,
+  carouselImage: {
+    width: '100%',
+    height: '100%',
     resizeMode: 'cover',
-    marginHorizontal: 5,
+    borderRadius: 8,
   },
 });
 
