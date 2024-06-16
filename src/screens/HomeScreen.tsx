@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, FlatList} from 'react-native';
+import {View, StyleSheet, FlatList, TouchableOpacity, Text} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {fetchCourts} from '../services/apiMock';
-import {RootStackParamList, Court} from '../types/types';
+import {Court, RootStackParamList} from '../types/types';
 import HomeCard from '../components/HomeCard';
 import {HomeScreenNavigationProp} from '../types/types';
 import {RouteProp} from '@react-navigation/native';
@@ -45,6 +45,12 @@ const HomeScreen: React.FC<Props> = ({route}) => {
         renderItem={renderItem}
         keyExtractor={item => item.id.toString()}
       />
+
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => console.log('Botão pressionado')}>
+        <Text style={styles.addButtonText}>+</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -52,7 +58,29 @@ const HomeScreen: React.FC<Props> = ({route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    backgroundColor: '#fff',
+    paddingHorizontal: 16,
+    paddingTop: 16,
+  },
+  addButton: {
+    position: 'absolute',
+    bottom: 24,
+    right: 24,
+    backgroundColor: '#E66901',
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.4,
+    shadowRadius: 2,
+    elevation: 4,
+  },
+  addButtonText: {
+    fontSize: 24,
+    color: '#fff',
   },
 });
 
