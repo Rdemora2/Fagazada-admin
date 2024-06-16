@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   TextInput,
@@ -6,160 +6,221 @@ import {
   StyleSheet,
   Text,
   ScrollView,
+  Alert,
+  TouchableOpacity,
 } from 'react-native';
 import {addCourt} from '../services/apiMock';
 import {CourtListScreenNavigationProp} from '../types/types';
-import {Court} from '../types/types'; // Importando o tipo Court
+import {Court, Availability} from '../types/types';
 
 type Props = {
   navigation: CourtListScreenNavigationProp;
 };
 
-const initialCourtDetails: Court = {
-  id: 0, // Definido como 0 inicialmente ou outro valor padrão
-  name: '',
-  type: '',
-  description: '',
-  photos: [],
-  availability: [],
-  hourlyRate: 0,
-  bookingPeriods: [],
-  address: '',
-  workingHours: '',
-  optionalServices: [],
-  monthlyRate: undefined,
-};
-
 const AddCourtScreen: React.FC<Props> = ({navigation}) => {
-  const [courtDetails, setCourtDetails] = useState<Court>(initialCourtDetails);
+  const [courtDetails, setCourtDetails] = useState<Court>({
+    id: 0,
+    name: '',
+    type: '',
+    description: '',
+    photos: [],
+    hourlyRate: 0,
+    address: '',
+    workingHours: '',
+    optionalServices: [],
+    availability: [],
+  });
 
   const handleAddCourt = async () => {
     try {
-      // Convertendo valores numéricos de string para number
       const hourlyRateNumber = parseFloat(courtDetails.hourlyRate.toString());
-      const monthlyRateNumber = courtDetails.monthlyRate
-        ? parseFloat(courtDetails.monthlyRate.toString())
-        : undefined;
 
-      // Verificando se a conversão foi bem-sucedida para todos os campos necessários
       if (isNaN(hourlyRateNumber)) {
         throw new Error('Taxa horária inválida');
       }
-      // Você pode adicionar validações semelhantes para outros campos se necessário
 
-      // Enviando os dados formatados para a função de adicionar quadra
       await addCourt({
         ...courtDetails,
         hourlyRate: hourlyRateNumber,
-        monthlyRate: monthlyRateNumber,
       });
 
-      // Navegando de volta para a lista de quadras após adicionar
-      navigation.navigate('Home');
+      setShowConfirmation(true);
+
+      setTimeout(() => {
+        setShowConfirmation(false);
+        navigation.navigate('Home');
+      }, 5000);
     } catch (error) {
       console.error('Erro ao adicionar quadra:', error);
+      Alert.alert(
+        'Erro',
+        'Erro ao adicionar quadra. Por favor, tente novamente.',
+      );
     }
   };
 
-  const handleChangeText = (key: keyof Court, value: string | string[]) => {
-    if (Array.isArray(value)) {
-      // Tratamento específico para arrays
-      setCourtDetails({...courtDetails, [key]: value});
-    } else if (key === 'hourlyRate' || key === 'monthlyRate') {
-      // Tratamento para campos numéricos
-      const numericValue = parseFloat(value.trim());
-      if (!isNaN(numericValue)) {
-        setCourtDetails({...courtDetails, [key]: numericValue});
-      }
+  const [date, setDate] = useState<string>('');
+  const [startTime, setStartTime] = useState<string>('');
+  const [endTime, setEndTime] = useState<string>('');
+  const [isDatePickerVisible, setDatePickerVisible] = useState(false);
+  const [isStartTimePickerVisible, setStartTimePickerVisible] = useState(false);
+  const [isEndTimePickerVisible, setEndTimePickerVisible] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  const handleAddAvailability = () => {
+    if (date && startTime && endTime) {
+      const newAvailability: Availability = {
+        id: courtDetails.availability.length + 1,
+        date,
+        startTime,
+        endTime,
+      };
+      setCourtDetails({
+        ...courtDetails,
+        availability: [...courtDetails.availability, newAvailability],
+      });
+      setDate('');
+      setStartTime('');
+      setEndTime('');
+      Alert.alert('Sucesso', 'Disponibilidade adicionada com sucesso.');
     } else {
-      // Tratamento padrão para campos de texto
-      setCourtDetails({...courtDetails, [key]: value});
+      Alert.alert(
+        'Erro',
+        'Por favor, preencha todos os campos de disponibilidade.',
+      );
     }
   };
+
+  const showDatePicker = () => {
+    setDatePickerVisible(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisible(false);
+  };
+
+  const handleConfirmDate = (selectedDate: Date) => {
+    const formattedDate = selectedDate.toISOString().split('T')[0];
+    setDate(formattedDate);
+    hideDatePicker();
+  };
+
+  const showStartTimePicker = () => {
+    setStartTimePickerVisible(true);
+  };
+
+  const hideStartTimePicker = () => {
+    setStartTimePickerVisible(false);
+  };
+
+  const handleConfirmStartTime = (selectedTime: Date) => {
+    const formattedTime = selectedTime.toISOString().split('T')[1].slice(0, 5);
+    setStartTime(formattedTime);
+    hideStartTimePicker();
+  };
+
+  const showEndTimePicker = () => {
+    setEndTimePickerVisible(true);
+  };
+
+  const hideEndTimePicker = () => {
+    setEndTimePickerVisible(false);
+  };
+
+  const handleConfirmEndTime = (selectedTime: Date) => {
+    const formattedTime = selectedTime.toISOString().split('T')[1].slice(0, 5);
+    setEndTime(formattedTime);
+    hideEndTimePicker();
+  };
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (showConfirmation) {
+      timer = setTimeout(() => {
+        setShowConfirmation(false);
+        navigation.navigate('Home');
+      }, 5000);
+    }
+    return () => clearTimeout(timer);
+  }, [showConfirmation, navigation]);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.sectionTitle}>Adicionar Nova Quadra</Text>
+
       <Text style={styles.label}>Nome da Quadra</Text>
       <TextInput
         style={styles.input}
+        placeholder="Digite o nome da quadra"
         value={courtDetails.name}
-        onChangeText={text => handleChangeText('name', text)}
+        onChangeText={text => setCourtDetails({...courtDetails, name: text})}
       />
+
       <Text style={styles.label}>Tipo da Quadra</Text>
       <TextInput
         style={styles.input}
+        placeholder="Digite o tipo da quadra"
         value={courtDetails.type}
-        onChangeText={text => handleChangeText('type', text)}
+        onChangeText={text => setCourtDetails({...courtDetails, type: text})}
       />
-      <Text style={styles.label}>Descrição</Text>
+
+      <Text style={styles.label}>Descrição da Quadra</Text>
       <TextInput
-        style={[styles.input, styles.descriptionInput]}
+        style={styles.input}
+        placeholder="Digite a descrição da quadra"
         multiline
         numberOfLines={4}
         value={courtDetails.description}
-        onChangeText={text => handleChangeText('description', text)}
-      />
-      <Text style={styles.label}>Fotos (separadas por vírgula)</Text>
-      <TextInput
-        style={styles.input}
-        value={courtDetails.photos.join(',')}
-        onChangeText={text => handleChangeText('photos', text.split(','))}
-      />
-      <Text style={styles.label}>Disponibilidade (separadas por vírgula)</Text>
-      <TextInput
-        style={styles.input}
-        value={courtDetails.availability.join(',')}
-        onChangeText={text => handleChangeText('availability', text.split(','))}
-      />
-      <Text style={styles.label}>Taxa Horária</Text>
-      <TextInput
-        style={styles.input}
-        value={courtDetails.hourlyRate.toString()} // Mostrar como string
-        onChangeText={text => handleChangeText('hourlyRate', text)}
-        keyboardType="numeric" // Teclado numérico para taxa horária
-      />
-      <Text style={styles.label}>
-        Períodos de Reserva (separados por vírgula)
-      </Text>
-      <TextInput
-        style={styles.input}
-        value={courtDetails.bookingPeriods.join(',')}
         onChangeText={text =>
-          handleChangeText('bookingPeriods', text.split(','))
+          setCourtDetails({...courtDetails, description: text})
         }
       />
-      <Text style={styles.label}>Endereço</Text>
+
+      <Text style={styles.label}>Taxa Horária (R$)</Text>
       <TextInput
         style={styles.input}
-        value={courtDetails.address}
-        onChangeText={text => handleChangeText('address', text)}
+        placeholder="Digite a taxa horária"
+        keyboardType="numeric"
+        value={courtDetails.hourlyRate.toString()}
+        onChangeText={text =>
+          setCourtDetails({...courtDetails, hourlyRate: parseFloat(text)})
+        }
       />
+
+      <Text style={styles.label}>Endereço da Quadra</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Digite o endereço da quadra"
+        value={courtDetails.address}
+        onChangeText={text => setCourtDetails({...courtDetails, address: text})}
+      />
+
       <Text style={styles.label}>Horário de Funcionamento</Text>
       <TextInput
         style={styles.input}
+        placeholder="Digite o horário de funcionamento da quadra"
         value={courtDetails.workingHours}
-        onChangeText={text => handleChangeText('workingHours', text)}
-      />
-      <Text style={styles.label}>
-        Serviços Opcionais (separados por vírgula)
-      </Text>
-      <TextInput
-        style={styles.input}
-        value={courtDetails.optionalServices.join(',')}
         onChangeText={text =>
-          handleChangeText('optionalServices', text.split(','))
+          setCourtDetails({...courtDetails, workingHours: text})
         }
       />
-      <Text style={styles.label}>Taxa Mensal (opcional)</Text>
-      <TextInput
-        style={styles.input}
-        value={
-          courtDetails.monthlyRate ? courtDetails.monthlyRate.toString() : ''
-        }
-        onChangeText={text => handleChangeText('monthlyRate', text)}
-        keyboardType="numeric" // Teclado numérico para taxa mensal
-      />
-      <Button title="Adicionar Quadra" onPress={handleAddCourt} />
+
+      <TouchableOpacity style={styles.addButton} onPress={handleAddCourt}>
+        <Text style={styles.textButton}>Adicionar Quadra</Text>
+      </TouchableOpacity>
+
+      {showConfirmation && (
+        <View style={styles.confirmationPopup}>
+          <Text style={styles.confirmationText}>
+            Quadra adicionada com sucesso!
+          </Text>
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() => navigation.navigate('CourtAvailability')}>
+            <Text style={styles.textButton}>Adicionar Disponibilidade</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </ScrollView>
   );
 };
@@ -170,6 +231,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingHorizontal: 16,
     paddingVertical: 24,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 16,
   },
   label: {
     fontSize: 16,
@@ -183,9 +249,46 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     paddingHorizontal: 10,
   },
-  descriptionInput: {
-    height: 120,
-    textAlignVertical: 'top',
+  picker: {
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    marginBottom: 12,
+  },
+  dateInputContainer: {
+    marginBottom: 12,
+  },
+  timeInputContainer: {
+    marginBottom: 12,
+  },
+  confirmationPopup: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#4CAF50',
+    padding: 16,
+    alignItems: 'center',
+  },
+  confirmationText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  addButton: {
+    backgroundColor: '#00786A',
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  textButton: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 
