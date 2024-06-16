@@ -10,8 +10,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {addCourt} from '../services/apiMock';
-import {CourtListScreenNavigationProp} from '../types/types';
-import {Court, Availability} from '../types/types';
+import {
+  Court,
+  Availability,
+  CourtListScreenNavigationProp,
+} from '../types/types';
 
 type Props = {
   navigation: CourtListScreenNavigationProp;
