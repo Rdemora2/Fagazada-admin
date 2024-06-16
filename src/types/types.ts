@@ -13,30 +13,44 @@ export type RootStackParamList = {
   AddCourt: undefined;
   EditCourt: {courtId: number};
   ReservationList: undefined;
+  CourtAvailability: undefined;
 };
 
-export type Court = {
+export interface Court {
   id: number;
   name: string;
   type: string;
   description: string;
   photos: string[];
-  availability: string[];
+  availability: Availability[];
   hourlyRate: number;
-  bookingPeriods: string[];
   address: string;
   workingHours: string;
   optionalServices: string[];
   monthlyRate?: number;
-};
+}
 
-export type Reservation = {
+export interface Reservation {
   id: number;
   courtId: number;
   userId: number;
   date: string;
   status: 'pending' | 'confirmed';
+  startTime: string;
+  endTime: string;
+}
+
+export type Availability = {
+  id: number;
+  date: string;
+  startTime: string;
+  endTime: string;
 };
+
+export interface Timeslot {
+  startTime: string;
+  endTime: string;
+}
 
 export type User = {
   id: number;
@@ -104,4 +118,9 @@ export type EditCourtScreenNavigationProp = StackNavigationProp<
 export type ReservationListScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'ReservationList'
+>;
+
+export type CourtAvailabilityScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'CourtAvailability'
 >;
