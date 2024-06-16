@@ -28,6 +28,7 @@ const App = () => {
           },
           headerTintColor: '#fff',
           headerTitleStyle: {},
+          headerShown: false,
         }}>
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
