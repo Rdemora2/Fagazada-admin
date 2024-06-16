@@ -34,6 +34,10 @@ const HomeScreen: React.FC<Props> = ({route}) => {
     navigation.navigate('CourtDetail', {courtId});
   };
 
+  const handleAddCourt = () => {
+    navigation.navigate('AddCourt'); // Navegar para AddCourtScreen
+  };
+
   const renderItem = ({item}: {item: Court}) => (
     <HomeCard court={item} onPress={handleCourtDetail} />
   );
@@ -46,9 +50,7 @@ const HomeScreen: React.FC<Props> = ({route}) => {
         keyExtractor={item => item.id.toString()}
       />
 
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => console.log('Botão pressionado')}>
+      <TouchableOpacity style={styles.addButton} onPress={handleAddCourt}>
         <Text style={styles.addButtonText}>+</Text>
       </TouchableOpacity>
     </View>
