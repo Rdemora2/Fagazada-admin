@@ -74,9 +74,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.fagazadaadmin"
+    namespace "com.fagazada.admin"
     defaultConfig {
-        applicationId "com.fagazadaadmin"
+        applicationId "com.fagazada.admin"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

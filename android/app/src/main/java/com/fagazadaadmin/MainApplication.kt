@@ -1,4 +1,4 @@
-package com.fagazadaadmin
+package com.fagazada.admin
 
 import android.app.Application
 import com.facebook.react.PackageList

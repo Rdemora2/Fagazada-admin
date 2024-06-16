@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "FagazadaAdmin.app"
-               BlueprintName = "FagazadaAdmin"
-               ReferencedContainer = "container:FagazadaAdmin.xcodeproj">
+               BuildableName = "fagazada.admin.app"
+               BlueprintName = "fagazada.admin"
+               ReferencedContainer = "container:fagazada.admin.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "FagazadaAdminTests.xctest"
-               BlueprintName = "FagazadaAdminTests"
-               ReferencedContainer = "container:FagazadaAdmin.xcodeproj">
+               BuildableName = "fagazada.adminTests.xctest"
+               BlueprintName = "fagazada.adminTests"
+               ReferencedContainer = "container:fagazada.admin.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "FagazadaAdmin.app"
-            BlueprintName = "FagazadaAdmin"
-            ReferencedContainer = "container:FagazadaAdmin.xcodeproj">
+            BuildableName = "fagazada.admin.app"
+            BlueprintName = "fagazada.admin"
+            ReferencedContainer = "container:fagazada.admin.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "FagazadaAdmin.app"
-            BlueprintName = "FagazadaAdmin"
-            ReferencedContainer = "container:FagazadaAdmin.xcodeproj">
+            BuildableName = "fagazada.admin.app"
+            BlueprintName = "fagazada.admin"
+            ReferencedContainer = "container:fagazada.admin.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

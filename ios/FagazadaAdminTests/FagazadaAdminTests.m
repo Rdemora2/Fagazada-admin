@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface FagazadaAdminTests : XCTestCase
+@interface fagazada.adminTests : XCTestCase
 
 @end
 
-@implementation FagazadaAdminTests
+@implementation fagazada.adminTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL (^)(UIView *view))test
 {
