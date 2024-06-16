@@ -1,5 +1,13 @@
 import React, {useState} from 'react';
-import {View, TextInput, Button, StyleSheet, Text} from 'react-native';
+import {
+  View,
+  TextInput,
+  Button,
+  StyleSheet,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import {register} from '../services/apiMock';
 import {RegisterScreenNavigationProp} from '../types/types';
 
@@ -37,84 +45,150 @@ const RegisterScreen: React.FC<Props> = ({navigation}) => {
     }
   };
 
+  const handleNavigateToLogin = () => {
+    navigation.navigate('Login');
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>Nome Completo</Text>
-      <TextInput
-        style={styles.input}
-        value={fullName}
-        onChangeText={text => setFullName(text)}
-      />
-      <Text style={styles.label}>Email</Text>
-      <TextInput
-        style={styles.input}
-        value={email}
-        onChangeText={text => setEmail(text)}
-      />
-      <Text style={styles.label}>Senha</Text>
-      <TextInput
-        style={styles.input}
-        value={password}
-        onChangeText={text => setPassword(text)}
-        secureTextEntry
-      />
-      <Text style={styles.label}>Apelido (opcional)</Text>
-      <TextInput
-        style={styles.input}
-        value={nickname}
-        onChangeText={text => setNickname(text)}
-      />
-      <Text style={styles.label}>Número de Contato</Text>
-      <TextInput
-        style={styles.input}
-        value={phoneNumber}
-        onChangeText={text => setPhoneNumber(text)}
-      />
-      <Text style={styles.label}>CPF</Text>
-      <TextInput
-        style={styles.input}
-        value={cpf}
-        onChangeText={text => setCpf(text)}
-      />
-      <Text style={styles.label}>Endereço</Text>
-      <TextInput
-        style={styles.input}
-        value={address}
-        onChangeText={text => setAddress(text)}
-      />
-      <Text style={styles.label}>URL da Foto</Text>
-      <TextInput
-        style={styles.input}
-        value={photo}
-        onChangeText={text => setPhoto(text)}
-      />
-      <Text style={styles.label}>Papel</Text>
-      <TextInput
-        style={styles.input}
-        value={role}
-        onChangeText={text => setRole(text)}
-        placeholder="dono, gestor ou professor"
-      />
-      <Button title="Registrar" onPress={handleSubmit} />
-    </View>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Cadastre-se</Text>
+
+        <Text style={[styles.label, styles.labelStart]}>Nome Completo</Text>
+        <TextInput
+          style={styles.input}
+          value={fullName}
+          onChangeText={text => setFullName(text)}
+        />
+
+        <Text style={[styles.label, styles.labelStart]}>Email</Text>
+        <TextInput
+          style={styles.input}
+          value={email}
+          onChangeText={text => setEmail(text)}
+        />
+
+        <Text style={[styles.label, styles.labelStart]}>Senha</Text>
+        <TextInput
+          style={styles.input}
+          value={password}
+          onChangeText={text => setPassword(text)}
+          secureTextEntry
+        />
+
+        <Text style={[styles.label, styles.labelStart]}>
+          Apelido (opcional)
+        </Text>
+        <TextInput
+          style={styles.input}
+          value={nickname}
+          onChangeText={text => setNickname(text)}
+        />
+
+        <Text style={[styles.label, styles.labelStart]}>Número de Contato</Text>
+        <TextInput
+          style={styles.input}
+          value={phoneNumber}
+          onChangeText={text => setPhoneNumber(text)}
+        />
+
+        <Text style={[styles.label, styles.labelStart]}>CPF</Text>
+        <TextInput
+          style={styles.input}
+          value={cpf}
+          onChangeText={text => setCpf(text)}
+        />
+
+        <Text style={[styles.label, styles.labelStart]}>Endereço</Text>
+        <TextInput
+          style={styles.input}
+          value={address}
+          onChangeText={text => setAddress(text)}
+        />
+
+        <Text style={[styles.label, styles.labelStart]}>URL da Foto</Text>
+        <TextInput
+          style={styles.input}
+          value={photo}
+          onChangeText={text => setPhoto(text)}
+        />
+
+        <Text style={[styles.label, styles.labelStart]}>Papel</Text>
+        <TextInput
+          style={styles.input}
+          value={role}
+          onChangeText={text => setRole(text)}
+          placeholder="dono, gestor ou professor"
+        />
+
+        <TouchableOpacity style={styles.buttonContainer} onPress={handleSubmit}>
+          <Text style={styles.buttonText}>Registrar</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={handleNavigateToLogin}>
+          <Text style={styles.registerText}>
+            Já tem uma conta? Faça login aqui
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    backgroundColor: '#f6f6f6',
     padding: 16,
+  },
+  container: {
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 24,
+    color: '#00786A',
+    textAlign: 'center',
   },
   label: {
     fontSize: 16,
     marginBottom: 8,
+    color: '#00786A',
+  },
+  labelStart: {
+    alignSelf: 'flex-start',
+    textAlign: 'left',
+    width: '100%',
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    width: '100%',
     borderWidth: 1,
+    borderColor: '#E66901',
+    paddingHorizontal: 10,
     marginBottom: 12,
-    padding: 8,
+    borderRadius: 16,
+    backgroundColor: '#fff',
+    color: '#333',
+  },
+  buttonContainer: {
+    width: '100%',
+    marginTop: 12,
+    backgroundColor: '#00786A',
+    paddingVertical: 12,
+    borderRadius: 16,
+  },
+  buttonText: {
+    textAlign: 'center',
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  registerText: {
+    marginTop: 16,
+    color: '#E66901',
   },
 });
 
