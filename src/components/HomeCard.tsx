@@ -7,6 +7,7 @@ import {
   FlatList,
   Image,
   Dimensions,
+  TouchableOpacity,
 } from 'react-native';
 import {Court} from '../types/types';
 
@@ -31,11 +32,12 @@ const HomeCard: React.FC<Props> = ({court, onPress}) => {
       />
       <View style={styles.content}>
         <Text style={styles.title}>{court.name}</Text>
-        <Text>{court.description}</Text>
-        <Button
-          title="Ver Detalhes da Quadra"
-          onPress={() => onPress(court.id)}
-        />
+        <Text style={styles.description}>{court.description}</Text>
+        <TouchableOpacity
+          style={styles.detailsButton}
+          onPress={() => onPress(court.id)}>
+          <Text style={styles.detailsButtonText}>Ver Detalhes da Quadra</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -45,21 +47,43 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
+    borderColor: '#ddd',
+    borderRadius: 8,
     overflow: 'hidden',
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
   },
   image: {
-    width: width - 32, // Adjust as needed
-    height: 200, // Adjust as needed
+    width: width - 2, // Ajustado para preencher o container sem margens
+    height: 200,
   },
   content: {
-    padding: 10,
+    padding: 12,
   },
   title: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 5,
+    marginBottom: 8,
+  },
+  description: {
+    fontSize: 16,
+    marginBottom: 12,
+  },
+  detailsButton: {
+    backgroundColor: '#00786A',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  detailsButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 
