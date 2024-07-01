@@ -6,9 +6,14 @@ import {
   StyleSheet,
   Text,
   ScrollView,
+  FlatList,
+  Image,
+  Dimensions,
+  TouchableOpacity,
 } from 'react-native';
 import {fetchCourtDetails, updateCourt} from '../services/apiMock';
 import {
+  Court,
   EditCourtScreenNavigationProp,
   RootStackParamList,
 } from '../types/types';
@@ -21,52 +26,49 @@ type Props = {
   navigation: EditCourtScreenNavigationProp;
 };
 
-type CourtDetails = {
-  name: string;
-  type: string;
-  description: string;
-  photos: string[];
-  availability: string[];
-  hourlyRate: string;
-  bookingPeriods: string[];
-  address: string;
-  workingHours: string;
-  optionalServices: string[];
-  monthlyRate: string;
-};
-
 const EditCourtScreen: React.FC<Props> = ({route, navigation}) => {
   const {courtId} = route.params;
-  const [courtDetails, setCourtDetails] = useState<CourtDetails>({
+  const windowWidth = Dimensions.get('window').width;
+  const carouselItemWidth = windowWidth * 0.93;
+  const [court, setCourtDetails] = useState<Court>({
+    id: 0,
     name: '',
     type: '',
     description: '',
     photos: [],
     availability: [],
-    hourlyRate: '',
-    bookingPeriods: [],
+    hourlyRate: 0,
     address: '',
     workingHours: '',
     optionalServices: [],
-    monthlyRate: '',
+    monthlyRate: 0,
   });
 
   useEffect(() => {
     const getCourtDetails = async () => {
       try {
-        const court = await fetchCourtDetails(courtId);
+        const courtData = await fetchCourtDetails(courtId);
+        const hourlyRate =
+          typeof courtData.hourlyRate === 'string'
+            ? parseFloat(courtData.hourlyRate)
+            : 0;
+        const monthlyRate =
+          typeof courtData.monthlyRate === 'string'
+            ? parseFloat(courtData.monthlyRate)
+            : 0;
+
         setCourtDetails({
-          name: court.name,
-          type: court.type,
-          description: court.description,
-          photos: court.photos,
-          availability: court.availability,
-          hourlyRate: court.hourlyRate.toString(),
-          bookingPeriods: court.bookingPeriods,
-          address: court.address,
-          workingHours: court.workingHours,
-          optionalServices: court.optionalServices,
-          monthlyRate: court.monthlyRate ? court.monthlyRate.toString() : '',
+          id: courtData.id,
+          name: courtData.name,
+          type: courtData.type,
+          description: courtData.description,
+          photos: courtData.photos,
+          availability: courtData.availability,
+          hourlyRate: hourlyRate,
+          address: courtData.address,
+          workingHours: courtData.workingHours,
+          optionalServices: courtData.optionalServices,
+          monthlyRate: monthlyRate,
         });
       } catch (error) {
         console.error('Erro ao buscar detalhes da quadra:', error);
@@ -79,19 +81,16 @@ const EditCourtScreen: React.FC<Props> = ({route, navigation}) => {
   const handleUpdateCourt = async () => {
     try {
       await updateCourt(courtId, {
-        name: courtDetails.name,
-        type: courtDetails.type,
-        description: courtDetails.description,
-        photos: courtDetails.photos,
-        availability: courtDetails.availability,
-        hourlyRate: parseFloat(courtDetails.hourlyRate),
-        bookingPeriods: courtDetails.bookingPeriods,
-        address: courtDetails.address,
-        workingHours: courtDetails.workingHours,
-        optionalServices: courtDetails.optionalServices,
-        monthlyRate: courtDetails.monthlyRate
-          ? parseFloat(courtDetails.monthlyRate)
-          : undefined,
+        name: court.name,
+        type: court.type,
+        description: court.description,
+        photos: court.photos,
+        availability: court.availability,
+        hourlyRate: court.hourlyRate,
+        address: court.address,
+        workingHours: court.workingHours,
+        optionalServices: court.optionalServices,
+        monthlyRate: court.monthlyRate,
       });
       navigation.navigate('CourtDetail', {courtId});
     } catch (error) {
@@ -101,27 +100,42 @@ const EditCourtScreen: React.FC<Props> = ({route, navigation}) => {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.label}>Nome da Quadra</Text>
-      <TextInput
-        style={styles.input}
-        value={courtDetails.name}
-        onChangeText={text => setCourtDetails({...courtDetails, name: text})}
+      <FlatList
+        data={court.photos}
+        renderItem={({item}) => (
+          <View style={[styles.carouselItem, {width: carouselItemWidth}]}>
+            <Image source={{uri: item}} style={styles.carouselImage} />
+          </View>
+        )}
+        keyExtractor={(item, index) => index.toString()}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.carousel}
+        contentContainerStyle={{alignItems: 'center'}}
       />
-      <Text style={styles.label}>Tipo da Quadra</Text>
-      <TextInput
-        style={styles.input}
-        value={courtDetails.type}
-        onChangeText={text => setCourtDetails({...courtDetails, type: text})}
-      />
-      <Text style={styles.label}>Descrição</Text>
-      <TextInput
-        style={styles.input}
-        value={courtDetails.description}
-        onChangeText={text =>
-          setCourtDetails({...courtDetails, description: text})
-        }
-      />
-      <Button title="Atualizar Quadra" onPress={handleUpdateCourt} />
+      <View style={styles.detailsContainer}>
+        <Text style={styles.label}>Nome da Quadra</Text>
+        <TextInput
+          style={styles.input}
+          value={court.name}
+          onChangeText={text => setCourtDetails({...court, name: text})}
+        />
+        <Text style={styles.label}>Tipo da Quadra</Text>
+        <TextInput
+          style={styles.input}
+          value={court.type}
+          onChangeText={text => setCourtDetails({...court, type: text})}
+        />
+        <Text style={styles.label}>Descrição</Text>
+        <TextInput
+          style={styles.input}
+          value={court.description}
+          onChangeText={text => setCourtDetails({...court, description: text})}
+        />
+      </View>
+      <TouchableOpacity style={styles.editButton} onPress={handleUpdateCourt}>
+        <Text style={styles.editButtonText}>Atualizar Quadra</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -129,18 +143,80 @@ const EditCourtScreen: React.FC<Props> = ({route, navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    backgroundColor: '#f8f8f8',
+  },
+  detailsContainer: {
+    paddingHorizontal: 16,
+    paddingBottom: 16,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    marginHorizontal: 16,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
   },
   label: {
-    fontSize: 16,
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 16,
     marginBottom: 8,
   },
   input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 12,
     padding: 8,
+    width: '100%',
+    paddingHorizontal: 10,
+    marginBottom: 0,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#E66901',
+    color: 'black',
+  },
+  carousel: {
+    marginVertical: 16,
+  },
+  carouselItem: {
+    height: 200,
+    marginHorizontal: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  carouselImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  editButton: {
+    backgroundColor: '#00786A',
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginHorizontal: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  editButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 
