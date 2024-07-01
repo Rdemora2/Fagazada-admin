@@ -14,6 +14,7 @@ export type RootStackParamList = {
   EditCourt: {courtId: number};
   ReservationList: undefined;
   CourtAvailability: undefined;
+  IdentificationScreen: undefined;
 };
 
 export interface Court {
