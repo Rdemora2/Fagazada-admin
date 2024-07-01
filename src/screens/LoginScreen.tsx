@@ -2,16 +2,23 @@ import React, {useState} from 'react';
 import {
   View,
   TextInput,
+  ImageBackground,
+  SafeAreaView,
+  ScrollView,
   TouchableOpacity,
   Text,
   StyleSheet,
+  Dimensions,
 } from 'react-native';
+import {BlurView} from '@react-native-community/blur';
 import {LoginScreenNavigationProp} from '../types/types';
 import {login} from '../services/apiMock';
 
 type Props = {
   navigation: LoginScreenNavigationProp;
 };
+
+const {width, height} = Dimensions.get('window');
 
 const LoginScreen: React.FC<Props> = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -35,56 +42,87 @@ const LoginScreen: React.FC<Props> = ({navigation}) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Senha"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <TouchableOpacity style={styles.buttonContainer} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Entrar</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={handleNavigateToRegister}>
-        <Text style={styles.registerText}>
-          Não tem uma conta? Cadastre-se aqui
-        </Text>
-      </TouchableOpacity>
-    </View>
+    <SafeAreaView>
+      <ImageBackground
+        source={require('../assets/images/basquetBackground.jpg')}
+        style={styles.fullScreen}>
+        <BlurView style={styles.fullScreen} blurAmount={4}>
+          <ScrollView>
+            <View style={styles.container}>
+              <View style={styles.inputContainer}>
+                <Text style={styles.title}>Faça seu login:</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Email"
+                  placeholderTextColor="#ffffff"
+                  value={email}
+                  onChangeText={setEmail}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Senha"
+                  placeholderTextColor="#ffffff"
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry
+                />
+                <TouchableOpacity
+                  style={styles.buttonContainer}
+                  onPress={handleLogin}>
+                  <Text style={styles.buttonText}>Entrar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleNavigateToRegister}>
+                  <Text style={styles.registerText}>
+                    Não tem uma conta? Cadastre-se aqui
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </ScrollView>
+        </BlurView>
+      </ImageBackground>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  fullScreen: {
+    width: width,
+    height: height,
+  },
   container: {
-    flex: 1,
+    width: width,
+    height: height,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f6f6f6',
-    padding: 16,
+    padding: 30,
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+  },
+  inputContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    height: '55%',
+    backgroundColor: 'rgba(0, 0, 0, 0.35)',
+    padding: 35,
+    borderRadius: 25,
   },
   title: {
-    fontSize: 24,
+    color: '#ffffff',
     fontWeight: 'bold',
+    fontSize: 24,
     marginBottom: 24,
-    color: '#00786A',
   },
   input: {
-    height: 40,
     width: '100%',
+    paddingHorizontal: 10,
+    marginBottom: 0,
+    borderRadius: 16,
     borderWidth: 1,
     borderColor: '#E66901',
-    paddingHorizontal: 10,
-    marginBottom: 12,
-    borderRadius: 16,
-    backgroundColor: '#fff',
+    color: '#ffffff',
+    backgroundColor: 'rgba(0, 0, 0, 0.17)',
   },
   buttonContainer: {
     width: '100%',
