@@ -3,26 +3,27 @@ import {Court, Reservation, User, Availability} from '../types/types';
 const users: User[] = [
   {
     id: 1,
-    email: 'user1@example.com',
-    password: 'password1',
-    fullName: 'User One',
-    nickname: 'U1',
-    phoneNumber: '123456789',
+    email: 'admin@fagazada.com',
+    password: '12345',
+    fullName: 'Admin Fagazada',
+    nickname: 'admin_fagazada',
+    phoneNumber: '(11) 9 8765-4321',
     cpf: '123.456.789-00',
-    address: 'Rua A, 123',
+    address: 'Avenida fagazada, 123',
     photo: '',
     role: 'dono',
   },
   {
     id: 2,
-    email: 'user2@example.com',
-    password: 'password2',
-    fullName: 'User Two',
-    phoneNumber: '987654321',
+    email: 'teste@fagazada.com',
+    password: '12345',
+    fullName: 'Teste Fagazada',
+    nickname: 'teste_fagazada',
+    phoneNumber: '(11) 9 4321-8765',
     cpf: '987.654.321-00',
-    address: 'Rua B, 456',
+    address: 'Avenida fagazada, 321',
     photo: '',
-    role: 'gestor',
+    role: 'dono',
   },
 ];
 
@@ -91,6 +92,18 @@ export const login = async (email: string, password: string) => {
 
   if (!user) {
     throw new Error('Credenciais inválidas');
+  }
+
+  return user;
+};
+
+export const checkEmail = async (email: string) => {
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  const user = users.find(user => user.email === email);
+
+  if (!user) {
+    throw new Error('Usuário não encontrado');
   }
 
   return user;
