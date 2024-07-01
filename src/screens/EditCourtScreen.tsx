@@ -146,12 +146,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f8f8',
   },
   detailsContainer: {
-    paddingHorizontal: 16,
-    paddingBottom: 16,
+    padding: 16,
     backgroundColor: '#fff',
     borderRadius: 8,
-    marginHorizontal: 16,
-    marginBottom: 16,
+    margin: 16,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
