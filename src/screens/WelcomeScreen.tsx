@@ -1,66 +1,143 @@
 import React from 'react';
-import {View, Text, Button, StyleSheet, TouchableOpacity} from 'react-native';
-import {WelcomeScreenNavigationProp} from '../types/types';
+import {
+  View,
+  Text,
+  ImageBackground,
+  SafeAreaView,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {BlurView} from '@react-native-community/blur';
 
-type Props = {
-  navigation: WelcomeScreenNavigationProp;
-};
+export default function App(): React.JSX.Element {
+  const navigation = useNavigation();
 
-const WelcomeScreen: React.FC<Props> = ({navigation}) => {
-  const handleLoginPress = () => {
-    navigation.navigate('Login');
-  };
-
-  const handleRegisterPress = () => {
-    navigation.navigate('Register');
+  const handleContinue = () => {
+    navigation.navigate('IdentificationScreen' as never);
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Bem-vindo ao Fagazada Gestores!</Text>
-      <TouchableOpacity style={styles.button} onPress={handleLoginPress}>
-        <Text style={styles.buttonText}>Fazer login</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.button, styles.registerButton]}
-        onPress={handleRegisterPress}>
-        <Text style={styles.buttonText}>Cadastrar</Text>
-      </TouchableOpacity>
-    </View>
+    <SafeAreaView>
+      <ImageBackground
+        source={require('../assets/images/basquetBackground.jpg')}
+        style={styles.fullScreen}>
+        <BlurView style={styles.fullScreen} blurAmount={4}>
+          <View style={styles.container}>
+            <ImageBackground
+              style={styles.logo}
+              source={require('../assets/images/logo.png')}
+            />
+            <View style={styles.spacingContainer} />
+            <View style={styles.inputContainer}>
+              <View style={styles.textContainer}>
+                <Text style={styles.paragraph1}>Bem vindo ao</Text>
+                <Text style={styles.paragraph2}>Fagazada Gestores</Text>
+                <Text style={styles.paragraph3}>
+                  Sua plataforma de aluguel de quadras a um toque
+                </Text>
+              </View>
+              <TouchableOpacity onPress={handleContinue}>
+                <View style={styles.continueButton}>
+                  <Text style={styles.buttonText}>Continuar</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </BlurView>
+      </ImageBackground>
+    </SafeAreaView>
   );
-};
-
+}
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f6f6f6',
-    padding: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 40,
-    textAlign: 'center',
-    color: '#00786A',
-  },
-  button: {
+  fullScreen: {
     width: '100%',
-    marginTop: 12,
-    backgroundColor: '#00786A',
-    paddingVertical: 12,
-    borderRadius: 16,
+    height: '100%',
+  },
+  container: {
+    display: 'flex',
+    width: '100%',
+    height: '100%',
+    paddingTop: 130,
+    paddingBottom: 40,
+    paddingRight: 30,
+    paddingLeft: 30,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
     alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+  },
+  inputContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '90%',
+    height: '43%',
+    backgroundColor: 'rgba(0, 0, 0, 0.24)',
+    paddingTop: 30,
+    paddingBottom: 30,
+    borderRadius: 25,
+  },
+  logo: {
+    width: 300,
+    height: 187,
+  },
+  spacingContainer: {
+    width: '100%',
+    height: 190,
+  },
+  textContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+    paddingTop: 6,
+    paddingBottom: 6,
+  },
+  paragraph1: {
+    display: 'flex',
+    textAlign: 'center',
+    width: '100%',
+    fontSize: 24,
+    lineHeight: 29,
+    fontFamily: 'Inter',
+    fontWeight: '700',
+    color: '#ffffff',
+  },
+  paragraph2: {
+    display: 'flex',
+    textAlign: 'center',
+    width: '100%',
+    fontSize: 28,
+    lineHeight: 42,
+    fontFamily: 'Inter',
+    fontWeight: '700',
+    color: '#ffffff',
+  },
+  paragraph3: {
+    display: 'flex',
+    textAlign: 'center',
+    width: '90%',
+    fontSize: 22,
+    lineHeight: 33,
+    fontFamily: 'Inter',
+    fontWeight: '500',
+    color: '#ffffff',
+  },
+  continueButton: {
+    display: 'flex',
+    width: '100%',
+    backgroundColor: '#00786a',
+    paddingTop: 14,
+    paddingRight: 24,
+    paddingBottom: 14,
+    paddingLeft: 24,
+    borderRadius: 20,
   },
   buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
     fontSize: 16,
-  },
-  registerButton: {
-    backgroundColor: '#E66901',
+    lineHeight: 24,
+    fontFamily: 'Inter',
+    fontWeight: '500',
+    color: '#ffffff',
   },
 });
-
-export default WelcomeScreen;
