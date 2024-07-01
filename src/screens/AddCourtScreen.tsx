@@ -149,65 +149,68 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.sectionTitle}>Adicionar Nova Quadra</Text>
+      <View style={styles.detailsContainer}>
+        <Text style={styles.sectionTitle}>Adicionar Nova Quadra</Text>
 
-      <Text style={styles.label}>Nome da Quadra</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Digite o nome da quadra"
-        value={courtDetails.name}
-        onChangeText={text => setCourtDetails({...courtDetails, name: text})}
-      />
+        <Text style={styles.label}>Nome da Quadra</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Digite o nome da quadra"
+          value={courtDetails.name}
+          onChangeText={text => setCourtDetails({...courtDetails, name: text})}
+        />
 
-      <Text style={styles.label}>Tipo da Quadra</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Digite o tipo da quadra"
-        value={courtDetails.type}
-        onChangeText={text => setCourtDetails({...courtDetails, type: text})}
-      />
+        <Text style={styles.label}>Tipo da Quadra</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Digite o tipo da quadra"
+          value={courtDetails.type}
+          onChangeText={text => setCourtDetails({...courtDetails, type: text})}
+        />
 
-      <Text style={styles.label}>Descrição da Quadra</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Digite a descrição da quadra"
-        multiline
-        numberOfLines={4}
-        value={courtDetails.description}
-        onChangeText={text =>
-          setCourtDetails({...courtDetails, description: text})
-        }
-      />
+        <Text style={styles.label}>Descrição da Quadra</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Digite a descrição da quadra"
+          multiline
+          numberOfLines={4}
+          value={courtDetails.description}
+          onChangeText={text =>
+            setCourtDetails({...courtDetails, description: text})
+          }
+        />
 
-      <Text style={styles.label}>Taxa Horária (R$)</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Digite a taxa horária"
-        keyboardType="numeric"
-        value={courtDetails.hourlyRate.toString()}
-        onChangeText={text =>
-          setCourtDetails({...courtDetails, hourlyRate: parseFloat(text)})
-        }
-      />
+        <Text style={styles.label}>Taxa Horária (R$)</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Digite a taxa horária"
+          keyboardType="numeric"
+          value={courtDetails.hourlyRate.toString()}
+          onChangeText={text =>
+            setCourtDetails({...courtDetails, hourlyRate: parseFloat(text)})
+          }
+        />
 
-      <Text style={styles.label}>Endereço da Quadra</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Digite o endereço da quadra"
-        value={courtDetails.address}
-        onChangeText={text => setCourtDetails({...courtDetails, address: text})}
-      />
+        <Text style={styles.label}>Endereço da Quadra</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Digite o endereço da quadra"
+          value={courtDetails.address}
+          onChangeText={text =>
+            setCourtDetails({...courtDetails, address: text})
+          }
+        />
 
-      <Text style={styles.label}>Horário de Funcionamento</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Digite o horário de funcionamento da quadra"
-        value={courtDetails.workingHours}
-        onChangeText={text =>
-          setCourtDetails({...courtDetails, workingHours: text})
-        }
-      />
-
+        <Text style={styles.label}>Horário de Funcionamento</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Digite o horário de funcionamento da quadra"
+          value={courtDetails.workingHours}
+          onChangeText={text =>
+            setCourtDetails({...courtDetails, workingHours: text})
+          }
+        />
+      </View>
       <TouchableOpacity style={styles.addButton} onPress={handleAddCourt}>
         <Text style={styles.textButton}>Adicionar Quadra</Text>
       </TouchableOpacity>
@@ -234,6 +237,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingHorizontal: 16,
     paddingVertical: 24,
+  },
+  detailsContainer: {
+    padding: 16,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    margin: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
   },
   sectionTitle: {
     fontSize: 18,
@@ -283,7 +300,12 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 8,
     alignItems: 'center',
+    marginHorizontal: 16,
     shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 4,
