@@ -35,7 +35,7 @@ const HomeScreen: React.FC<Props> = ({route}) => {
   };
 
   const handleAddCourt = () => {
-    navigation.navigate('AddCourt'); // Navegar para AddCourtScreen
+    navigation.navigate('AddCourt');
   };
 
   const renderItem = ({item}: {item: Court}) => (
