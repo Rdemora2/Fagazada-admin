@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   image: {
-    width: width - 2, // Ajustado para preencher o container sem margens
+    width: width - 2,
     height: 200,
   },
   content: {
