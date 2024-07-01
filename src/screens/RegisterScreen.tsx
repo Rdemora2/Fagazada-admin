@@ -2,18 +2,24 @@ import React, {useState} from 'react';
 import {
   View,
   TextInput,
+  ImageBackground,
+  SafeAreaView,
   Button,
   StyleSheet,
   Text,
   ScrollView,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
+import {BlurView} from '@react-native-community/blur';
 import {register} from '../services/apiMock';
 import {RegisterScreenNavigationProp} from '../types/types';
 
 type Props = {
   navigation: RegisterScreenNavigationProp;
 };
+
+const {width, height} = Dimensions.get('window');
 
 const RegisterScreen: React.FC<Props> = ({navigation}) => {
   const [fullName, setFullName] = useState('');
@@ -50,112 +56,130 @@ const RegisterScreen: React.FC<Props> = ({navigation}) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <View style={styles.container}>
-        <Text style={styles.title}>Cadastre-se</Text>
+    <SafeAreaView>
+      <ImageBackground
+        source={require('../assets/images/basquetBackground.jpg')}
+        style={styles.fullScreen}>
+        <BlurView style={styles.fullScreen} blurAmount={4}>
+          <ScrollView style={styles.fullScreen}>
+            <View style={styles.container}>
+              <Text style={styles.title}>Cadastre-se na plataforma:</Text>
 
-        <Text style={[styles.label, styles.labelStart]}>Nome Completo</Text>
-        <TextInput
-          style={styles.input}
-          value={fullName}
-          onChangeText={text => setFullName(text)}
-        />
+              <Text style={[styles.label, styles.labelStart]}>
+                Nome Completo
+              </Text>
+              <TextInput
+                style={styles.input}
+                value={fullName}
+                onChangeText={text => setFullName(text)}
+              />
 
-        <Text style={[styles.label, styles.labelStart]}>Email</Text>
-        <TextInput
-          style={styles.input}
-          value={email}
-          onChangeText={text => setEmail(text)}
-        />
+              <Text style={[styles.label, styles.labelStart]}>Email</Text>
+              <TextInput
+                style={styles.input}
+                value={email}
+                onChangeText={text => setEmail(text)}
+              />
 
-        <Text style={[styles.label, styles.labelStart]}>Senha</Text>
-        <TextInput
-          style={styles.input}
-          value={password}
-          onChangeText={text => setPassword(text)}
-          secureTextEntry
-        />
+              <Text style={[styles.label, styles.labelStart]}>Senha</Text>
+              <TextInput
+                style={styles.input}
+                value={password}
+                onChangeText={text => setPassword(text)}
+                secureTextEntry
+              />
 
-        <Text style={[styles.label, styles.labelStart]}>
-          Apelido (opcional)
-        </Text>
-        <TextInput
-          style={styles.input}
-          value={nickname}
-          onChangeText={text => setNickname(text)}
-        />
+              <Text style={[styles.label, styles.labelStart]}>
+                Apelido (opcional)
+              </Text>
+              <TextInput
+                style={styles.input}
+                value={nickname}
+                onChangeText={text => setNickname(text)}
+              />
 
-        <Text style={[styles.label, styles.labelStart]}>Número de Contato</Text>
-        <TextInput
-          style={styles.input}
-          value={phoneNumber}
-          onChangeText={text => setPhoneNumber(text)}
-        />
+              <Text style={[styles.label, styles.labelStart]}>
+                Número de Contato
+              </Text>
+              <TextInput
+                style={styles.input}
+                value={phoneNumber}
+                onChangeText={text => setPhoneNumber(text)}
+              />
 
-        <Text style={[styles.label, styles.labelStart]}>CPF</Text>
-        <TextInput
-          style={styles.input}
-          value={cpf}
-          onChangeText={text => setCpf(text)}
-        />
+              <Text style={[styles.label, styles.labelStart]}>CPF</Text>
+              <TextInput
+                style={styles.input}
+                value={cpf}
+                onChangeText={text => setCpf(text)}
+              />
 
-        <Text style={[styles.label, styles.labelStart]}>Endereço</Text>
-        <TextInput
-          style={styles.input}
-          value={address}
-          onChangeText={text => setAddress(text)}
-        />
+              <Text style={[styles.label, styles.labelStart]}>Endereço</Text>
+              <TextInput
+                style={styles.input}
+                value={address}
+                onChangeText={text => setAddress(text)}
+              />
 
-        <Text style={[styles.label, styles.labelStart]}>URL da Foto</Text>
-        <TextInput
-          style={styles.input}
-          value={photo}
-          onChangeText={text => setPhoto(text)}
-        />
+              <Text style={[styles.label, styles.labelStart]}>URL da Foto</Text>
+              <TextInput
+                style={styles.input}
+                value={photo}
+                onChangeText={text => setPhoto(text)}
+              />
 
-        <Text style={[styles.label, styles.labelStart]}>Papel</Text>
-        <TextInput
-          style={styles.input}
-          value={role}
-          onChangeText={text => setRole(text)}
-          placeholder="dono, gestor ou professor"
-        />
+              <Text style={[styles.label, styles.labelStart]}>Papel</Text>
+              <TextInput
+                style={styles.input}
+                value={role}
+                onChangeText={text => setRole(text)}
+                placeholder="dono, gestor ou professor"
+                placeholderTextColor="#ffffff"
+              />
 
-        <TouchableOpacity style={styles.buttonContainer} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>Registrar</Text>
-        </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.buttonContainer}
+                onPress={handleSubmit}>
+                <Text style={styles.buttonText}>Registrar</Text>
+              </TouchableOpacity>
 
-        <TouchableOpacity onPress={handleNavigateToLogin}>
-          <Text style={styles.registerText}>
-            Já tem uma conta? Faça login aqui
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+              <TouchableOpacity onPress={handleNavigateToLogin}>
+                <Text style={styles.registerText}>
+                  Já tem uma conta? Faça login aqui
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </BlurView>
+      </ImageBackground>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  scrollContainer: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    backgroundColor: '#f6f6f6',
-    padding: 16,
+  fullScreen: {
+    width: width,
+    height: height,
   },
   container: {
+    justifyContent: 'center',
     alignItems: 'center',
+    margin: 30,
+    backgroundColor: 'rgba(0, 0, 0, 0.35)',
+    padding: 35,
+    borderRadius: 25,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 24,
-    color: '#00786A',
+    color: '#ffffff',
     textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 24,
+    marginBottom: 24,
   },
   label: {
     fontSize: 16,
     marginBottom: 8,
-    color: '#00786A',
+    color: '#ffffff',
   },
   labelStart: {
     alignSelf: 'flex-start',
@@ -163,15 +187,15 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   input: {
-    height: 40,
     width: '100%',
-    borderWidth: 1,
-    borderColor: '#E66901',
+    height: 40,
     paddingHorizontal: 10,
     marginBottom: 12,
     borderRadius: 16,
-    backgroundColor: '#fff',
-    color: '#333',
+    borderWidth: 1,
+    borderColor: '#E66901',
+    color: '#ffffff',
+    backgroundColor: 'rgba(0, 0, 0, 0.17)',
   },
   buttonContainer: {
     width: '100%',
