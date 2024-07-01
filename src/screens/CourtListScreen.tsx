@@ -1,14 +1,8 @@
-// src/screens/CourtListScreen.tsx
-
 import React, {useState, useEffect} from 'react';
 import {View, Text, FlatList, StyleSheet} from 'react-native';
 import {CourtListScreenNavigationProp} from '../types/types';
 import {fetchCourts} from '../services/apiMock';
-
-type Court = {
-  id: string;
-  name: string;
-};
+import {Court} from '../types/types';
 
 type Props = {
   navigation: CourtListScreenNavigationProp;
@@ -38,12 +32,14 @@ const CourtListScreen: React.FC<Props> = ({navigation}) => {
     </Text>
   );
 
+  const keyExtractor = (item: Court) => item.id.toString();
+
   return (
     <View style={styles.container}>
       <FlatList
         data={courts}
         renderItem={renderItem}
-        keyExtractor={item => item.id}
+        keyExtractor={keyExtractor}
       />
     </View>
   );
