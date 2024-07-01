@@ -8,8 +8,14 @@ import {
   FlatList,
   ScrollView,
   Dimensions,
+  GestureResponderEvent,
 } from 'react-native';
-import {CourtDetailScreenRouteProp, Court} from '../types/types';
+import {useNavigation} from '@react-navigation/native';
+import {
+  CourtDetailScreenRouteProp,
+  Court,
+  HomeScreenNavigationProp,
+} from '../types/types';
 import {fetchCourtDetails} from '../services/apiMock';
 
 type Props = {
@@ -21,6 +27,7 @@ const CourtDetailScreen: React.FC<Props> = ({route}) => {
   const [court, setCourt] = useState<Court | null>(null);
   const windowWidth = Dimensions.get('window').width;
   const carouselItemWidth = windowWidth * 0.93;
+  const navigation = useNavigation<HomeScreenNavigationProp>();
 
   useEffect(() => {
     const getCourtDetails = async () => {
@@ -34,6 +41,10 @@ const CourtDetailScreen: React.FC<Props> = ({route}) => {
 
     getCourtDetails();
   }, [courtId]);
+
+  const handleCourtEdit = (event: GestureResponderEvent) => {
+    navigation.navigate('EditCourt', {courtId});
+  };
 
   if (!court) {
     return (
@@ -75,9 +86,7 @@ const CourtDetailScreen: React.FC<Props> = ({route}) => {
         <Text style={styles.sectionContent}>{court.workingHours}</Text>
       </View>
 
-      <TouchableOpacity
-        style={styles.editButton}
-        onPress={() => console.log('Editar quadra')}>
+      <TouchableOpacity style={styles.editButton} onPress={handleCourtEdit}>
         <Text style={styles.editButtonText}>Editar</Text>
       </TouchableOpacity>
     </ScrollView>
