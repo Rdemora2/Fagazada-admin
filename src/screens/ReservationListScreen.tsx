@@ -21,7 +21,7 @@ const ReservationListScreen: React.FC<Props> = ({navigation}) => {
   useEffect(() => {
     const getReservations = async () => {
       try {
-        const data = await fetchReservations(1); // Substituir pelo id do usuário logado
+        const data = await fetchReservations(1);
         setReservations(data);
       } catch (error) {
         console.error('Erro ao buscar reservas:', error);
