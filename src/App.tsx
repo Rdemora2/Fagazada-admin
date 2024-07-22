@@ -40,7 +40,7 @@ function MainTabs({route}: {route: any}) {
             iconName = focused ? 'menu' : 'menu-outline';
           }
 
-          return <Ionicons name={iconName} size={size} color={color} />;
+          return <Ionicons name={iconName ?? ''} size={size} color={color} />;
         },
         tabBarActiveTintColor: '#E66901',
         tabBarInactiveTintColor: 'gray',
@@ -81,7 +81,7 @@ const App = () => {
         <Stack.Screen
           name="Welcome"
           component={WelcomeScreen}
-          options={{title: '', headerLeft: () => null}}
+          options={{title: '', headerShown: false}}
         />
         <Stack.Screen
           name="Home"
@@ -91,12 +91,12 @@ const App = () => {
         <Stack.Screen
           name="Login"
           component={LoginScreen}
-          options={{title: ''}}
+          options={{title: '', headerShown: false}}
         />
         <Stack.Screen
           name="Register"
           component={RegisterScreen}
-          options={{title: ''}}
+          options={{title: '', headerShown: false}}
         />
         <Stack.Screen
           name="CourtList"
@@ -131,7 +131,7 @@ const App = () => {
         <Stack.Screen
           name="IdentificationScreen"
           component={IdentificationScreen}
-          options={{title: 'Identificação'}}
+          options={{title: 'Identificação', headerShown: false}}
         />
         <Stack.Screen
           name="ReservationList"
