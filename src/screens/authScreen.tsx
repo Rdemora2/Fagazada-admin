@@ -90,12 +90,12 @@ const AuthenticationScreen = () => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.safeArea}>
       <ImageBackground
         source={require('../assets/images/basquetBackground.jpg')}
         style={styles.fullScreen}>
         <BlurView style={styles.fullScreen} blurAmount={4}>
-          <ScrollView>
+          <ScrollView contentContainerStyle={styles.scrollViewContent}>
             <View style={styles.container}>
               <ImageBackground
                 style={styles.logo}
@@ -181,7 +181,7 @@ const AuthenticationScreen = () => {
               {step === 'register' && (
                 <View style={styles.registerContainer}>
                   <Text style={styles.title}>Cadastre-se na plataforma:</Text>
-                  <Text style={[styles.label, styles.labelStart]}>
+                  <Text style={[styles.registerLabel, styles.labelStart]}>
                     Nome Completo
                   </Text>
                   <TextInput
@@ -189,20 +189,24 @@ const AuthenticationScreen = () => {
                     value={fullName}
                     onChangeText={setFullName}
                   />
-                  <Text style={[styles.label, styles.labelStart]}>Email</Text>
+                  <Text style={[styles.registerLabel, styles.labelStart]}>
+                    Email
+                  </Text>
                   <TextInput
                     style={styles.input}
                     value={email}
                     onChangeText={setEmail}
                   />
-                  <Text style={[styles.label, styles.labelStart]}>Senha</Text>
+                  <Text style={[styles.registerLabel, styles.labelStart]}>
+                    Senha
+                  </Text>
                   <TextInput
                     style={styles.input}
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry
                   />
-                  <Text style={[styles.label, styles.labelStart]}>
+                  <Text style={[styles.registerLabel, styles.labelStart]}>
                     Apelido (opcional)
                   </Text>
                   <TextInput
@@ -210,7 +214,7 @@ const AuthenticationScreen = () => {
                     value={nickname}
                     onChangeText={setNickname}
                   />
-                  <Text style={[styles.label, styles.labelStart]}>
+                  <Text style={[styles.registerLabel, styles.labelStart]}>
                     Número de Contato
                   </Text>
                   <TextInput
@@ -218,13 +222,15 @@ const AuthenticationScreen = () => {
                     value={phoneNumber}
                     onChangeText={setPhoneNumber}
                   />
-                  <Text style={[styles.label, styles.labelStart]}>CPF</Text>
+                  <Text style={[styles.registerLabel, styles.labelStart]}>
+                    CPF
+                  </Text>
                   <TextInput
                     style={styles.input}
                     value={cpf}
                     onChangeText={setCpf}
                   />
-                  <Text style={[styles.label, styles.labelStart]}>
+                  <Text style={[styles.registerLabel, styles.labelStart]}>
                     Endereço
                   </Text>
                   <TextInput
@@ -232,7 +238,7 @@ const AuthenticationScreen = () => {
                     value={address}
                     onChangeText={setAddress}
                   />
-                  <Text style={[styles.label, styles.labelStart]}>
+                  <Text style={[styles.registerLabel, styles.labelStart]}>
                     URL da Foto
                   </Text>
                   <TextInput
@@ -240,7 +246,9 @@ const AuthenticationScreen = () => {
                     value={photo}
                     onChangeText={setPhoto}
                   />
-                  <Text style={[styles.label, styles.labelStart]}>Papel</Text>
+                  <Text style={[styles.registerLabel, styles.labelStart]}>
+                    Papel
+                  </Text>
                   <TextInput
                     style={styles.input}
                     value={role}
@@ -249,9 +257,9 @@ const AuthenticationScreen = () => {
                     placeholderTextColor="#ffffff"
                   />
                   <TouchableOpacity
-                    style={styles.buttonContainer}
+                    style={styles.registerButtonContainer}
                     onPress={handleRegister}>
-                    <Text style={styles.buttonText}>Registrar</Text>
+                    <Text style={styles.registerButtonText}>Registrar</Text>
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => setStep('login')}>
                     <Text style={styles.registerText}>
@@ -269,14 +277,21 @@ const AuthenticationScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
   fullScreen: {
     width: width,
     height: height,
   },
+  scrollViewContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   container: {
     display: 'flex',
     width: width,
-    height: height,
     paddingTop: 130,
     paddingBottom: 80,
     paddingRight: 30,
@@ -319,14 +334,11 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
   registerContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
     width: '90%',
-    height: '80%',
-    backgroundColor: 'rgba(0, 0, 0, 0.24)',
-    padding: 30,
+    padding: 25,
+    backgroundColor: 'rgba(0, 0, 0, 0.35)',
     borderRadius: 25,
+    alignItems: 'center',
   },
   logo: {
     width: 300,
@@ -348,6 +360,16 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#ffffff',
     textAlign: 'left',
+  },
+  registerLabel: {
+    fontSize: 16,
+    marginBottom: 8,
+    color: '#ffffff',
+  },
+  labelStart: {
+    alignSelf: 'flex-start',
+    textAlign: 'left',
+    width: '100%',
   },
   loginTitle: {
     height: '35%',
@@ -375,17 +397,15 @@ const styles = StyleSheet.create({
     borderColor: '#e66901',
   },
   input: {
-    display: 'flex',
     width: '100%',
-    height: '100%',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    flexBasis: 'auto',
-    fontFamily: 'Inter',
-    fontSize: 18,
-    fontWeight: '500',
+    height: 40,
+    paddingHorizontal: 10,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#E66901',
     color: '#ffffff',
-    textAlign: 'left',
+    backgroundColor: 'rgba(0, 0, 0, 0.17)',
+    marginBottom: 12,
   },
   loginInput: {
     width: '100%',
@@ -404,7 +424,6 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   continueButton: {
-    display: 'flex',
     width: 150,
     height: 'auto',
     paddingTop: 14,
@@ -421,7 +440,6 @@ const styles = StyleSheet.create({
     marginLeft: 0,
   },
   backButton: {
-    display: 'flex',
     width: 150,
     height: 'auto',
     paddingTop: 14,
@@ -441,6 +459,19 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   loginButtonText: {
+    textAlign: 'center',
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  registerButtonContainer: {
+    width: '100%',
+    marginTop: 12,
+    backgroundColor: '#00786A',
+    paddingVertical: 12,
+    borderRadius: 16,
+  },
+  registerButtonText: {
     textAlign: 'center',
     color: '#fff',
     fontWeight: 'bold',
@@ -470,14 +501,12 @@ const styles = StyleSheet.create({
     color: '#E66901',
   },
   textContainer: {
-    display: 'flex',
     alignItems: 'center',
     width: '100%',
     paddingTop: 6,
     paddingBottom: 26,
   },
   paragraph1: {
-    display: 'flex',
     textAlign: 'center',
     width: '100%',
     fontSize: 24,
@@ -487,7 +516,6 @@ const styles = StyleSheet.create({
     color: '#ffffff',
   },
   paragraph2: {
-    display: 'flex',
     textAlign: 'center',
     width: '100%',
     fontSize: 28,
@@ -497,7 +525,6 @@ const styles = StyleSheet.create({
     color: '#ffffff',
   },
   paragraph3: {
-    display: 'flex',
     textAlign: 'center',
     width: '90%',
     fontSize: 22,
