@@ -22,6 +22,7 @@ export type RootStackParamList = {
   CourtAvailability: undefined;
   IdentificationScreen: undefined;
   Menu: {userName: string; userId: number};
+  Authentication: undefined;
 };
 
 export interface Court {

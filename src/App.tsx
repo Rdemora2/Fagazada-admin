@@ -5,10 +5,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import WelcomeScreen from './screens/WelcomeScreen';
 import HomeScreen from './screens/HomeScreen';
-import LoginScreen from './screens/LoginScreen';
-import RegisterScreen from './screens/RegisterScreen';
 import CourtListScreen from './screens/CourtListScreen';
 import CourtDetailScreen from './screens/CourtDetailScreen';
 import ProfileScreen from './screens/ProfileScreen';
@@ -17,15 +14,14 @@ import AddCourtScreen from './screens/AddCourtScreen';
 import EditCourtScreen from './screens/EditCourtScreen';
 import ReservationListScreen from './screens/ReservationListScreen';
 import CourtAvailability from './screens/CourtAvailability';
-import IdentificationScreen from './screens/identificationScreen';
 import MenuScreen from './screens/MenuScreen';
+import AuthenticationScreen from './screens/authScreen'; // Nova tela combinada
 import {RootStackParamList} from './types/types';
 
 const Stack = createStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
 
-function MainTabs({route}: {route: any}) {
-  const {userName, userId} = route.params;
+function MainTabs() {
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
@@ -53,11 +49,7 @@ function MainTabs({route}: {route: any}) {
       })}>
       <Tab.Screen name="Início" component={HomeScreen} />
       <Tab.Screen name="Reservas" component={ReservationListScreen} />
-      <Tab.Screen
-        name="Menu"
-        component={MenuScreen}
-        initialParams={{userName, userId}}
-      />
+      <Tab.Screen name="Menu" component={MenuScreen} />
     </Tab.Navigator>
   );
 }
@@ -66,7 +58,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Welcome"
+        initialRouteName="Authentication"
         screenOptions={{
           headerStyle: {
             backgroundColor: '#00786A',
@@ -79,24 +71,14 @@ const App = () => {
           headerTitleAlign: 'center',
         }}>
         <Stack.Screen
-          name="Welcome"
-          component={WelcomeScreen}
+          name="Authentication"
+          component={AuthenticationScreen}
           options={{title: '', headerShown: false}}
         />
         <Stack.Screen
           name="Home"
           component={MainTabs}
           options={{title: 'Fagazada gestores', headerLeft: () => null}}
-        />
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{title: '', headerShown: false}}
-        />
-        <Stack.Screen
-          name="Register"
-          component={RegisterScreen}
-          options={{title: '', headerShown: false}}
         />
         <Stack.Screen
           name="CourtList"
@@ -127,11 +109,6 @@ const App = () => {
           name="EditCourt"
           component={EditCourtScreen}
           options={{title: 'Editar Quadra'}}
-        />
-        <Stack.Screen
-          name="IdentificationScreen"
-          component={IdentificationScreen}
-          options={{title: 'Identificação', headerShown: false}}
         />
         <Stack.Screen
           name="ReservationList"
