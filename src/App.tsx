@@ -40,14 +40,14 @@ function MainTabs() {
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: 'tomato',
+        tabBarActiveTintColor: '#E66901',
         tabBarInactiveTintColor: 'gray',
         tabBarStyle: {
           paddingTop: 10,
           paddingBottom: 10,
           height: 60,
         },
-        headerShown: false, // Esconde o cabeçalho das telas do Tab.Navigator
+        headerShown: false,
       })}>
       <Tab.Screen name="Início" component={HomeScreen} />
       <Tab.Screen name="Reservas" component={ReservationListScreen} />
