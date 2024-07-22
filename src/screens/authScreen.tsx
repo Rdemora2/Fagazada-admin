@@ -87,7 +87,7 @@ const AuthenticationScreen = () => {
               />
               <View style={styles.spacingContainer} />
               {step === 'welcome' && (
-                <View style={styles.inputContainer}>
+                <View style={styles.welcomeContainer}>
                   <View style={styles.textContainer}>
                     <Text style={styles.paragraph1}>Bem vindo ao</Text>
                     <Text style={styles.paragraph2}>Fagazada Gestores</Text>
@@ -103,7 +103,7 @@ const AuthenticationScreen = () => {
                 </View>
               )}
               {step === 'identification' && (
-                <View style={styles.inputContainer}>
+                <View style={styles.identificationContainer}>
                   <View style={styles.inputWrapper}>
                     <Text style={styles.loginTitle}>Identifique-se</Text>
                     <Text style={styles.label}>E-mail:</Text>
@@ -133,17 +133,17 @@ const AuthenticationScreen = () => {
                 </View>
               )}
               {step === 'login' && (
-                <View style={styles.inputContainer}>
+                <View style={styles.loginContainer}>
                   <Text style={styles.title}>Faça seu login:</Text>
                   <TextInput
-                    style={styles.input}
+                    style={styles.loginInput}
                     placeholder="Email"
                     placeholderTextColor="#ffffff"
                     value={email}
                     onChangeText={setEmail}
                   />
                   <TextInput
-                    style={styles.input}
+                    style={styles.loginInput}
                     placeholder="Senha"
                     placeholderTextColor="#ffffff"
                     value={password}
@@ -151,9 +151,9 @@ const AuthenticationScreen = () => {
                     secureTextEntry
                   />
                   <TouchableOpacity
-                    style={styles.buttonContainer}
+                    style={styles.loginButtonContainer}
                     onPress={handleLogin}>
-                    <Text style={styles.buttonText}>Entrar</Text>
+                    <Text style={styles.loginButtonText}>Entrar</Text>
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => setStep('register')}>
                     <Text style={styles.registerText}>
@@ -163,7 +163,7 @@ const AuthenticationScreen = () => {
                 </View>
               )}
               {step === 'register' && (
-                <View style={styles.inputContainer}>
+                <View style={styles.registerContainer}>
                   <Text style={styles.title}>Cadastre-se na plataforma:</Text>
                   <Text style={[styles.label, styles.labelStart]}>
                     Nome Completo
@@ -270,15 +270,46 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
   },
-  inputContainer: {
+  welcomeContainer: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    width: '100%',
+    width: '90%',
+    height: '43%',
+    backgroundColor: 'rgba(0, 0, 0, 0.24)',
+    paddingTop: 30,
+    paddingBottom: 30,
+    borderRadius: 25,
+  },
+  identificationContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '90%',
     height: '50%',
     backgroundColor: 'rgba(0, 0, 0, 0.24)',
     paddingTop: 30,
     paddingBottom: 30,
+    borderRadius: 25,
+  },
+  loginContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '90%',
+    height: '55%',
+    backgroundColor: 'rgba(0, 0, 0, 0.24)',
+    padding: 35,
+    borderRadius: 25,
+  },
+  registerContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '90%',
+    height: '80%',
+    backgroundColor: 'rgba(0, 0, 0, 0.24)',
+    padding: 30,
     borderRadius: 25,
   },
   logo: {
@@ -340,6 +371,16 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     textAlign: 'left',
   },
+  loginInput: {
+    width: '100%',
+    paddingHorizontal: 10,
+    marginBottom: 12,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#E66901',
+    color: '#ffffff',
+    backgroundColor: 'rgba(0, 0, 0, 0.17)',
+  },
   buttonContainer: {
     width: '100%',
     height: 'auto',
@@ -376,6 +417,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#e66901',
     borderRadius: 20,
   },
+  loginButtonContainer: {
+    width: '100%',
+    marginTop: 12,
+    backgroundColor: '#00786A',
+    paddingVertical: 12,
+    borderRadius: 16,
+  },
+  loginButtonText: {
+    textAlign: 'center',
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
   buttonText: {
     fontSize: 16,
     lineHeight: 24,
@@ -390,13 +444,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 24,
   },
-
   labelStart: {
     alignSelf: 'flex-start',
     textAlign: 'left',
     width: '100%',
   },
-
   registerText: {
     marginTop: 16,
     color: '#E66901',
