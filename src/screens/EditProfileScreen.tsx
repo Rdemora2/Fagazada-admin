@@ -1,5 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {View, TextInput, Button, StyleSheet, Alert} from 'react-native';
+import {
+  View,
+  TextInput,
+  Button,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Modal,
+} from 'react-native';
 import {updateProfile, fetchProfile} from '../services/apiMock';
 import {
   EditProfileScreenNavigationProp,
@@ -25,6 +33,7 @@ const EditProfileScreen: React.FC<Props> = ({route, navigation}) => {
   const [address, setAddress] = useState<string>('');
   const [photo, setPhoto] = useState<string | undefined>('');
   const [role, setRole] = useState<string>('');
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -57,14 +66,15 @@ const EditProfileScreen: React.FC<Props> = ({route, navigation}) => {
         photo,
         role,
       });
-      Alert.alert(
-        'Perfil Atualizado',
-        'Seu perfil foi atualizado com sucesso!',
-        [{text: 'OK', onPress: () => navigation.navigate('Profile', {userId})}],
-      );
+      setIsModalVisible(true);
     } catch (error) {
       console.error('Erro ao atualizar perfil:', error);
     }
+  };
+
+  const handleModalClose = () => {
+    setIsModalVisible(false);
+    navigation.navigate('Profile', {userId});
   };
 
   return (
@@ -130,6 +140,17 @@ const EditProfileScreen: React.FC<Props> = ({route, navigation}) => {
           color="#00786A"
         />
       </View>
+
+      <Modal visible={isModalVisible}>
+        <View style={styles.modalContainer}>
+          <Text style={styles.modalText}>Perfil Atualizado!</Text>
+          <TouchableOpacity
+            style={styles.modalButton}
+            onPress={handleModalClose}>
+            <Text style={styles.modalButtonText}>OK</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -179,6 +200,26 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  modalContainer: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 10,
+  },
+  modalButton: {
+    backgroundColor: '#00786A',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  modalButtonText: {
+    color: 'white',
+    fontSize: 16,
   },
 });
 
