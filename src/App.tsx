@@ -42,6 +42,11 @@ function MainTabs() {
         },
         tabBarActiveTintColor: 'tomato',
         tabBarInactiveTintColor: 'gray',
+        tabBarStyle: {
+          paddingTop: 11,
+          paddingBottom: 11,
+          height: 60,
+        },
       })}>
       <Tab.Screen name="Início" component={HomeScreen} />
       <Tab.Screen name="Reservas" component={ReservationListScreen} />
