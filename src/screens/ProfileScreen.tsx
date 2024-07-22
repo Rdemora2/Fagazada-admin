@@ -12,14 +12,18 @@ type Props = {
 };
 
 const ProfileScreen: React.FC<Props> = ({route, navigation}) => {
-  const {userId} = route.params;
+  const userId = route.params?.userId;
   const [profile, setProfile] = useState<any>(null);
 
   useEffect(() => {
     const loadProfile = async () => {
       try {
-        const data = await fetchProfile(userId);
-        setProfile(data);
+        if (userId) {
+          const data = await fetchProfile(userId);
+          setProfile(data);
+        } else {
+          console.error('userId não disponível');
+        }
       } catch (error) {
         console.error('Erro ao carregar perfil:', error);
       }
@@ -27,6 +31,14 @@ const ProfileScreen: React.FC<Props> = ({route, navigation}) => {
 
     loadProfile();
   }, [userId]);
+
+  if (!userId) {
+    return (
+      <View style={styles.container}>
+        <Text>Erro: ID do usuário não disponível.</Text>
+      </View>
+    );
+  }
 
   if (!profile) {
     return (
@@ -58,6 +70,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   label: {
     fontSize: 16,

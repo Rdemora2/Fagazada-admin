@@ -18,6 +18,7 @@ import EditCourtScreen from './screens/EditCourtScreen';
 import ReservationListScreen from './screens/ReservationListScreen';
 import CourtAvailability from './screens/CourtAvailability';
 import IdentificationScreen from './screens/identificationScreen';
+import MenuScreen from './screens/MenuScreen';
 import {RootStackParamList} from './types/types';
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -51,7 +52,11 @@ function MainTabs() {
       })}>
       <Tab.Screen name="Início" component={HomeScreen} />
       <Tab.Screen name="Reservas" component={ReservationListScreen} />
-      <Tab.Screen name="Menu" component={ProfileScreen} />
+      <Tab.Screen
+        name="Menu"
+        component={MenuScreen}
+        initialParams={{userName: 'Usuário', userId: 123}}
+      />
     </Tab.Navigator>
   );
 }
@@ -136,6 +141,11 @@ const App = () => {
           name="CourtAvailability"
           component={CourtAvailability}
           options={{title: 'Disponibilidade da Quadra'}}
+        />
+        <Stack.Screen
+          name="Menu"
+          component={MenuScreen}
+          options={{title: 'Menu'}}
         />
       </Stack.Navigator>
     </NavigationContainer>
