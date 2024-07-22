@@ -106,7 +106,7 @@ const App = () => {
         <Stack.Screen
           name="CourtDetail"
           component={CourtDetailScreen}
-          options={{title: 'Detalhe da Quadra'}}
+          options={{title: 'Detalhes da Quadra'}}
         />
         <Stack.Screen
           name="Profile"
