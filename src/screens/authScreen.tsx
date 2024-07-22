@@ -45,7 +45,7 @@ const AuthenticationScreen = () => {
     try {
       const user = await login(email, password);
       navigation.navigate('Home', {
-        screen: 'Home',
+        screen: 'Menu',
         params: {
           userName: user.fullName,
           userId: user.id,
