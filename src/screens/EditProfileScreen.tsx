@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, TextInput, Button, StyleSheet, Text} from 'react-native';
+import {View, TextInput, Button, StyleSheet, Alert} from 'react-native';
 import {updateProfile, fetchProfile} from '../services/apiMock';
 import {
   EditProfileScreenNavigationProp,
@@ -57,7 +57,11 @@ const EditProfileScreen: React.FC<Props> = ({route, navigation}) => {
         photo,
         role,
       });
-      navigation.navigate('Profile', {userId});
+      Alert.alert(
+        'Perfil Atualizado',
+        'Seu perfil foi atualizado com sucesso!',
+        [{text: 'OK', onPress: () => navigation.navigate('Profile', {userId})}],
+      );
     } catch (error) {
       console.error('Erro ao atualizar perfil:', error);
     }
