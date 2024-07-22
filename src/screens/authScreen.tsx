@@ -491,11 +491,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 24,
   },
-  labelStart: {
-    alignSelf: 'flex-start',
-    textAlign: 'left',
-    width: '100%',
-  },
   registerText: {
     marginTop: 16,
     color: '#E66901',
