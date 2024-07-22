@@ -6,6 +6,7 @@ import {
   RootStackParamList,
 } from '../types/types';
 import {RouteProp} from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 type EditProfileScreenRouteProp = RouteProp<RootStackParamList, 'EditProfile'>;
 
@@ -64,56 +65,67 @@ const EditProfileScreen: React.FC<Props> = ({route, navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Nome Completo</Text>
-      <TextInput
-        style={styles.input}
-        value={fullName}
-        onChangeText={text => setFullName(text)}
-      />
-      <Text style={styles.label}>Email</Text>
-      <TextInput
-        style={styles.input}
-        value={email}
-        onChangeText={text => setEmail(text)}
-      />
-      <Text style={styles.label}>Apelido (opcional)</Text>
-      <TextInput
-        style={styles.input}
-        value={nickname || ''}
-        onChangeText={text => setNickname(text)}
-      />
-      <Text style={styles.label}>Número de Contato</Text>
-      <TextInput
-        style={styles.input}
-        value={phoneNumber}
-        onChangeText={text => setPhoneNumber(text)}
-      />
-      <Text style={styles.label}>CPF</Text>
-      <TextInput
-        style={styles.input}
-        value={cpf}
-        onChangeText={text => setCpf(text)}
-      />
-      <Text style={styles.label}>Endereço</Text>
-      <TextInput
-        style={styles.input}
-        value={address}
-        onChangeText={text => setAddress(text)}
-      />
-      <Text style={styles.label}>URL da Foto</Text>
-      <TextInput
-        style={styles.input}
-        value={photo || ''}
-        onChangeText={text => setPhoto(text)}
-      />
-      <Text style={styles.label}>Papel</Text>
-      <TextInput
-        style={styles.input}
-        value={role}
-        onChangeText={text => setRole(text)}
-        placeholder="dono, gestor ou professor"
-      />
-      <Button title="Atualizar Perfil" onPress={handleSubmit} />
+      <View style={styles.item}>
+        <Ionicons name="person" size={24} style={styles.icon} />
+        <TextInput
+          style={styles.input}
+          value={fullName}
+          onChangeText={text => setFullName(text)}
+          placeholder="Nome Completo"
+        />
+      </View>
+      <View style={styles.item}>
+        <Ionicons name="mail" size={24} style={styles.icon} />
+        <TextInput
+          style={styles.input}
+          value={email}
+          onChangeText={text => setEmail(text)}
+          placeholder="Email"
+        />
+      </View>
+      <View style={styles.item}>
+        <Ionicons name="call" size={24} style={styles.icon} />
+        <TextInput
+          style={styles.input}
+          value={phoneNumber}
+          onChangeText={text => setPhoneNumber(text)}
+          placeholder="Número de Contato"
+        />
+      </View>
+      <View style={styles.item}>
+        <Ionicons name="card" size={24} style={styles.icon} />
+        <TextInput
+          style={styles.input}
+          value={cpf}
+          onChangeText={text => setCpf(text)}
+          placeholder="CPF"
+        />
+      </View>
+      <View style={styles.item}>
+        <Ionicons name="home" size={24} style={styles.icon} />
+        <TextInput
+          style={styles.input}
+          value={address}
+          onChangeText={text => setAddress(text)}
+          placeholder="Endereço"
+        />
+      </View>
+      <View style={styles.item}>
+        <Ionicons name="briefcase" size={24} style={styles.icon} />
+        <TextInput
+          style={styles.input}
+          value={role}
+          onChangeText={text => setRole(text)}
+          placeholder="Papel"
+        />
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Atualizar Perfil"
+          onPress={handleSubmit}
+          color="#00786A"
+        />
+      </View>
     </View>
   );
 };
@@ -121,18 +133,48 @@ const EditProfileScreen: React.FC<Props> = ({route, navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    backgroundColor: '#fff',
+    paddingHorizontal: 16,
+    paddingTop: 16,
   },
-  label: {
-    fontSize: 16,
-    marginBottom: 8,
+  item: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+  },
+  icon: {
+    marginRight: 10,
+    color: '#00786A',
   },
   input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 12,
-    padding: 8,
+    flex: 1,
+    fontSize: 16,
+    color: '#333',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    paddingVertical: 5,
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#E66901',
+    marginHorizontal: 10,
+  },
+  buttonContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  button: {
+    backgroundColor: '#00786A',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 
