@@ -93,6 +93,16 @@ const reservations: Reservation[] = [
     startTime: '11:00',
     endTime: '13:00',
   },
+  {
+    id: 4,
+    courtId: 2,
+    userId: 2,
+    value: 100,
+    date: '2023-07-09',
+    status: 'confirmed',
+    startTime: '11:00',
+    endTime: '12:00',
+  },
 ];
 
 const availabilities: Availability[] = [];
