@@ -163,7 +163,7 @@ export const register = async (
 export const fetchProfile = async (userId: number) => {
   await new Promise(resolve => setTimeout(resolve, 100));
 
-  const user = users.find(user => user.id === userId);
+  const user = users.find(user => user.id == userId);
 
   if (!user) {
     throw new Error('Usuário não encontrado');

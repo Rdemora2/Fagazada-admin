@@ -1,4 +1,3 @@
-// src/screens/MenuScreen.tsx
 import React from 'react';
 import {View, Text, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
 import {useNavigation, RouteProp} from '@react-navigation/native';
