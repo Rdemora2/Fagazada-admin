@@ -67,6 +67,10 @@ const EditProfileScreen: React.FC<Props> = ({route, navigation}) => {
         role,
       });
       setIsModalVisible(true);
+      setTimeout(() => {
+        setIsModalVisible(false);
+        navigation.navigate('Profile', {userId});
+      }, 1000);
     } catch (error) {
       console.error('Erro ao atualizar perfil:', error);
     }
