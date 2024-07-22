@@ -185,7 +185,7 @@ export const fetchProfile = async (userId: number) => {
 export const updateProfile = async (userId: number, profile: Partial<User>) => {
   await new Promise(resolve => setTimeout(resolve, 100));
 
-  const userIndex = users.findIndex(user => user.id === userId);
+  const userIndex = users.findIndex(user => user.id == userId);
 
   if (userIndex === -1) {
     throw new Error('Usuário não encontrado');
