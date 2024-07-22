@@ -40,6 +40,7 @@ const EditCourtScreen: React.FC<Props> = ({route, navigation}) => {
     hourlyRate: 0,
     address: '',
     workingHours: '',
+    workingDays: '',
     optionalServices: [],
     monthlyRate: 0,
   });
@@ -67,6 +68,7 @@ const EditCourtScreen: React.FC<Props> = ({route, navigation}) => {
           hourlyRate: hourlyRate,
           address: courtData.address,
           workingHours: courtData.workingHours,
+          workingDays: courtData.workingDays,
           optionalServices: courtData.optionalServices,
           monthlyRate: monthlyRate,
         });
@@ -114,16 +116,34 @@ const EditCourtScreen: React.FC<Props> = ({route, navigation}) => {
         contentContainerStyle={{alignItems: 'center'}}
       />
       <View style={styles.detailsContainer}>
-        <Text style={styles.label}>Nome da Quadra</Text>
+        <Text style={styles.label}>Nome</Text>
         <TextInput
           style={styles.input}
           value={court.name}
           onChangeText={text => setCourtDetails({...court, name: text})}
         />
-        <Text style={styles.label}>Tipo da Quadra</Text>
+        <Text style={styles.label}>Tipo</Text>
         <TextInput
           style={styles.input}
           value={court.type}
+          onChangeText={text => setCourtDetails({...court, type: text})}
+        />
+        <Text style={styles.label}>Endereço</Text>
+        <TextInput
+          style={styles.input}
+          value={court.address}
+          onChangeText={text => setCourtDetails({...court, type: text})}
+        />
+        <Text style={styles.label}>Dias de funcionamento</Text>
+        <TextInput
+          style={styles.input}
+          value={court.workingDays}
+          onChangeText={text => setCourtDetails({...court, type: text})}
+        />
+        <Text style={styles.label}>Horário de funcionamento</Text>
+        <TextInput
+          style={styles.input}
+          value={court.workingHours}
           onChangeText={text => setCourtDetails({...court, type: text})}
         />
         <Text style={styles.label}>Descrição</Text>

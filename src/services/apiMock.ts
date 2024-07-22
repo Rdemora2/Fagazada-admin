@@ -41,6 +41,7 @@ const courts: Court[] = [
     hourlyRate: 50,
     address: 'Rua A, 123',
     workingHours: '8:00 - 18:00',
+    workingDays: 'Seg - Sab',
     optionalServices: ['professor', 'aluguel de bolas'],
   },
   {
@@ -56,6 +57,7 @@ const courts: Court[] = [
     hourlyRate: 60,
     address: 'Rua B, 456',
     workingHours: '10:00 - 22:00',
+    workingDays: 'Ter - Dom',
     optionalServices: ['aluguel de bolas'],
   },
 ];
@@ -65,6 +67,7 @@ const reservations: Reservation[] = [
     id: 1,
     courtId: 1,
     userId: 1,
+    value: 100,
     date: '2023-07-01',
     status: 'pending',
     startTime: '12:00',
@@ -74,6 +77,7 @@ const reservations: Reservation[] = [
     id: 2,
     courtId: 2,
     userId: 2,
+    value: 200,
     date: '2023-07-02',
     status: 'confirmed',
     startTime: '18:00',
@@ -83,10 +87,11 @@ const reservations: Reservation[] = [
     id: 3,
     courtId: 2,
     userId: 1,
+    value: 200,
     date: '2023-07-09',
     status: 'confirmed',
     startTime: '11:00',
-    endTime: '12:00',
+    endTime: '13:00',
   },
 ];
 

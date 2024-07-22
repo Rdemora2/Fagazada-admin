@@ -34,6 +34,7 @@ export interface Court {
   hourlyRate: number;
   address: string;
   workingHours: string;
+  workingDays: string;
   optionalServices: string[];
   monthlyRate?: number;
 }
@@ -42,6 +43,7 @@ export interface Reservation {
   id: number;
   courtId: number;
   userId: number;
+  value: number;
   date: string;
   status: 'pending' | 'confirmed';
   startTime: string;

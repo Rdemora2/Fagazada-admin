@@ -82,8 +82,14 @@ const CourtDetailScreen: React.FC<Props> = ({route}) => {
         <Text style={styles.sectionTitle}>Endereço</Text>
         <Text style={styles.sectionContent}>{court.address}</Text>
 
+        <Text style={styles.sectionTitle}>Dias de Funcionamento</Text>
+        <Text style={styles.sectionContent}>{court.workingDays}</Text>
+
         <Text style={styles.sectionTitle}>Horário de Funcionamento</Text>
         <Text style={styles.sectionContent}>{court.workingHours}</Text>
+
+        <Text style={styles.sectionTitle}>Valor por hora</Text>
+        <Text style={styles.sectionContent}>R${court.hourlyRate}</Text>
       </View>
 
       <TouchableOpacity style={styles.editButton} onPress={handleCourtEdit}>
@@ -167,7 +173,6 @@ const styles = StyleSheet.create({
   },
   sectionContent: {
     fontSize: 16,
-    marginBottom: 8,
   },
   editButton: {
     backgroundColor: '#00786A',

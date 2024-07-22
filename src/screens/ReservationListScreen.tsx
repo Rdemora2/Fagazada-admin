@@ -11,7 +11,10 @@ type Reservation = {
   id: number;
   courtId: number;
   userId: number;
+  value: number;
   date: string;
+  startTime: string;
+  endTime: string;
   status: 'pending' | 'confirmed';
 };
 
@@ -67,9 +70,13 @@ const ReservationListScreen: React.FC<Props> = ({navigation}) => {
 
     return (
       <View style={styles.item}>
-        <Text style={styles.title}>{courtName}</Text>
-        <Text style={styles.label}>ID da reserva: {item.id}</Text>
+        <Text style={styles.title}>Reserva #{item.id}</Text>
+        <Text style={styles.label}>Quadra: {courtName}</Text>
         <Text style={styles.label}>Data: {item.date}</Text>
+        <Text style={styles.label}>
+          Horário: {item.startTime} - {item.endTime}
+        </Text>
+        <Text style={styles.label}>Valor: R${item.value}</Text>
         {item.status === 'confirmed' && (
           <Text style={styles.label}>Status: Confirmado</Text>
         )}
