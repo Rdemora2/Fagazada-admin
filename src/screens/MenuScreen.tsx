@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fafafa',
     padding: 12,
     borderRadius: 0,
-    borderTopWidth: 2,
+    borderTopWidth: 1,
     borderBottomWidth: 1,
     borderColor: '#E66901',
     alignItems: 'center',

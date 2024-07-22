@@ -79,12 +79,21 @@ const reservations: Reservation[] = [
     startTime: '18:00',
     endTime: '20:00',
   },
+  {
+    id: 3,
+    courtId: 2,
+    userId: 1,
+    date: '2023-07-09',
+    status: 'confirmed',
+    startTime: '11:00',
+    endTime: '12:00',
+  },
 ];
 
 const availabilities: Availability[] = [];
 
 export const login = async (email: string, password: string) => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise(resolve => setTimeout(resolve, 100));
 
   const user = users.find(
     user => user.email === email && user.password === password,
@@ -98,7 +107,7 @@ export const login = async (email: string, password: string) => {
 };
 
 export const checkEmail = async (email: string) => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise(resolve => setTimeout(resolve, 100));
 
   const user = users.find(user => user.email === email);
 
@@ -120,7 +129,7 @@ export const register = async (
   photo: string,
   role: string,
 ) => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise(resolve => setTimeout(resolve, 100));
 
   const existingUser = users.find(user => user.email === email);
 
@@ -147,7 +156,7 @@ export const register = async (
 };
 
 export const fetchProfile = async (userId: number) => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise(resolve => setTimeout(resolve, 100));
 
   const user = users.find(user => user.id === userId);
 
@@ -159,7 +168,7 @@ export const fetchProfile = async (userId: number) => {
 };
 
 export const updateProfile = async (userId: number, profile: Partial<User>) => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise(resolve => setTimeout(resolve, 100));
 
   const userIndex = users.findIndex(user => user.id === userId);
 
@@ -173,13 +182,13 @@ export const updateProfile = async (userId: number, profile: Partial<User>) => {
 };
 
 export const fetchCourts = async () => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise(resolve => setTimeout(resolve, 100));
 
   return courts;
 };
 
 export const fetchCourtDetails = async (courtId: number) => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise(resolve => setTimeout(resolve, 100));
 
   const court = courts.find(court => court.id === courtId);
 
@@ -191,7 +200,7 @@ export const fetchCourtDetails = async (courtId: number) => {
 };
 
 export const addCourt = async (court: Omit<Court, 'id'>) => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise(resolve => setTimeout(resolve, 100));
 
   const newCourt = {...court, id: courts.length + 1};
   courts.push(newCourt);
@@ -203,7 +212,7 @@ export const updateCourt = async (
   courtId: number,
   updatedDetails: Partial<Court>,
 ) => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise(resolve => setTimeout(resolve, 100));
 
   const courtIndex = courts.findIndex(court => court.id === courtId);
 
@@ -217,7 +226,7 @@ export const updateCourt = async (
 };
 
 export const fetchReservations = async (userId: number) => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise(resolve => setTimeout(resolve, 100));
 
   return reservations.filter(reservation => reservation.userId === userId);
 };
@@ -226,7 +235,7 @@ export const updateReservationStatus = async (
   reservationId: number,
   status: 'pending' | 'confirmed',
 ) => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise(resolve => setTimeout(resolve, 100));
 
   const reservation = reservations.find(res => res.id === reservationId);
 
@@ -240,7 +249,7 @@ export const updateReservationStatus = async (
 };
 
 export const fetchAvailabilities = async () => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise(resolve => setTimeout(resolve, 100));
 
   return availabilities;
 };
@@ -248,7 +257,7 @@ export const fetchAvailabilities = async () => {
 export const addAvailability = async (
   availability: Omit<Availability, 'id'>,
 ) => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise(resolve => setTimeout(resolve, 100));
 
   const newAvailability = {...availability, id: availabilities.length + 1};
   availabilities.push(newAvailability);
@@ -259,7 +268,7 @@ export const addAvailability = async (
 export const bulkAddAvailability = async (
   availabilitiesToAdd: Omit<Availability, 'id'>[],
 ) => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise(resolve => setTimeout(resolve, 100));
 
   const newAvailabilities = availabilitiesToAdd.map((availability, index) => ({
     ...availability,

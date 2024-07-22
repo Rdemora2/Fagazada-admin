@@ -8,7 +8,7 @@ import {
 import {HomeScreenNavigationProp} from '../types/types';
 
 type Reservation = {
-  id: string;
+  id: number;
   courtId: number;
   userId: number;
   date: string;
@@ -39,8 +39,8 @@ const ReservationListScreen: React.FC<Props> = ({navigation}) => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const reservationData = await fetchReservations(1);
-        const courtData = await fetchCourts();
+        const reservationData: Reservation[] = await fetchReservations(1);
+        const courtData: Court[] = await fetchCourts();
         setReservations(reservationData);
         setCourts(courtData);
       } catch (error) {
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 8,
-    backgroundColor: '#00786A',
+    backgroundColor: '#E66901',
     padding: 10,
     borderRadius: 8,
     alignItems: 'center',
