@@ -1,6 +1,6 @@
 // src/screens/MenuScreen.tsx
 import React from 'react';
-import {View, Text, Button, FlatList, StyleSheet} from 'react-native';
+import {View, Text, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
 import {useNavigation, RouteProp} from '@react-navigation/native';
 import {RootStackParamList} from '../types/types';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -38,18 +38,21 @@ const MenuScreen: React.FC<Props> = ({route, navigation}) => {
     }
   };
 
+  const renderItem = ({item}: {item: (typeof menuItems)[0]}) => (
+    <TouchableOpacity
+      style={styles.button}
+      onPress={() => handleNavigation(item.navigateTo)}>
+      <Text style={styles.buttonText}>{item.title}</Text>
+    </TouchableOpacity>
+  );
+
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>{userName}</Text>
+      <Text style={styles.header}>Olá, {userName}</Text>
       <FlatList
         data={menuItems}
         keyExtractor={item => item.id}
-        renderItem={({item}) => (
-          <Button
-            title={item.title}
-            onPress={() => handleNavigation(item.navigateTo)}
-          />
-        )}
+        renderItem={renderItem}
       />
     </View>
   );
@@ -61,9 +64,24 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   header: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 16,
+  },
+  button: {
+    backgroundColor: '#fafafa',
+    padding: 12,
+    borderRadius: 0,
+    borderTopWidth: 2,
+    borderBottomWidth: 1,
+    borderColor: '#E66901',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  buttonText: {
+    color: '#00786A',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

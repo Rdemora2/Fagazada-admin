@@ -76,7 +76,7 @@ const CourtDetailScreen: React.FC<Props> = ({route}) => {
         <Text style={styles.sectionTitle}>Descrição</Text>
         <Text style={styles.sectionContent}>{court.description}</Text>
 
-        <Text style={styles.sectionTitle}>Tipo</Text>
+        <Text style={styles.sectionTitle}>Modalidade</Text>
         <Text style={styles.sectionContent}>{court.type}</Text>
 
         <Text style={styles.sectionTitle}>Endereço</Text>
