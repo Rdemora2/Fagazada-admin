@@ -43,10 +43,11 @@ function MainTabs() {
         tabBarActiveTintColor: 'tomato',
         tabBarInactiveTintColor: 'gray',
         tabBarStyle: {
-          paddingTop: 11,
-          paddingBottom: 11,
+          paddingTop: 10,
+          paddingBottom: 10,
           height: 60,
         },
+        headerShown: false, // Esconde o cabeçalho das telas do Tab.Navigator
       })}>
       <Tab.Screen name="Início" component={HomeScreen} />
       <Tab.Screen name="Reservas" component={ReservationListScreen} />
@@ -65,28 +66,77 @@ const App = () => {
             backgroundColor: '#00786A',
           },
           headerTintColor: '#fff',
-          headerTitleStyle: {},
-          headerShown: false,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18,
+          },
+          headerTitleAlign: 'center',
         }}>
-        <Stack.Screen name="Welcome" component={WelcomeScreen} />
-        <Stack.Screen name="Home" component={MainTabs} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Register" component={RegisterScreen} />
-        <Stack.Screen name="CourtList" component={CourtListScreen} />
-        <Stack.Screen name="CourtDetail" component={CourtDetailScreen} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-        <Stack.Screen name="EditProfile" component={EditProfileScreen} />
-        <Stack.Screen name="AddCourt" component={AddCourtScreen} />
-        <Stack.Screen name="EditCourt" component={EditCourtScreen} />
+        <Stack.Screen
+          name="Welcome"
+          component={WelcomeScreen}
+          options={{title: '', headerLeft: () => null}}
+        />
+        <Stack.Screen
+          name="Home"
+          component={MainTabs}
+          options={{title: 'Fagazada gestores', headerLeft: () => null}}
+        />
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{title: ''}}
+        />
+        <Stack.Screen
+          name="Register"
+          component={RegisterScreen}
+          options={{title: ''}}
+        />
+        <Stack.Screen
+          name="CourtList"
+          component={CourtListScreen}
+          options={{title: 'Lista de Quadras'}}
+        />
+        <Stack.Screen
+          name="CourtDetail"
+          component={CourtDetailScreen}
+          options={{title: 'Detalhe da Quadra'}}
+        />
+        <Stack.Screen
+          name="Profile"
+          component={ProfileScreen}
+          options={{title: 'Perfil'}}
+        />
+        <Stack.Screen
+          name="EditProfile"
+          component={EditProfileScreen}
+          options={{title: 'Editar Perfil'}}
+        />
+        <Stack.Screen
+          name="AddCourt"
+          component={AddCourtScreen}
+          options={{title: 'Adicionar Quadra'}}
+        />
+        <Stack.Screen
+          name="EditCourt"
+          component={EditCourtScreen}
+          options={{title: 'Editar Quadra'}}
+        />
         <Stack.Screen
           name="IdentificationScreen"
           component={IdentificationScreen}
+          options={{title: 'Identificação'}}
         />
         <Stack.Screen
           name="ReservationList"
           component={ReservationListScreen}
+          options={{title: 'Lista de Reservas'}}
         />
-        <Stack.Screen name="CourtAvailability" component={CourtAvailability} />
+        <Stack.Screen
+          name="CourtAvailability"
+          component={CourtAvailability}
+          options={{title: 'Disponibilidade da Quadra'}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
