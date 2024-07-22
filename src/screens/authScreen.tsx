@@ -12,10 +12,12 @@ import {
 } from 'react-native';
 import {BlurView} from '@react-native-community/blur';
 import {checkEmail, login, register} from '../services/apiMock';
+import {useNavigation} from '@react-navigation/native';
 
 const {width, height} = Dimensions.get('window');
 
 const AuthenticationScreen = () => {
+  const navigation = useNavigation();
   const [step, setStep] = useState('welcome'); // 'welcome', 'identification', 'login', 'register'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -38,10 +40,17 @@ const AuthenticationScreen = () => {
       setStep('register');
     }
   };
+
   const handleLogin = async () => {
     try {
       const user = await login(email, password);
-      // Navegar para a tela inicial do aplicativo
+      navigation.navigate('Home', {
+        screen: 'Home',
+        params: {
+          userName: user.fullName,
+          userId: user.id,
+        },
+      });
     } catch (error) {
       if (error instanceof Error) {
         console.error('Erro ao fazer login:', error.message);
@@ -50,6 +59,7 @@ const AuthenticationScreen = () => {
       }
     }
   };
+
   const handleRegister = async () => {
     try {
       await register(
@@ -63,7 +73,13 @@ const AuthenticationScreen = () => {
         photo,
         role,
       );
-      // Navegar para a tela inicial do aplicativo
+      navigation.navigate('Home', {
+        screen: 'Menu',
+        params: {
+          userName: fullName,
+          userId: id,
+        },
+      });
     } catch (error) {
       if (error instanceof Error) {
         console.error('Erro ao registrar usuário:', error.message);
@@ -286,7 +302,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '90%',
-    height: '50%',
+    height: '47%',
     backgroundColor: 'rgba(0, 0, 0, 0.24)',
     paddingTop: 30,
     paddingBottom: 30,
