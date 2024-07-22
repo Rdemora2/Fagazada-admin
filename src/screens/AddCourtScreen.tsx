@@ -9,12 +9,9 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
+import {Picker} from '@react-native-picker/picker';
 import {addCourt} from '../services/apiMock';
-import {
-  Court,
-  Availability,
-  CourtListScreenNavigationProp,
-} from '../types/types';
+import {Court, CourtListScreenNavigationProp} from '../types/types';
 
 type Props = {
   navigation: CourtListScreenNavigationProp;
@@ -26,19 +23,17 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
   const [courtDetails, setCourtDetails] = useState<Court>({
     id: 0,
     name: '',
-    type: '',
+    type: 'Futebol',
     description: '',
     photos: [],
     hourlyRate: 0,
     address: '',
     workingHours: '',
+    workingDays: '',
     optionalServices: [],
     availability: [],
   });
 
-  const [date, setDate] = useState<string>('');
-  const [startTime, setStartTime] = useState<string>('');
-  const [endTime, setEndTime] = useState<string>('');
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   const handleAddCourt = async () => {
@@ -83,8 +78,6 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.detailsContainer}>
-        <Text style={styles.sectionTitle}>Adicionar Nova Quadra</Text>
-
         <Text style={styles.label}>Nome da Quadra</Text>
         <TextInput
           style={styles.input}
@@ -94,12 +87,23 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
         />
 
         <Text style={styles.label}>Tipo da Quadra</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Digite o tipo da quadra"
-          value={courtDetails.type}
-          onChangeText={text => setCourtDetails({...courtDetails, type: text})}
-        />
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={courtDetails.type}
+            style={styles.picker}
+            onValueChange={itemValue =>
+              setCourtDetails({...courtDetails, type: itemValue})
+            }>
+            <Picker.Item label="Futebol" value="Futebol" />
+            <Picker.Item label="Futsal" value="Futsal" />
+            <Picker.Item label="Tênis" value="Tênis" />
+            <Picker.Item label="Basquete" value="Basquete" />
+            <Picker.Item label="Vôlei" value="Vôlei" />
+            <Picker.Item label="Beach Vôlei" value="Beach Vôlei" />
+            <Picker.Item label="Beach Tênis" value="Beach Tênis" />
+            <Picker.Item label="Squash" value="Squash" />
+          </Picker>
+        </View>
 
         <Text style={styles.label}>Descrição da Quadra</Text>
         <TextInput
@@ -135,14 +139,49 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
         />
 
         <Text style={styles.label}>Horário de Funcionamento</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Digite o horário de funcionamento da quadra"
-          value={courtDetails.workingHours}
-          onChangeText={text =>
-            setCourtDetails({...courtDetails, workingHours: text})
-          }
-        />
+        <View style={styles.timeInputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Abertura (ex: 08:00)"
+            value={courtDetails.workingHours.split('-')[0]}
+            onChangeText={text =>
+              setCourtDetails({
+                ...courtDetails,
+                workingHours: `${text}-${
+                  courtDetails.workingHours.split('-')[1]
+                }`,
+              })
+            }
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Fechamento (ex: 22:00)"
+            value={courtDetails.workingHours.split('-')[1]}
+            onChangeText={text =>
+              setCourtDetails({
+                ...courtDetails,
+                workingHours: `${
+                  courtDetails.workingHours.split('-')[0]
+                }-${text}`,
+              })
+            }
+          />
+        </View>
+
+        <Text style={styles.label}>Dias de Funcionamento</Text>
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={courtDetails.workingDays}
+            style={styles.picker}
+            onValueChange={itemValue =>
+              setCourtDetails({...courtDetails, workingDays: itemValue})
+            }>
+            <Picker.Item label="Segunda a Sexta" value="Segunda a Sexta" />
+            <Picker.Item label="Segunda a Sábado" value="Segunda a Sábado" />
+            <Picker.Item label="Segunda a Domingo" value="Segunda a Domingo" />
+            <Picker.Item label="Finais de Semana" value="Finais de Semana" />
+          </Picker>
+        </View>
       </View>
 
       <TouchableOpacity style={styles.addButton} onPress={handleAddCourt}>
@@ -201,6 +240,7 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderWidth: 1,
     marginBottom: 12,
+    marginRight: 4,
     paddingHorizontal: 10,
     borderRadius: 8,
   },
@@ -212,6 +252,23 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     height: 80,
     textAlignVertical: 'top',
+  },
+  pickerContainer: {
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    marginBottom: 12,
+    paddingBottom: 12,
+  },
+  picker: {
+    height: 40,
+    width: '100%',
+  },
+  timeInputContainer: {
+    flexDirection: 'row',
+    width: '50%',
+    justifyContent: 'space-between',
+    marginBottom: 12,
   },
   addButton: {
     backgroundColor: '#00786A',
