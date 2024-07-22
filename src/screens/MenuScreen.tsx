@@ -40,17 +40,15 @@ const MenuScreen: React.FC<Props> = ({route, navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.userName}>{userName}</Text>
+      <Text style={styles.header}>{userName}</Text>
       <FlatList
         data={menuItems}
         keyExtractor={item => item.id}
         renderItem={({item}) => (
-          <View style={styles.menuItem}>
-            <Button
-              title={item.title}
-              onPress={() => handleNavigation(item.navigateTo)}
-            />
-          </View>
+          <Button
+            title={item.title}
+            onPress={() => handleNavigation(item.navigateTo)}
+          />
         )}
       />
     </View>
@@ -62,12 +60,9 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
-  userName: {
+  header: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 16,
-  },
-  menuItem: {
     marginBottom: 16,
   },
 });

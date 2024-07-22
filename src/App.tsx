@@ -24,7 +24,8 @@ import {RootStackParamList} from './types/types';
 const Stack = createStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
 
-function MainTabs() {
+function MainTabs({route}: {route: any}) {
+  const {userName, userId} = route.params;
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
@@ -55,7 +56,7 @@ function MainTabs() {
       <Tab.Screen
         name="Menu"
         component={MenuScreen}
-        initialParams={{userName: 'Usuário', userId: 123}}
+        initialParams={{userName, userId}}
       />
     </Tab.Navigator>
   );

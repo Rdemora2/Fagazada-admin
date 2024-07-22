@@ -3,7 +3,13 @@ import {RouteProp} from '@react-navigation/native';
 
 export type RootStackParamList = {
   Welcome: undefined;
-  Home: undefined;
+  Home: {
+    screen: 'Menu';
+    params: {
+      userName: string;
+      userId: string;
+    };
+  };
   Login: undefined;
   Register: undefined;
   CourtList: undefined;

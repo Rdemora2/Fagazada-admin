@@ -27,7 +27,13 @@ const LoginScreen: React.FC<Props> = ({navigation}) => {
   const handleLogin = async () => {
     try {
       const user = await login(email, password);
-      navigation.navigate('Home');
+      navigation.navigate('Home', {
+        screen: 'Menu',
+        params: {
+          userName: user.fullName,
+          userId: user.id.toString(),
+        },
+      });
     } catch (error) {
       if (error instanceof Error) {
         console.error('Erro ao fazer login:', error.message);
