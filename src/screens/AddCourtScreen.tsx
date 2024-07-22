@@ -2,12 +2,12 @@ import React, {useState, useEffect} from 'react';
 import {
   View,
   TextInput,
-  Button,
-  StyleSheet,
   Text,
   ScrollView,
   Alert,
   TouchableOpacity,
+  StyleSheet,
+  Dimensions,
 } from 'react-native';
 import {addCourt} from '../services/apiMock';
 import {
@@ -19,6 +19,8 @@ import {
 type Props = {
   navigation: CourtListScreenNavigationProp;
 };
+
+const {width, height} = Dimensions.get('window');
 
 const AddCourtScreen: React.FC<Props> = ({navigation}) => {
   const [courtDetails, setCourtDetails] = useState<Court>({
@@ -33,6 +35,11 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
     optionalServices: [],
     availability: [],
   });
+
+  const [date, setDate] = useState<string>('');
+  const [startTime, setStartTime] = useState<string>('');
+  const [endTime, setEndTime] = useState<string>('');
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const handleAddCourt = async () => {
     try {
@@ -60,80 +67,6 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
         'Erro ao adicionar quadra. Por favor, tente novamente.',
       );
     }
-  };
-
-  const [date, setDate] = useState<string>('');
-  const [startTime, setStartTime] = useState<string>('');
-  const [endTime, setEndTime] = useState<string>('');
-  const [isDatePickerVisible, setDatePickerVisible] = useState(false);
-  const [isStartTimePickerVisible, setStartTimePickerVisible] = useState(false);
-  const [isEndTimePickerVisible, setEndTimePickerVisible] = useState(false);
-  const [showConfirmation, setShowConfirmation] = useState(false);
-
-  const handleAddAvailability = () => {
-    if (date && startTime && endTime) {
-      const newAvailability: Availability = {
-        id: courtDetails.availability.length + 1,
-        date,
-        startTime,
-        endTime,
-      };
-      setCourtDetails({
-        ...courtDetails,
-        availability: [...courtDetails.availability, newAvailability],
-      });
-      setDate('');
-      setStartTime('');
-      setEndTime('');
-      Alert.alert('Sucesso', 'Disponibilidade adicionada com sucesso.');
-    } else {
-      Alert.alert(
-        'Erro',
-        'Por favor, preencha todos os campos de disponibilidade.',
-      );
-    }
-  };
-
-  const showDatePicker = () => {
-    setDatePickerVisible(true);
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisible(false);
-  };
-
-  const handleConfirmDate = (selectedDate: Date) => {
-    const formattedDate = selectedDate.toISOString().split('T')[0];
-    setDate(formattedDate);
-    hideDatePicker();
-  };
-
-  const showStartTimePicker = () => {
-    setStartTimePickerVisible(true);
-  };
-
-  const hideStartTimePicker = () => {
-    setStartTimePickerVisible(false);
-  };
-
-  const handleConfirmStartTime = (selectedTime: Date) => {
-    const formattedTime = selectedTime.toISOString().split('T')[1].slice(0, 5);
-    setStartTime(formattedTime);
-    hideStartTimePicker();
-  };
-
-  const showEndTimePicker = () => {
-    setEndTimePickerVisible(true);
-  };
-
-  const hideEndTimePicker = () => {
-    setEndTimePickerVisible(false);
-  };
-
-  const handleConfirmEndTime = (selectedTime: Date) => {
-    const formattedTime = selectedTime.toISOString().split('T')[1].slice(0, 5);
-    setEndTime(formattedTime);
-    hideEndTimePicker();
   };
 
   useEffect(() => {
@@ -170,7 +103,7 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
 
         <Text style={styles.label}>Descrição da Quadra</Text>
         <TextInput
-          style={styles.input}
+          style={styles.textarea}
           placeholder="Digite a descrição da quadra"
           multiline
           numberOfLines={4}
@@ -180,7 +113,7 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
           }
         />
 
-        <Text style={styles.label}>Taxa Horária (R$)</Text>
+        <Text style={styles.label}>Valor por hora: (R$)</Text>
         <TextInput
           style={styles.input}
           placeholder="Digite a taxa horária"
@@ -211,6 +144,7 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
           }
         />
       </View>
+
       <TouchableOpacity style={styles.addButton} onPress={handleAddCourt}>
         <Text style={styles.textButton}>Adicionar Quadra</Text>
       </TouchableOpacity>
@@ -234,15 +168,14 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: '#fff',
-    paddingHorizontal: 16,
-    paddingVertical: 24,
+    backgroundColor: '#f8f8f8',
+    padding: 16,
   },
   detailsContainer: {
     padding: 16,
     backgroundColor: '#fff',
     borderRadius: 8,
-    margin: 16,
+    marginVertical: 16,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -256,6 +189,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 16,
+    color: '#333',
   },
   label: {
     fontSize: 16,
@@ -268,39 +202,23 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 12,
     paddingHorizontal: 10,
+    borderRadius: 8,
   },
-  picker: {
-    height: 40,
+  textarea: {
     borderColor: '#ccc',
     borderWidth: 1,
     marginBottom: 12,
-  },
-  dateInputContainer: {
-    marginBottom: 12,
-  },
-  timeInputContainer: {
-    marginBottom: 12,
-  },
-  confirmationPopup: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: '#4CAF50',
-    padding: 16,
-    alignItems: 'center',
-  },
-  confirmationText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    height: 80,
+    textAlignVertical: 'top',
   },
   addButton: {
     backgroundColor: '#00786A',
     padding: 16,
     borderRadius: 8,
     alignItems: 'center',
-    marginHorizontal: 16,
+    marginVertical: 16,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -314,6 +232,27 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  confirmationPopup: {
+    backgroundColor: '#4CAF50',
+    padding: 16,
+    alignItems: 'center',
+    borderRadius: 8,
+    marginVertical: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  confirmationText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 8,
   },
 });
 
