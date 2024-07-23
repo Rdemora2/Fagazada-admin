@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
+  Modal,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import {addCourt} from '../services/apiMock';
@@ -50,11 +51,6 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
       });
 
       setShowConfirmation(true);
-
-      setTimeout(() => {
-        setShowConfirmation(false);
-        navigation.navigate('Home');
-      }, 5000);
     } catch (error) {
       console.error('Erro ao adicionar quadra:', error);
       Alert.alert(
@@ -64,16 +60,10 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
     }
   };
 
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
-    if (showConfirmation) {
-      timer = setTimeout(() => {
-        setShowConfirmation(false);
-        navigation.navigate('Home');
-      }, 5000);
-    }
-    return () => clearTimeout(timer);
-  }, [showConfirmation, navigation]);
+  const handleModalClose = () => {
+    setShowConfirmation(false);
+    navigation.navigate('Home');
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -188,18 +178,22 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
         <Text style={styles.textButton}>Adicionar Quadra</Text>
       </TouchableOpacity>
 
-      {showConfirmation && (
-        <View style={styles.confirmationPopup}>
-          <Text style={styles.confirmationText}>
-            Quadra adicionada com sucesso!
-          </Text>
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={() => navigation.navigate('CourtAvailability')}>
-            <Text style={styles.textButton}>Adicionar Disponibilidade</Text>
-          </TouchableOpacity>
+      <Modal
+        visible={showConfirmation}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={handleModalClose}>
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalText}>Quadra adicionada com sucesso!</Text>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={handleModalClose}>
+              <Text style={styles.modalButtonText}>OK</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      )}
+      </Modal>
     </ScrollView>
   );
 };
@@ -290,26 +284,33 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  confirmationPopup: {
-    backgroundColor: '#4CAF50',
-    padding: 16,
+  modalBackground: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 8,
-    marginVertical: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  confirmationText: {
+  modalContainer: {
+    width: width * 0.8,
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 20,
+    color: '#333',
+  },
+  modalButton: {
+    backgroundColor: '#00786A',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  modalButtonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 8,
   },
 });
 
