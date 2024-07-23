@@ -141,34 +141,44 @@ const ReservationListScreen: React.FC<Props> = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.filterContainer}>
-        <Picker
-          selectedValue={selectedCourt}
-          onValueChange={itemValue => setSelectedCourt(itemValue)}
-          style={styles.picker}>
-          <Picker.Item label="Quadra" value="" />
-          {courts.map(court => (
-            <Picker.Item key={court.id} label={court.name} value={court.name} />
-          ))}
-        </Picker>
-        <Picker
-          selectedValue={selectedDate}
-          onValueChange={itemValue => setSelectedDate(itemValue)}
-          style={styles.picker}>
-          <Picker.Item label="Data" value="" />
-          {[...new Set(reservations.map(reservation => reservation.date))].map(
-            date => (
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={selectedCourt}
+            onValueChange={itemValue => setSelectedCourt(itemValue)}
+            style={styles.picker}>
+            <Picker.Item label="Quadra" value="" />
+            {courts.map(court => (
+              <Picker.Item
+                key={court.id}
+                label={court.name}
+                value={court.name}
+              />
+            ))}
+          </Picker>
+        </View>
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={selectedDate}
+            onValueChange={itemValue => setSelectedDate(itemValue)}
+            style={styles.picker}>
+            <Picker.Item label="Data" value="" />
+            {[
+              ...new Set(reservations.map(reservation => reservation.date)),
+            ].map(date => (
               <Picker.Item key={date} label={date} value={date} />
-            ),
-          )}
-        </Picker>
-        <Picker
-          selectedValue={selectedStatus}
-          onValueChange={itemValue => setSelectedStatus(itemValue)}
-          style={styles.picker}>
-          <Picker.Item label="Status" value="" />
-          <Picker.Item label="Pendente" value="pending" />
-          <Picker.Item label="Confirmado" value="confirmed" />
-        </Picker>
+            ))}
+          </Picker>
+        </View>
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={selectedStatus}
+            onValueChange={itemValue => setSelectedStatus(itemValue)}
+            style={styles.picker}>
+            <Picker.Item label="Status" value="" />
+            <Picker.Item label="Pendente" value="pending" />
+            <Picker.Item label="Confirmado" value="confirmed" />
+          </Picker>
+        </View>
         <TouchableOpacity onPress={resetFilters} style={styles.resetButton}>
           <Ionicons name="close-circle" size={24} color="#E66901" />
         </TouchableOpacity>
@@ -201,12 +211,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 16,
   },
-  picker: {
+  pickerContainer: {
     flex: 1,
     height: 50,
+    justifyContent: 'center',
+  },
+  picker: {
+    flex: 1,
+    width: '115%',
+  },
+  pickerItem: {
+    fontSize: 16,
   },
   resetButton: {
-    padding: 10,
+    paddingLeft: 7,
   },
   emptyContainer: {
     flex: 1,
