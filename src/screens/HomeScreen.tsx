@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, FlatList, TouchableOpacity, Text} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useIsFocused} from '@react-navigation/native';
 import {fetchCourts} from '../services/apiMock';
 import {Court, RootStackParamList} from '../types/types';
 import HomeCard from '../components/HomeCard';
@@ -15,20 +15,23 @@ type Props = {
 
 const HomeScreen: React.FC<Props> = ({route}) => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
+  const isFocused = useIsFocused();
   const [courts, setCourts] = useState<Court[]>([]);
 
-  useEffect(() => {
-    const loadCourts = async () => {
-      try {
-        const data = await fetchCourts();
-        setCourts(data);
-      } catch (error) {
-        console.error('Erro ao carregar quadras:', error);
-      }
-    };
+  const loadCourts = async () => {
+    try {
+      const data = await fetchCourts();
+      setCourts(data);
+    } catch (error) {
+      console.error('Erro ao carregar quadras:', error);
+    }
+  };
 
-    loadCourts();
-  }, []);
+  useEffect(() => {
+    if (isFocused) {
+      loadCourts();
+    }
+  }, [isFocused]);
 
   const handleCourtDetail = (courtId: number) => {
     navigation.navigate('CourtDetail', {courtId});
@@ -39,7 +42,7 @@ const HomeScreen: React.FC<Props> = ({route}) => {
   };
 
   const renderItem = ({item}: {item: Court}) => (
-    <HomeCard court={item} onPress={handleCourtDetail} />
+    <HomeCard court={item} onPress={() => handleCourtDetail(item.id)} />
   );
 
   return (
