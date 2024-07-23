@@ -1,7 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, FlatList, TouchableOpacity, Text} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Text,
+  Alert,
+} from 'react-native';
 import {useNavigation, useIsFocused} from '@react-navigation/native';
-import {fetchCourts} from '../services/apiMock';
+import {fetchCourts, deleteCourt} from '../services/apiMock';
 import {Court, RootStackParamList} from '../types/types';
 import HomeCard from '../components/HomeCard';
 import {HomeScreenNavigationProp} from '../types/types';
@@ -27,6 +34,19 @@ const HomeScreen: React.FC<Props> = ({route}) => {
     }
   };
 
+  const handleDeleteCourt = async (courtId: number) => {
+    try {
+      await deleteCourt(courtId);
+      loadCourts();
+    } catch (error) {
+      Alert.alert(
+        'Erro',
+        'Erro ao excluir quadra. Por favor, tente novamente.',
+      );
+      console.error('Erro ao excluir quadra:', error);
+    }
+  };
+
   useEffect(() => {
     if (isFocused) {
       loadCourts();
@@ -42,7 +62,11 @@ const HomeScreen: React.FC<Props> = ({route}) => {
   };
 
   const renderItem = ({item}: {item: Court}) => (
-    <HomeCard court={item} onPress={() => handleCourtDetail(item.id)} />
+    <HomeCard
+      court={item}
+      onPress={() => handleCourtDetail(item.id)}
+      onDelete={handleDeleteCourt}
+    />
   );
 
   return (

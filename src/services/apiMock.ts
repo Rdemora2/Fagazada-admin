@@ -197,29 +197,26 @@ export const updateProfile = async (userId: number, profile: Partial<User>) => {
 };
 
 export const fetchCourts = async () => {
+  // Função para buscar quadras
   await new Promise(resolve => setTimeout(resolve, 100));
-
   return courts;
 };
 
 export const fetchCourtDetails = async (courtId: number) => {
+  // Função para buscar detalhes da quadra
   await new Promise(resolve => setTimeout(resolve, 100));
-
   const court = courts.find(court => court.id === courtId);
-
   if (!court) {
     throw new Error('Quadra não encontrada');
   }
-
   return court;
 };
 
 export const addCourt = async (court: Omit<Court, 'id'>) => {
+  // Função para adicionar quadra
   await new Promise(resolve => setTimeout(resolve, 100));
-
   const newCourt = {...court, id: courts.length + 1};
   courts.push(newCourt);
-
   return newCourt;
 };
 
@@ -227,22 +224,29 @@ export const updateCourt = async (
   courtId: number,
   updatedDetails: Partial<Court>,
 ) => {
+  // Função para atualizar quadra
   await new Promise(resolve => setTimeout(resolve, 100));
-
   const courtIndex = courts.findIndex(court => court.id === courtId);
-
   if (courtIndex === -1) {
     throw new Error('Quadra não encontrada');
   }
-
   courts[courtIndex] = {...courts[courtIndex], ...updatedDetails};
-
   return courts[courtIndex];
 };
 
-export const fetchReservations = async (userId: number) => {
+export const deleteCourt = async (courtId: number) => {
+  // Função para deletar quadra
   await new Promise(resolve => setTimeout(resolve, 100));
+  const courtIndex = courts.findIndex(court => court.id === courtId);
+  if (courtIndex === -1) {
+    throw new Error('Quadra não encontrada');
+  }
+  courts.splice(courtIndex, 1);
+};
 
+export const fetchReservations = async (userId: number) => {
+  // Função para buscar reservas
+  await new Promise(resolve => setTimeout(resolve, 100));
   return reservations.filter(reservation => reservation.userId === userId);
 };
 
@@ -250,47 +254,41 @@ export const updateReservationStatus = async (
   reservationId: number,
   status: 'pending' | 'confirmed',
 ) => {
+  // Função para atualizar status da reserva
   await new Promise(resolve => setTimeout(resolve, 100));
-
   const reservation = reservations.find(res => res.id === reservationId);
-
   if (!reservation) {
     throw new Error('Reserva não encontrada');
   }
-
   reservation.status = status;
-
   return reservation;
 };
 
 export const fetchAvailabilities = async () => {
+  // Função para buscar disponibilidades
   await new Promise(resolve => setTimeout(resolve, 100));
-
   return availabilities;
 };
 
 export const addAvailability = async (
   availability: Omit<Availability, 'id'>,
 ) => {
+  // Função para adicionar disponibilidade
   await new Promise(resolve => setTimeout(resolve, 100));
-
   const newAvailability = {...availability, id: availabilities.length + 1};
   availabilities.push(newAvailability);
-
   return newAvailability;
 };
 
 export const bulkAddAvailability = async (
   availabilitiesToAdd: Omit<Availability, 'id'>[],
 ) => {
+  // Função para adicionar disponibilidades em massa
   await new Promise(resolve => setTimeout(resolve, 100));
-
   const newAvailabilities = availabilitiesToAdd.map((availability, index) => ({
     ...availability,
     id: availabilities.length + index + 1,
   }));
-
   availabilities.push(...newAvailabilities);
-
   return newAvailabilities;
 };
