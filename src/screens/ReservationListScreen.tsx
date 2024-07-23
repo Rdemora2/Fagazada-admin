@@ -81,14 +81,14 @@ const ReservationListScreen: React.FC<Props> = ({navigation}) => {
           <Text style={styles.label}>Status: Confirmado</Text>
         )}
         {item.status === 'pending' && (
-          <Text style={styles.label}>Status: Pendente</Text>
-        )}
-        {item.status === 'pending' && (
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => handleConfirmReservation(item.id)}>
-            <Text style={styles.buttonText}>Confirmar</Text>
-          </TouchableOpacity>
+          <>
+            <Text style={styles.label}>Status: Pendente</Text>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => handleConfirmReservation(item.id)}>
+              <Text style={styles.buttonText}>Confirmar</Text>
+            </TouchableOpacity>
+          </>
         )}
       </View>
     );
@@ -96,11 +96,17 @@ const ReservationListScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={reservations}
-        renderItem={renderItem}
-        keyExtractor={item => item.id.toString()}
-      />
+      {reservations.length === 0 ? (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.infoText}>Nenhuma reserva encontrada</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={reservations}
+          renderItem={renderItem}
+          keyExtractor={item => item.id.toString()}
+        />
+      )}
     </View>
   );
 };
@@ -111,6 +117,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingHorizontal: 16,
     paddingTop: 16,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  infoText: {
+    fontSize: 18,
+    color: '#666',
+    textAlign: 'center',
+    paddingHorizontal: 20,
   },
   item: {
     padding: 16,
