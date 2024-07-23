@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import {useNavigation, useIsFocused} from '@react-navigation/native';
 import {fetchProfile} from '../services/apiMock';
 import {ProfileScreenNavigationProp, RootStackParamList} from '../types/types';
 import {RouteProp} from '@react-navigation/native';
@@ -15,23 +16,26 @@ type Props = {
 const ProfileScreen: React.FC<Props> = ({route, navigation}) => {
   const userId = route.params?.userId;
   const [profile, setProfile] = useState<any>(null);
+  const isFocused = useIsFocused();
+
+  const loadProfile = async () => {
+    try {
+      if (userId) {
+        const data = await fetchProfile(userId);
+        setProfile(data);
+      } else {
+        console.error('userId não disponível');
+      }
+    } catch (error) {
+      console.error('Erro ao carregar perfil:', error);
+    }
+  };
 
   useEffect(() => {
-    const loadProfile = async () => {
-      try {
-        if (userId) {
-          const data = await fetchProfile(userId);
-          setProfile(data);
-        } else {
-          console.error('userId não disponível');
-        }
-      } catch (error) {
-        console.error('Erro ao carregar perfil:', error);
-      }
-    };
-
-    loadProfile();
-  }, [userId]);
+    if (isFocused) {
+      loadProfile();
+    }
+  }, [isFocused, userId]);
 
   if (!userId) {
     return (
