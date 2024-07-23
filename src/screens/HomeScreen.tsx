@@ -37,7 +37,7 @@ const HomeScreen: React.FC<Props> = ({route}) => {
   const handleDeleteCourt = async (courtId: number) => {
     try {
       await deleteCourt(courtId);
-      loadCourts();
+      setCourts(courts.filter(court => court.id !== courtId));
     } catch (error) {
       Alert.alert(
         'Erro',
