@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
+import {Picker} from '@react-native-picker/picker';
 import {
   fetchReservations,
   fetchCourts,
@@ -38,6 +39,12 @@ type Props = {
 const ReservationListScreen: React.FC<Props> = ({navigation}) => {
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [courts, setCourts] = useState<Court[]>([]);
+  const [filteredReservations, setFilteredReservations] = useState<
+    Reservation[]
+  >([]);
+  const [selectedCourt, setSelectedCourt] = useState<string>('');
+  const [selectedDate, setSelectedDate] = useState<string>('');
+  const [selectedStatus, setSelectedStatus] = useState<string>('');
 
   useEffect(() => {
     const getData = async () => {
@@ -46,6 +53,7 @@ const ReservationListScreen: React.FC<Props> = ({navigation}) => {
         const courtData: Court[] = await fetchCourts();
         setReservations(reservationData);
         setCourts(courtData);
+        setFilteredReservations(reservationData);
       } catch (error) {
         console.error('Erro ao buscar dados:', error);
       }
@@ -59,10 +67,38 @@ const ReservationListScreen: React.FC<Props> = ({navigation}) => {
       await updateReservationStatus(reservationId, 'confirmed');
       const updatedReservations = await fetchReservations(1);
       setReservations(updatedReservations);
+      applyFilters(updatedReservations);
     } catch (error) {
       console.error('Erro ao confirmar reserva:', error);
     }
   };
+
+  const applyFilters = (reservations: Reservation[]) => {
+    let filtered = reservations;
+    if (selectedCourt) {
+      filtered = filtered.filter(reservation =>
+        courts.find(
+          court =>
+            court.id === reservation.courtId && court.name === selectedCourt,
+        ),
+      );
+    }
+    if (selectedDate) {
+      filtered = filtered.filter(
+        reservation => reservation.date === selectedDate,
+      );
+    }
+    if (selectedStatus) {
+      filtered = filtered.filter(
+        reservation => reservation.status === selectedStatus,
+      );
+    }
+    setFilteredReservations(filtered);
+  };
+
+  useEffect(() => {
+    applyFilters(reservations);
+  }, [selectedCourt, selectedDate, selectedStatus]);
 
   const renderItem = ({item}: {item: Reservation}) => {
     const court = courts.find(court => court.id === item.courtId);
@@ -96,13 +132,43 @@ const ReservationListScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      {reservations.length === 0 ? (
+      <View style={styles.filterContainer}>
+        <Picker
+          selectedValue={selectedCourt}
+          onValueChange={itemValue => setSelectedCourt(itemValue)}
+          style={styles.picker}>
+          <Picker.Item label="Quadra" value="" />
+          {courts.map(court => (
+            <Picker.Item key={court.id} label={court.name} value={court.name} />
+          ))}
+        </Picker>
+        <Picker
+          selectedValue={selectedDate}
+          onValueChange={itemValue => setSelectedDate(itemValue)}
+          style={styles.picker}>
+          <Picker.Item label="Data" value="" />
+          {[...new Set(reservations.map(reservation => reservation.date))].map(
+            date => (
+              <Picker.Item key={date} label={date} value={date} />
+            ),
+          )}
+        </Picker>
+        <Picker
+          selectedValue={selectedStatus}
+          onValueChange={itemValue => setSelectedStatus(itemValue)}
+          style={styles.picker}>
+          <Picker.Item label="Status" value="" />
+          <Picker.Item label="Pendente" value="pending" />
+          <Picker.Item label="Confirmado" value="confirmed" />
+        </Picker>
+      </View>
+      {filteredReservations.length === 0 ? (
         <View style={styles.emptyContainer}>
           <Text style={styles.infoText}>Nenhuma reserva encontrada</Text>
         </View>
       ) : (
         <FlatList
-          data={reservations}
+          data={filteredReservations}
           renderItem={renderItem}
           keyExtractor={item => item.id.toString()}
         />
@@ -117,6 +183,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingHorizontal: 16,
     paddingTop: 16,
+  },
+  filterContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  picker: {
+    flex: 1,
+    height: 50,
   },
   emptyContainer: {
     flex: 1,
