@@ -125,7 +125,7 @@ const AuthenticationScreen = () => {
                     <Text style={styles.label}>E-mail:</Text>
                     <View style={styles.inputBackground}>
                       <TextInput
-                        style={styles.input}
+                        style={styles.inputIdentification}
                         placeholder="Insira seu e-mail"
                         placeholderTextColor="#ffffff"
                         value={email}
@@ -395,6 +395,19 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 1,
     borderColor: '#e66901',
+  },
+  inputIdentification: {
+    display: 'flex',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    flexBasis: 'auto',
+    fontFamily: 'Inter',
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#ffffff',
+    textAlign: 'left',
   },
   input: {
     width: '100%',
