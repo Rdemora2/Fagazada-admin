@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
-import {useNavigation, RouteProp} from '@react-navigation/native';
+import {useNavigation, useIsFocused, RouteProp} from '@react-navigation/native';
 import {RootStackParamList} from '../types/types';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {fetchProfile} from '../services/apiMock';
 
 type MenuScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Menu'>;
 type MenuScreenRouteProp = RouteProp<RootStackParamList, 'Menu'>;
@@ -13,7 +14,28 @@ type Props = {
 };
 
 const MenuScreen: React.FC<Props> = ({route, navigation}) => {
-  const {userName, userId} = route.params;
+  const {userId} = route.params;
+  const [profile, setProfile] = useState<any>(null);
+  const isFocused = useIsFocused();
+
+  const loadProfile = async () => {
+    try {
+      if (userId) {
+        const data = await fetchProfile(userId);
+        setProfile(data);
+      } else {
+        console.error('userId não disponível');
+      }
+    } catch (error) {
+      console.error('Erro ao carregar perfil:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (isFocused) {
+      loadProfile();
+    }
+  }, [isFocused, userId]);
 
   const menuItems = [
     {
@@ -30,7 +52,7 @@ const MenuScreen: React.FC<Props> = ({route, navigation}) => {
         navigation.navigate(navigateTo, {userId});
         break;
       case 'Menu':
-        navigation.navigate(navigateTo, {userName, userId});
+        navigation.navigate(navigateTo, {userId});
         break;
       default:
         navigation.navigate(navigateTo as never);
@@ -45,9 +67,17 @@ const MenuScreen: React.FC<Props> = ({route, navigation}) => {
     </TouchableOpacity>
   );
 
+  if (!profile) {
+    return (
+      <View style={styles.container}>
+        <Text>Carregando perfil...</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Olá, {userName}</Text>
+      <Text style={styles.header}>Olá, {profile.fullName}</Text>
       <FlatList
         data={menuItems}
         keyExtractor={item => item.id}
