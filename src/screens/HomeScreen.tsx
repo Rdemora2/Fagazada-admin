@@ -71,12 +71,20 @@ const HomeScreen: React.FC<Props> = ({route}) => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={courts}
-        renderItem={renderItem}
-        keyExtractor={item => item.id.toString()}
-      />
-
+      {courts.length === 0 ? (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.welcomeText}>Bem-vindo!</Text>
+          <Text style={styles.infoText}>
+            Você ainda não cadastrou nenhuma quadra.
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          data={courts}
+          renderItem={renderItem}
+          keyExtractor={item => item.id.toString()}
+        />
+      )}
       <TouchableOpacity style={styles.addButton} onPress={handleAddCourt}>
         <Text style={styles.addButtonText}>+</Text>
       </TouchableOpacity>
@@ -90,6 +98,23 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingHorizontal: 16,
     paddingTop: 16,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  welcomeText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  infoText: {
+    fontSize: 18,
+    color: '#666',
+    marginTop: 10,
+    textAlign: 'center',
+    paddingHorizontal: 20,
   },
   addButton: {
     position: 'absolute',
