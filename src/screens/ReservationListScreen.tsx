@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   fetchReservations,
   fetchCourts,
@@ -96,6 +97,13 @@ const ReservationListScreen: React.FC<Props> = ({navigation}) => {
     setFilteredReservations(filtered);
   };
 
+  const resetFilters = () => {
+    setSelectedCourt('');
+    setSelectedDate('');
+    setSelectedStatus('');
+    setFilteredReservations(reservations);
+  };
+
   useEffect(() => {
     applyFilters(reservations);
   }, [selectedCourt, selectedDate, selectedStatus]);
@@ -161,6 +169,9 @@ const ReservationListScreen: React.FC<Props> = ({navigation}) => {
           <Picker.Item label="Pendente" value="pending" />
           <Picker.Item label="Confirmado" value="confirmed" />
         </Picker>
+        <TouchableOpacity onPress={resetFilters} style={styles.resetButton}>
+          <Ionicons name="close-circle" size={24} color="#E66901" />
+        </TouchableOpacity>
       </View>
       {filteredReservations.length === 0 ? (
         <View style={styles.emptyContainer}>
@@ -187,11 +198,15 @@ const styles = StyleSheet.create({
   filterContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 16,
   },
   picker: {
     flex: 1,
     height: 50,
+  },
+  resetButton: {
+    padding: 10,
   },
   emptyContainer: {
     flex: 1,
