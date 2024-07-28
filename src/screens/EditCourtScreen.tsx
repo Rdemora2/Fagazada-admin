@@ -336,10 +336,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   pickerContainer2: {
-    borderColor: '#ccc',
+    borderColor: '#E66901',
     borderWidth: 1,
     borderRadius: 8,
-    marginBottom: 12,
     paddingBottom: 12,
     width: '48%',
   },
