@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   TextInput,
@@ -18,7 +18,7 @@ type Props = {
   navigation: CourtListScreenNavigationProp;
 };
 
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 const AddCourtScreen: React.FC<Props> = ({navigation}) => {
   const [courtDetails, setCourtDetails] = useState<Court>({
@@ -38,8 +38,28 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [openingHour, setOpeningHour] = useState('08:00');
   const [closingHour, setClosingHour] = useState('22:00');
+  const [errors, setErrors] = useState<{[key: string]: string}>({});
 
   const handleAddCourt = async () => {
+    const newErrors: {[key: string]: string} = {};
+
+    if (!courtDetails.name) newErrors.name = 'Nome é obrigatório';
+    if (!courtDetails.type) newErrors.type = 'Tipo é obrigatório';
+    if (!courtDetails.description)
+      newErrors.description = 'Descrição é obrigatória';
+    if (!courtDetails.hourlyRate)
+      newErrors.hourlyRate = 'Taxa horária é obrigatória';
+    if (!courtDetails.address) newErrors.address = 'Endereço é obrigatório';
+    if (!openingHour || !closingHour)
+      newErrors.workingHours = 'Horário de funcionamento é obrigatório';
+    if (!courtDetails.workingDays)
+      newErrors.workingDays = 'Dias de funcionamento são obrigatórios';
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
     try {
       const hourlyRateNumber = parseFloat(courtDetails.hourlyRate.toString());
 
@@ -92,6 +112,7 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
           value={courtDetails.name}
           onChangeText={text => setCourtDetails({...courtDetails, name: text})}
         />
+        {errors.name && <Text style={styles.errorText}>{errors.name}</Text>}
 
         <Text style={styles.label}>Tipo da Quadra</Text>
         <View style={styles.pickerContainer}>
@@ -111,6 +132,7 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
             <Picker.Item label="Squash" value="Squash" />
           </Picker>
         </View>
+        {errors.type && <Text style={styles.errorText}>{errors.type}</Text>}
 
         <Text style={styles.label}>Descrição da Quadra</Text>
         <TextInput
@@ -123,6 +145,9 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
             setCourtDetails({...courtDetails, description: text})
           }
         />
+        {errors.description && (
+          <Text style={styles.errorText}>{errors.description}</Text>
+        )}
 
         <Text style={styles.label}>Valor por hora: (R$)</Text>
         <TextInput
@@ -134,6 +159,9 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
             setCourtDetails({...courtDetails, hourlyRate: parseFloat(text)})
           }
         />
+        {errors.hourlyRate && (
+          <Text style={styles.errorText}>{errors.hourlyRate}</Text>
+        )}
 
         <Text style={styles.label}>Endereço da Quadra</Text>
         <TextInput
@@ -144,6 +172,9 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
             setCourtDetails({...courtDetails, address: text})
           }
         />
+        {errors.address && (
+          <Text style={styles.errorText}>{errors.address}</Text>
+        )}
 
         <Text style={styles.label}>Horário de Funcionamento</Text>
         <View style={styles.timeInputContainer}>
@@ -182,6 +213,9 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
             </Picker>
           </View>
         </View>
+        {errors.workingHours && (
+          <Text style={styles.errorText}>{errors.workingHours}</Text>
+        )}
 
         <Text style={styles.label}>Dias de Funcionamento</Text>
         <View style={styles.pickerContainer}>
@@ -197,6 +231,9 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
             <Picker.Item label="Finais de Semana" value="Finais de Semana" />
           </Picker>
         </View>
+        {errors.workingDays && (
+          <Text style={styles.errorText}>{errors.workingDays}</Text>
+        )}
       </View>
 
       <TouchableOpacity style={styles.addButton} onPress={handleAddCourt}>
@@ -347,6 +384,12 @@ const styles = StyleSheet.create({
   modalButtonText: {
     color: '#fff',
     fontSize: 16,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginTop: -10,
+    marginBottom: 10,
   },
 });
 
