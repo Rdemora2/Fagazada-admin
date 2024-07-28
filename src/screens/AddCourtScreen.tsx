@@ -24,7 +24,7 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
   const [courtDetails, setCourtDetails] = useState<Court>({
     id: 0,
     name: '',
-    type: 'Futebol',
+    type: '',
     description: '',
     photos: [],
     hourlyRate: 0,
@@ -156,7 +156,10 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
           keyboardType="numeric"
           value={courtDetails.hourlyRate.toString()}
           onChangeText={text =>
-            setCourtDetails({...courtDetails, hourlyRate: parseFloat(text)})
+            setCourtDetails({
+              ...courtDetails,
+              hourlyRate: parseFloat(text) || 0,
+            })
           }
         />
         {errors.hourlyRate && (
