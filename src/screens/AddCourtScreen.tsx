@@ -36,6 +36,8 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
   });
 
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [openingHour, setOpeningHour] = useState('08:00');
+  const [closingHour, setClosingHour] = useState('22:00');
 
   const handleAddCourt = async () => {
     try {
@@ -48,6 +50,7 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
       await addCourt({
         ...courtDetails,
         hourlyRate: hourlyRateNumber,
+        workingHours: `${openingHour}-${closingHour}`,
       });
 
       setShowConfirmation(true);
@@ -64,6 +67,20 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
     setShowConfirmation(false);
     navigation.navigate('Home');
   };
+
+  const generateTimeOptions = () => {
+    const times = [];
+    for (let h = 0; h < 24; h++) {
+      for (let m = 0; m < 60; m += 30) {
+        const hour = h < 10 ? `0${h}` : h;
+        const minute = m === 0 ? '00' : m;
+        times.push(`${hour}:${minute}`);
+      }
+    }
+    return times;
+  };
+
+  const timeOptions = generateTimeOptions();
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -130,32 +147,40 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
 
         <Text style={styles.label}>Horário de Funcionamento</Text>
         <View style={styles.timeInputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Abertura (ex: 08:00)"
-            value={courtDetails.workingHours.split('-')[0]}
-            onChangeText={text =>
-              setCourtDetails({
-                ...courtDetails,
-                workingHours: `${text}-${
-                  courtDetails.workingHours.split('-')[1]
-                }`,
-              })
-            }
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Fechamento (ex: 22:00)"
-            value={courtDetails.workingHours.split('-')[1]}
-            onChangeText={text =>
-              setCourtDetails({
-                ...courtDetails,
-                workingHours: `${
-                  courtDetails.workingHours.split('-')[0]
-                }-${text}`,
-              })
-            }
-          />
+          <View style={styles.pickerContainer2}>
+            <Picker
+              selectedValue={openingHour}
+              style={styles.picker2}
+              onValueChange={itemValue => {
+                setOpeningHour(itemValue);
+                if (itemValue >= closingHour) {
+                  setClosingHour(
+                    timeOptions[
+                      Math.min(
+                        timeOptions.indexOf(itemValue) + 1,
+                        timeOptions.length - 1,
+                      )
+                    ],
+                  );
+                }
+              }}>
+              {timeOptions.map(time => (
+                <Picker.Item key={time} label={time} value={time} />
+              ))}
+            </Picker>
+          </View>
+          <View style={styles.pickerContainer2}>
+            <Picker
+              selectedValue={closingHour}
+              style={styles.picker2}
+              onValueChange={itemValue => setClosingHour(itemValue)}>
+              {timeOptions
+                .filter(time => time > openingHour)
+                .map(time => (
+                  <Picker.Item key={time} label={time} value={time} />
+                ))}
+            </Picker>
+          </View>
         </View>
 
         <Text style={styles.label}>Dias de Funcionamento</Text>
@@ -254,13 +279,24 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     paddingBottom: 12,
   },
+  pickerContainer2: {
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    marginBottom: 12,
+    paddingBottom: 12,
+    width: '48%',
+  },
   picker: {
+    height: 40,
+    width: '100%',
+  },
+  picker2: {
     height: 40,
     width: '100%',
   },
   timeInputContainer: {
     flexDirection: 'row',
-    width: '50%',
     justifyContent: 'space-between',
     marginBottom: 12,
   },
