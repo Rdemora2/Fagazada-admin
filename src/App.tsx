@@ -13,9 +13,8 @@ import EditProfileScreen from './screens/EditProfileScreen';
 import AddCourtScreen from './screens/AddCourtScreen';
 import EditCourtScreen from './screens/EditCourtScreen';
 import ReservationListScreen from './screens/ReservationListScreen';
-import CourtAvailability from './screens/CourtAvailability';
 import MenuScreen from './screens/MenuScreen';
-import AuthenticationScreen from './screens/authScreen'; // Nova tela combinada
+import AuthenticationScreen from './screens/authScreen';
 import {RootStackParamList} from './types/types';
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -114,11 +113,6 @@ const App = () => {
           name="ReservationList"
           component={ReservationListScreen}
           options={{title: 'Lista de Reservas'}}
-        />
-        <Stack.Screen
-          name="CourtAvailability"
-          component={CourtAvailability}
-          options={{title: 'Disponibilidade da Quadra'}}
         />
         <Stack.Screen
           name="Menu"

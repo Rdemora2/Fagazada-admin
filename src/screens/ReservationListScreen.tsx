@@ -26,7 +26,6 @@ type Court = {
   type: string;
   description: string;
   photos: string[];
-  availability: any[];
   hourlyRate: number;
   address: string;
   workingHours: string;

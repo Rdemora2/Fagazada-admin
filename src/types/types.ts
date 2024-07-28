@@ -19,7 +19,6 @@ export type RootStackParamList = {
   AddCourt: undefined;
   EditCourt: {courtId: number};
   ReservationList: undefined;
-  CourtAvailability: undefined;
   IdentificationScreen: undefined;
   Menu: {userId: number};
   Authentication: undefined;
@@ -31,7 +30,6 @@ export interface Court {
   type: string;
   description: string;
   photos: string[];
-  availability: Availability[];
   hourlyRate: number;
   address: string;
   workingHours: string;
@@ -50,13 +48,6 @@ export interface Reservation {
   startTime: string;
   endTime: string;
 }
-
-export type Availability = {
-  id: number;
-  date: string;
-  startTime: string;
-  endTime: string;
-};
 
 export interface Timeslot {
   startTime: string;
@@ -129,9 +120,4 @@ export type EditCourtScreenNavigationProp = StackNavigationProp<
 export type ReservationListScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'ReservationList'
->;
-
-export type CourtAvailabilityScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'CourtAvailability'
 >;

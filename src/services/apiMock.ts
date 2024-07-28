@@ -1,4 +1,4 @@
-import {Court, Reservation, User, Availability} from '../types/types';
+import {Court, Reservation, User} from '../types/types';
 
 const users: User[] = [
   {
@@ -32,32 +32,30 @@ const courts: Court[] = [
     id: 1,
     name: 'Quadra 1',
     type: 'tenis',
-    description: 'Quadra de tênis',
+    description: 'Descrição da quadra de tênis',
     photos: [
       'https://www.pardinisport.com.br/img/servicos/quadra-de-tenis.jpg',
       'https://www.construtoraplaneta.com.br/wp-content/uploads/2021/03/DRONE-S-DIJON.00_15_52_33.Still003-scaled.jpg',
     ],
-    availability: [],
     hourlyRate: 50,
     address: 'Rua A, 123',
     workingHours: '8:00 - 18:00',
-    workingDays: 'Seg - Sab',
+    workingDays: 'Segunda a Sexta',
     optionalServices: ['professor', 'aluguel de bolas'],
   },
   {
     id: 2,
     name: 'Quadra 2',
     type: 'basquete',
-    description: 'Quadra de basquete',
+    description: 'Descrição da quadra de basquete',
     photos: [
       'https://static1.squarespace.com/static/5cee719a52ab760001a563d8/5d12491fca4ce20001fb0e24/5d1249faca4ce20001fb4028/1561479674612/56d450bbd5fd513636077becc9f843d50db0ee97a826b.jpg?format=original',
       'https://www.sescpr.com.br/wp-content/uploads/2020/11/20201001_173756.jpg',
     ],
-    availability: [],
     hourlyRate: 60,
     address: 'Rua B, 456',
     workingHours: '10:00 - 22:00',
-    workingDays: 'Ter - Dom',
+    workingDays: 'Segunda a Domingo',
     optionalServices: ['aluguel de bolas'],
   },
 ];
@@ -104,8 +102,6 @@ const reservations: Reservation[] = [
     endTime: '12:00',
   },
 ];
-
-const availabilities: Availability[] = [];
 
 export const login = async (email: string, password: string) => {
   await new Promise(resolve => setTimeout(resolve, 100));
@@ -197,13 +193,11 @@ export const updateProfile = async (userId: number, profile: Partial<User>) => {
 };
 
 export const fetchCourts = async () => {
-  // Função para buscar quadras
   await new Promise(resolve => setTimeout(resolve, 100));
   return courts;
 };
 
 export const fetchCourtDetails = async (courtId: number) => {
-  // Função para buscar detalhes da quadra
   await new Promise(resolve => setTimeout(resolve, 100));
   const court = courts.find(court => court.id === courtId);
   if (!court) {
@@ -213,7 +207,6 @@ export const fetchCourtDetails = async (courtId: number) => {
 };
 
 export const addCourt = async (court: Omit<Court, 'id'>) => {
-  // Função para adicionar quadra
   await new Promise(resolve => setTimeout(resolve, 100));
   const newCourt = {...court, id: courts.length + 1};
   courts.push(newCourt);
@@ -224,7 +217,6 @@ export const updateCourt = async (
   courtId: number,
   updatedDetails: Partial<Court>,
 ) => {
-  // Função para atualizar quadra
   await new Promise(resolve => setTimeout(resolve, 100));
   const courtIndex = courts.findIndex(court => court.id === courtId);
   if (courtIndex === -1) {
@@ -235,7 +227,6 @@ export const updateCourt = async (
 };
 
 export const deleteCourt = async (courtId: number) => {
-  // Função para deletar quadra
   await new Promise(resolve => setTimeout(resolve, 100));
   const courtIndex = courts.findIndex(court => court.id === courtId);
   if (courtIndex === -1) {
@@ -245,7 +236,6 @@ export const deleteCourt = async (courtId: number) => {
 };
 
 export const fetchReservations = async (userId: number) => {
-  // Função para buscar reservas
   await new Promise(resolve => setTimeout(resolve, 100));
   return reservations.filter(reservation => reservation.userId === userId);
 };
@@ -254,7 +244,6 @@ export const updateReservationStatus = async (
   reservationId: number,
   status: 'pending' | 'confirmed',
 ) => {
-  // Função para atualizar status da reserva
   await new Promise(resolve => setTimeout(resolve, 100));
   const reservation = reservations.find(res => res.id === reservationId);
   if (!reservation) {
@@ -262,33 +251,4 @@ export const updateReservationStatus = async (
   }
   reservation.status = status;
   return reservation;
-};
-
-export const fetchAvailabilities = async () => {
-  // Função para buscar disponibilidades
-  await new Promise(resolve => setTimeout(resolve, 100));
-  return availabilities;
-};
-
-export const addAvailability = async (
-  availability: Omit<Availability, 'id'>,
-) => {
-  // Função para adicionar disponibilidade
-  await new Promise(resolve => setTimeout(resolve, 100));
-  const newAvailability = {...availability, id: availabilities.length + 1};
-  availabilities.push(newAvailability);
-  return newAvailability;
-};
-
-export const bulkAddAvailability = async (
-  availabilitiesToAdd: Omit<Availability, 'id'>[],
-) => {
-  // Função para adicionar disponibilidades em massa
-  await new Promise(resolve => setTimeout(resolve, 100));
-  const newAvailabilities = availabilitiesToAdd.map((availability, index) => ({
-    ...availability,
-    id: availabilities.length + index + 1,
-  }));
-  availabilities.push(...newAvailabilities);
-  return newAvailabilities;
 };

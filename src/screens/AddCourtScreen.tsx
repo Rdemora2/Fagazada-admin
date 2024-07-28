@@ -32,7 +32,6 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
     workingHours: '',
     workingDays: '',
     optionalServices: [],
-    availability: [],
   });
 
   const [showConfirmation, setShowConfirmation] = useState(false);
