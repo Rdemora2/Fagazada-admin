@@ -263,3 +263,13 @@ export const updateReservationStatus = async (
   reservation.status = status;
   return reservation;
 };
+
+export const cancelReservation = async (reservationId: number) => {
+  await new Promise(resolve => setTimeout(resolve, 100));
+  const reservation = reservations.find(res => res.id === reservationId);
+  if (!reservation) {
+    throw new Error('Reserva não encontrada');
+  }
+  reservation.status = 'canceled';
+  return reservation;
+};

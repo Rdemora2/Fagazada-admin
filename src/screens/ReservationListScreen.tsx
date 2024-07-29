@@ -24,7 +24,7 @@ type Reservation = {
   date: string;
   startTime: string;
   endTime: string;
-  status: 'pending' | 'confirmed';
+  status: 'pending' | 'confirmed' | 'canceled';
 };
 
 type Court = {
@@ -140,7 +140,10 @@ const ReservationListScreen: React.FC<Props> = ({navigation}) => {
         </Text>
         <Text style={styles.label}>Valor: R${item.value}</Text>
         {item.status === 'confirmed' && (
-          <Text style={styles.label}>Status: Confirmado</Text>
+          <Text style={styles.label}>Status: Confirmada</Text>
+        )}
+        {item.status === 'canceled' && (
+          <Text style={styles.label}>Status: Cancelada</Text>
         )}
         {item.status === 'pending' && (
           <>
@@ -194,7 +197,8 @@ const ReservationListScreen: React.FC<Props> = ({navigation}) => {
             style={styles.picker}>
             <Picker.Item label="Status" value="" />
             <Picker.Item label="Pendente" value="pending" />
-            <Picker.Item label="Confirmado" value="confirmed" />
+            <Picker.Item label="Confirmada" value="confirmed" />
+            <Picker.Item label="Cancelada" value="canceled" />
           </Picker>
         </View>
         <TouchableOpacity onPress={resetFilters} style={styles.resetButton}>

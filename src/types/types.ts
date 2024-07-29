@@ -45,7 +45,7 @@ export interface Reservation {
   userId: number;
   value: number;
   date: string;
-  status: 'pending' | 'confirmed';
+  status: 'pending' | 'confirmed' | 'canceled';
   startTime: string;
   endTime: string;
 }

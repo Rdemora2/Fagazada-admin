@@ -12,6 +12,7 @@ import {
   fetchReservationDetails,
   fetchCourtDetails,
   updateReservationStatus,
+  cancelReservation,
 } from '../services/apiMock';
 import {
   ReservationDetailScreenRouteProp,
@@ -29,6 +30,7 @@ const ReservationDetailScreen: React.FC<Props> = ({route}) => {
   const [reservation, setReservation] = useState<Reservation | null>(null);
   const [court, setCourt] = useState<Court | null>(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showCancellation, setShowCancellation] = useState(false);
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
   const getReservationDetails = async () => {
@@ -62,6 +64,18 @@ const ReservationDetailScreen: React.FC<Props> = ({route}) => {
     }
   };
 
+  const handleCancelReservation = async () => {
+    if (reservation) {
+      try {
+        await cancelReservation(reservation.id);
+        setShowCancellation(true);
+        getReservationDetails();
+      } catch (error) {
+        console.error('Erro ao cancelar reserva:', error);
+      }
+    }
+  };
+
   const formatDate = (dateString: string): string => {
     const [year, month, day] = dateString.split('-');
     return `${day}/${month}/${year}`;
@@ -88,7 +102,12 @@ const ReservationDetailScreen: React.FC<Props> = ({route}) => {
       </Text>
       <Text style={styles.label}>Valor: R${reservation.value}</Text>
       <Text style={styles.label}>
-        Status: {reservation.status === 'confirmed' ? 'Confirmado' : 'Pendente'}
+        Status:{' '}
+        {reservation.status === 'confirmed'
+          ? 'Confirmado'
+          : reservation.status === 'pending'
+          ? 'Pendente'
+          : 'Cancelado'}
       </Text>
       {reservation.status === 'pending' && (
         <TouchableOpacity
@@ -97,6 +116,14 @@ const ReservationDetailScreen: React.FC<Props> = ({route}) => {
           <Text style={styles.buttonText}>Confirmar</Text>
         </TouchableOpacity>
       )}
+      {reservation.status !== 'canceled' &&
+        reservation.status !== 'pending' && (
+          <TouchableOpacity
+            style={styles.cancelButton}
+            onPress={handleCancelReservation}>
+            <Text style={styles.buttonText}>Cancelar</Text>
+          </TouchableOpacity>
+        )}
       <TouchableOpacity
         style={styles.button2}
         onPress={() => navigation.goBack()}>
@@ -116,6 +143,26 @@ const ReservationDetailScreen: React.FC<Props> = ({route}) => {
               style={styles.modalButton}
               onPress={() => {
                 setShowConfirmation(false);
+                onGoBack();
+                navigation.goBack();
+              }}>
+              <Text style={styles.modalButtonText}>OK</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        visible={showCancellation}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setShowCancellation(false)}>
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalText}>Reserva cancelada com sucesso!</Text>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                setShowCancellation(false);
                 onGoBack();
                 navigation.goBack();
               }}>
@@ -164,6 +211,13 @@ const styles = StyleSheet.create({
   button2: {
     marginTop: 16,
     backgroundColor: '#00786A',
+    padding: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  cancelButton: {
+    marginTop: 16,
+    backgroundColor: '#E66901',
     padding: 10,
     borderRadius: 8,
     alignItems: 'center',
