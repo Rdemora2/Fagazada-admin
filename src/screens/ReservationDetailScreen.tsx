@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Modal} from 'react-native';
 import {RouteProp, useNavigation} from '@react-navigation/native';
 import {
   fetchReservationDetails,
@@ -21,24 +21,25 @@ const ReservationDetailScreen: React.FC<Props> = ({route}) => {
   const {reservationId} = route.params;
   const [reservation, setReservation] = useState<Reservation | null>(null);
   const [court, setCourt] = useState<Court | null>(null);
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
-  useEffect(() => {
-    const getReservationDetails = async () => {
-      try {
-        const reservationDetails: Reservation = await fetchReservationDetails(
-          reservationId,
-        );
-        setReservation(reservationDetails);
-        const courtDetails: Court = await fetchCourtDetails(
-          reservationDetails.courtId,
-        );
-        setCourt(courtDetails);
-      } catch (error) {
-        console.error('Erro ao buscar detalhes da reserva:', error);
-      }
-    };
+  const getReservationDetails = async () => {
+    try {
+      const reservationDetails: Reservation = await fetchReservationDetails(
+        reservationId,
+      );
+      setReservation(reservationDetails);
+      const courtDetails: Court = await fetchCourtDetails(
+        reservationDetails.courtId,
+      );
+      setCourt(courtDetails);
+    } catch (error) {
+      console.error('Erro ao buscar detalhes da reserva:', error);
+    }
+  };
 
+  useEffect(() => {
     getReservationDetails();
   }, [reservationId]);
 
@@ -46,10 +47,8 @@ const ReservationDetailScreen: React.FC<Props> = ({route}) => {
     if (reservation) {
       try {
         await updateReservationStatus(reservation.id, 'confirmed');
-        const updatedReservation = await fetchReservationDetails(
-          reservation.id,
-        );
-        setReservation(updatedReservation);
+        setShowConfirmation(true);
+        getReservationDetails();
       } catch (error) {
         console.error('Erro ao confirmar reserva:', error);
       }
@@ -93,6 +92,27 @@ const ReservationDetailScreen: React.FC<Props> = ({route}) => {
         onPress={() => navigation.goBack()}>
         <Text style={styles.buttonText}>Voltar</Text>
       </TouchableOpacity>
+      <Modal
+        visible={showConfirmation}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setShowConfirmation(false)}>
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalText}>
+              Reserva confirmada com sucesso!
+            </Text>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                setShowConfirmation(false);
+                navigation.goBack();
+              }}>
+              <Text style={styles.modalButtonText}>OK</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -135,6 +155,34 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  modalBackground: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContainer: {
+    width: '80%',
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 20,
+    color: '#333',
+  },
+  modalButton: {
+    backgroundColor: '#E66901',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  modalButtonText: {
+    color: '#fff',
+    fontSize: 16,
   },
 });
 

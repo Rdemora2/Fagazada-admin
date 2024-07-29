@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  Modal,
+} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
@@ -45,29 +52,29 @@ const ReservationListScreen: React.FC<Props> = ({navigation}) => {
   const [selectedCourt, setSelectedCourt] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [selectedStatus, setSelectedStatus] = useState<string>('');
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  const getData = async () => {
+    try {
+      const reservationData: Reservation[] = await fetchReservations(1);
+      const courtData: Court[] = await fetchCourts();
+      setReservations(reservationData);
+      setCourts(courtData);
+      setFilteredReservations(reservationData);
+    } catch (error) {
+      console.error('Erro ao buscar dados:', error);
+    }
+  };
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const reservationData: Reservation[] = await fetchReservations(1);
-        const courtData: Court[] = await fetchCourts();
-        setReservations(reservationData);
-        setCourts(courtData);
-        setFilteredReservations(reservationData);
-      } catch (error) {
-        console.error('Erro ao buscar dados:', error);
-      }
-    };
-
     getData();
   }, []);
 
   const handleConfirmReservation = async (reservationId: number) => {
     try {
       await updateReservationStatus(reservationId, 'confirmed');
-      const updatedReservations = await fetchReservations(1);
-      setReservations(updatedReservations);
-      applyFilters(updatedReservations);
+      setShowConfirmation(true);
+      getData();
     } catch (error) {
       console.error('Erro ao confirmar reserva:', error);
     }
@@ -202,6 +209,24 @@ const ReservationListScreen: React.FC<Props> = ({navigation}) => {
           keyExtractor={item => item.id.toString()}
         />
       )}
+      <Modal
+        visible={showConfirmation}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setShowConfirmation(false)}>
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalText}>
+              Reserva confirmada com sucesso!
+            </Text>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => setShowConfirmation(false)}>
+              <Text style={styles.modalButtonText}>OK</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -276,6 +301,34 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  modalBackground: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContainer: {
+    width: '80%',
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 20,
+    color: '#333',
+  },
+  modalButton: {
+    backgroundColor: '#E66901',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  modalButtonText: {
+    color: '#fff',
+    fontSize: 16,
   },
 });
 
