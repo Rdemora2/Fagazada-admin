@@ -15,6 +15,7 @@ import {Picker} from '@react-native-picker/picker';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {addCourt} from '../services/apiMock';
 import {Court, CourtListScreenNavigationProp} from '../types/types';
+import {useUser} from '../context/UserContext';
 
 type Props = {
   navigation: CourtListScreenNavigationProp;
@@ -23,8 +24,11 @@ type Props = {
 const {width} = Dimensions.get('window');
 
 const AddCourtScreen: React.FC<Props> = ({navigation}) => {
+  const {userId} = useUser();
+
   const [courtDetails, setCourtDetails] = useState<Court>({
     id: 0,
+    companyId: 0,
     name: '',
     type: '',
     description: '',
@@ -62,19 +66,22 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
     }
 
     try {
-      const hourlyRateNumber = parseFloat(courtDetails.hourlyRate.toString());
+      if (userId !== null) {
+        const hourlyRateNumber = parseFloat(courtDetails.hourlyRate.toString());
 
-      if (isNaN(hourlyRateNumber)) {
-        throw new Error('Taxa horária inválida');
+        if (isNaN(hourlyRateNumber)) {
+          throw new Error('Taxa horária inválida');
+        }
+
+        await addCourt({
+          ...courtDetails,
+          hourlyRate: hourlyRateNumber,
+          workingHours: `${openingHour}-${closingHour}`,
+          companyId: userId,
+        });
+
+        setShowConfirmation(true);
       }
-
-      await addCourt({
-        ...courtDetails,
-        hourlyRate: hourlyRateNumber,
-        workingHours: `${openingHour}-${closingHour}`,
-      });
-
-      setShowConfirmation(true);
     } catch (error) {
       console.error('Erro ao adicionar quadra:', error);
       Alert.alert(
