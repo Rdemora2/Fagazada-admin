@@ -272,8 +272,6 @@ const AddReservationScreen: React.FC<Props> = ({navigation}) => {
           <Text style={styles.errorText}>{errors.fullName}</Text>
         )}
 
-        <Text style={styles.label}>Data de Nascimento</Text>
-
         <Text style={styles.label}>CPF</Text>
         <TextInput
           style={styles.input}
