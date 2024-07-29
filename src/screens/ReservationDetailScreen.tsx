@@ -31,6 +31,7 @@ const ReservationDetailScreen: React.FC<Props> = ({route}) => {
   const [court, setCourt] = useState<Court | null>(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showCancellation, setShowCancellation] = useState(false);
+  const [showCancelConfirmation, setShowCancelConfirmation] = useState(false);
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
   const getReservationDetails = async () => {
@@ -120,7 +121,7 @@ const ReservationDetailScreen: React.FC<Props> = ({route}) => {
         reservation.status !== 'pending' && (
           <TouchableOpacity
             style={styles.cancelButton}
-            onPress={handleCancelReservation}>
+            onPress={() => setShowCancelConfirmation(true)}>
             <Text style={styles.buttonText}>Cancelar</Text>
           </TouchableOpacity>
         )}
@@ -167,6 +168,32 @@ const ReservationDetailScreen: React.FC<Props> = ({route}) => {
                 navigation.goBack();
               }}>
               <Text style={styles.modalButtonText}>OK</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        visible={showCancelConfirmation}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setShowCancelConfirmation(false)}>
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalText}>
+              Você tem certeza que deseja cancelar esta reserva?
+            </Text>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                setShowCancelConfirmation(false);
+                handleCancelReservation();
+              }}>
+              <Text style={styles.modalButtonText}>Sim</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.modalButton, {backgroundColor: '#00786A'}]}
+              onPress={() => setShowCancelConfirmation(false)}>
+              <Text style={styles.modalButtonText}>Não</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -244,12 +271,14 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 20,
     color: '#333',
+    textAlign: 'center',
   },
   modalButton: {
     backgroundColor: '#E66901',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
+    marginTop: 10,
   },
   modalButtonText: {
     color: '#fff',
