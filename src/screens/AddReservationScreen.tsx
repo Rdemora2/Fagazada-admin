@@ -74,8 +74,6 @@ const AddReservationScreen: React.FC<Props> = ({navigation}) => {
     if (!reservationDetails.value) newErrors.value = 'Valor é obrigatório';
 
     if (!clientDetails.fullName) newErrors.fullName = 'Nome é obrigatório';
-    if (!clientDetails.birthDate)
-      newErrors.birthDate = 'Data de nascimento é obrigatória';
     if (!clientDetails.cpf) newErrors.cpf = 'CPF é obrigatório';
     if (!clientDetails.email) newErrors.email = 'Email é obrigatório';
     if (!clientDetails.phoneNumber)
@@ -275,17 +273,6 @@ const AddReservationScreen: React.FC<Props> = ({navigation}) => {
         )}
 
         <Text style={styles.label}>Data de Nascimento</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Digite a data de nascimento (YYYY-MM-DD)"
-          value={clientDetails.birthDate}
-          onChangeText={text =>
-            setClientDetails({...clientDetails, birthDate: text})
-          }
-        />
-        {errors.birthDate && (
-          <Text style={styles.errorText}>{errors.birthDate}</Text>
-        )}
 
         <Text style={styles.label}>CPF</Text>
         <TextInput
