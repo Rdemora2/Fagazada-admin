@@ -61,9 +61,20 @@ const ReservationListScreen: React.FC<Props> = ({navigation}) => {
       if (userId !== null) {
         const reservationData: Reservation[] = await fetchReservations(userId);
         const courtData: Court[] = await fetchCourts(userId);
-        setReservations(reservationData);
+
+        // Filtra reservas futuras
+        const now = new Date();
+        const futureReservations = reservationData.filter(reservation => {
+          const reservationDate = new Date(reservation.date);
+          const reservationTime = reservation.startTime.split(':');
+          reservationDate.setHours(parseInt(reservationTime[0]));
+          reservationDate.setMinutes(parseInt(reservationTime[1]));
+          return reservationDate > now;
+        });
+
+        setReservations(futureReservations);
         setCourts(courtData);
-        setFilteredReservations(reservationData);
+        setFilteredReservations(futureReservations);
       }
     } catch (error) {
       console.error('Erro ao buscar dados:', error);
