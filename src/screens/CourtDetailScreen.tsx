@@ -1,22 +1,20 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
-  Image,
   FlatList,
-  ScrollView,
+  Image,
+  TouchableOpacity,
   Dimensions,
-  GestureResponderEvent,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useFocusEffect} from '@react-navigation/native';
+import {fetchCourtDetails} from '../services/apiMock';
 import {
   CourtDetailScreenRouteProp,
-  Court,
   HomeScreenNavigationProp,
+  Court,
 } from '../types/types';
-import {fetchCourtDetails} from '../services/apiMock';
 
 type Props = {
   route: CourtDetailScreenRouteProp;
@@ -29,20 +27,22 @@ const CourtDetailScreen: React.FC<Props> = ({route}) => {
   const carouselItemWidth = windowWidth * 0.93;
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
-  useEffect(() => {
-    const getCourtDetails = async () => {
-      try {
-        const courtDetails: Court = await fetchCourtDetails(courtId);
-        setCourt(courtDetails);
-      } catch (error) {
-        console.error('Erro ao buscar detalhes da quadra:', error);
-      }
-    };
+  const getCourtDetails = async () => {
+    try {
+      const courtDetails: Court = await fetchCourtDetails(courtId);
+      setCourt(courtDetails);
+    } catch (error) {
+      console.error('Erro ao buscar detalhes da quadra:', error);
+    }
+  };
 
-    getCourtDetails();
-  }, [courtId]);
+  useFocusEffect(
+    useCallback(() => {
+      getCourtDetails();
+    }, [courtId]),
+  );
 
-  const handleCourtEdit = (event: GestureResponderEvent) => {
+  const handleCourtEdit = () => {
     navigation.navigate('EditCourt', {courtId});
   };
 
@@ -55,7 +55,7 @@ const CourtDetailScreen: React.FC<Props> = ({route}) => {
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <FlatList
         data={court.photos}
         renderItem={({item}) => (
@@ -95,7 +95,7 @@ const CourtDetailScreen: React.FC<Props> = ({route}) => {
       <TouchableOpacity style={styles.editButton} onPress={handleCourtEdit}>
         <Text style={styles.editButtonText}>Editar</Text>
       </TouchableOpacity>
-    </ScrollView>
+    </View>
   );
 };
 

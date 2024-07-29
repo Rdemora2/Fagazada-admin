@@ -154,13 +154,24 @@ const EditCourtScreen: React.FC<Props> = ({route, navigation}) => {
     });
   };
 
+  const deleteImage = (index: number) => {
+    const newPhotos = [...court.photos];
+    newPhotos.splice(index, 1);
+    setCourtDetails({...court, photos: newPhotos});
+  };
+
   return (
     <ScrollView style={styles.container}>
       <FlatList
         data={court.photos}
-        renderItem={({item}) => (
+        renderItem={({item, index}) => (
           <View style={[styles.carouselItem, {width: carouselItemWidth}]}>
             <Image source={{uri: item}} style={styles.carouselImage} />
+            <TouchableOpacity
+              style={styles.deleteButton}
+              onPress={() => deleteImage(index)}>
+              <Text style={styles.deleteButtonText}>X</Text>
+            </TouchableOpacity>
           </View>
         )}
         keyExtractor={(item, index) => index.toString()}
@@ -274,7 +285,14 @@ const EditCourtScreen: React.FC<Props> = ({route, navigation}) => {
         <Text style={styles.label}>Fotos da Quadra</Text>
         <View style={styles.imageContainer}>
           {court.photos.map((photo, index) => (
-            <Image key={index} source={{uri: photo}} style={styles.image} />
+            <View key={index} style={styles.imageWrapper}>
+              <Image source={{uri: photo}} style={styles.image} />
+              <TouchableOpacity
+                style={styles.deleteButton}
+                onPress={() => deleteImage(index)}>
+                <Text style={styles.deleteButtonText}>X</Text>
+              </TouchableOpacity>
+            </View>
           ))}
         </View>
         <TouchableOpacity style={styles.imageButton} onPress={selectImage}>
@@ -391,12 +409,31 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     marginBottom: 12,
   },
+  imageWrapper: {
+    position: 'relative',
+    marginRight: 8,
+    marginBottom: 8,
+  },
   image: {
     width: 100,
     height: 100,
-    marginRight: 8,
-    marginBottom: 8,
     borderRadius: 8,
+  },
+  deleteButton: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    width: 13,
+    height: 16,
+    backgroundColor: 'red',
+    borderRadius: 20,
+    paddingLeft: 3,
+    marginRight: 2,
+    marginTop: 2,
+  },
+  deleteButtonText: {
+    color: '#fff',
+    fontSize: 11,
   },
   imageButton: {
     backgroundColor: '#00786A',
