@@ -13,6 +13,7 @@ import EditProfileScreen from './screens/EditProfileScreen';
 import AddCourtScreen from './screens/AddCourtScreen';
 import EditCourtScreen from './screens/EditCourtScreen';
 import ReservationListScreen from './screens/ReservationListScreen';
+import ReservationDetailScreen from './screens/ReservationDetailScreen';
 import MenuScreen from './screens/MenuScreen';
 import AuthenticationScreen from './screens/authScreen';
 import {RootStackParamList} from './types/types';
@@ -113,6 +114,11 @@ const App = () => {
           name="ReservationList"
           component={ReservationListScreen}
           options={{title: 'Lista de Reservas'}}
+        />
+        <Stack.Screen
+          name="ReservationDetail"
+          component={ReservationDetailScreen}
+          options={{title: 'Detalhes da Reserva'}}
         />
         <Stack.Screen
           name="Menu"

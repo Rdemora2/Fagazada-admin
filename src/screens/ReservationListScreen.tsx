@@ -7,7 +7,7 @@ import {
   fetchCourts,
   updateReservationStatus,
 } from '../services/apiMock';
-import {HomeScreenNavigationProp} from '../types/types';
+import {ReservationListScreenNavigationProp} from '../types/types';
 
 type Reservation = {
   id: number;
@@ -33,7 +33,7 @@ type Court = {
 };
 
 type Props = {
-  navigation: HomeScreenNavigationProp;
+  navigation: ReservationListScreenNavigationProp;
 };
 
 const ReservationListScreen: React.FC<Props> = ({navigation}) => {
@@ -117,7 +117,11 @@ const ReservationListScreen: React.FC<Props> = ({navigation}) => {
     const courtName = court ? court.name : 'Quadra não encontrada';
 
     return (
-      <View style={styles.item}>
+      <TouchableOpacity
+        style={styles.item}
+        onPress={() =>
+          navigation.navigate('ReservationDetail', {reservationId: item.id})
+        }>
         <Text style={styles.title}>Reserva #{item.id}</Text>
         <Text style={styles.label}>Quadra: {courtName}</Text>
         <Text style={styles.label}>Data: {formatDate(item.date)}</Text>
@@ -138,7 +142,7 @@ const ReservationListScreen: React.FC<Props> = ({navigation}) => {
             </TouchableOpacity>
           </>
         )}
-      </View>
+      </TouchableOpacity>
     );
   };
 

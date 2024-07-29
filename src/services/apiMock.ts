@@ -206,6 +206,17 @@ export const fetchCourtDetails = async (courtId: number) => {
   return court;
 };
 
+export const fetchReservationDetails = async (reservationId: number) => {
+  await new Promise(resolve => setTimeout(resolve, 100));
+  const reservation = reservations.find(
+    reservation => reservation.id === reservationId,
+  );
+  if (!reservation) {
+    throw new Error('Reserva não encontrada');
+  }
+  return reservation;
+};
+
 export const addCourt = async (court: Omit<Court, 'id'>) => {
   await new Promise(resolve => setTimeout(resolve, 100));
   const newCourt = {...court, id: courts.length + 1};

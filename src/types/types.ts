@@ -19,6 +19,7 @@ export type RootStackParamList = {
   AddCourt: undefined;
   EditCourt: {courtId: number};
   ReservationList: undefined;
+  ReservationDetail: {reservationId: number};
   IdentificationScreen: undefined;
   Menu: {userId: number};
   Authentication: undefined;
@@ -91,7 +92,6 @@ export type CourtDetailScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'CourtDetail'
 >;
-
 export type CourtDetailScreenRouteProp = RouteProp<
   RootStackParamList,
   'CourtDetail'
@@ -101,23 +101,27 @@ export type ProfileScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'Profile'
 >;
-
 export type EditProfileScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'EditProfile'
 >;
-
 export type AddCourtScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'AddCourt'
 >;
-
 export type EditCourtScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'EditCourt'
 >;
-
 export type ReservationListScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'ReservationList'
+>;
+export type ReservationDetailScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'ReservationDetail'
+>;
+export type ReservationDetailScreenRouteProp = RouteProp<
+  RootStackParamList,
+  'ReservationDetail'
 >;
