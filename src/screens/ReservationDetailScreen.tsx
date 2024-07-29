@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Modal} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Modal,
+  Image,
+} from 'react-native';
 import {RouteProp, useNavigation} from '@react-navigation/native';
 import {
   fetchReservationDetails,
@@ -70,6 +77,9 @@ const ReservationDetailScreen: React.FC<Props> = ({route}) => {
 
   return (
     <View style={styles.container}>
+      {court.photos.length > 0 && (
+        <Image source={{uri: court.photos[0]}} style={styles.courtImage} />
+      )}
       <Text style={styles.title}>Reserva #{reservation.id}</Text>
       <Text style={styles.label}>Quadra: {court.name}</Text>
       <Text style={styles.label}>Data: {formatDate(reservation.date)}</Text>
@@ -88,7 +98,7 @@ const ReservationDetailScreen: React.FC<Props> = ({route}) => {
         </TouchableOpacity>
       )}
       <TouchableOpacity
-        style={styles.button}
+        style={styles.button2}
         onPress={() => navigation.goBack()}>
         <Text style={styles.buttonText}>Voltar</Text>
       </TouchableOpacity>
@@ -129,6 +139,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  courtImage: {
+    width: '100%',
+    height: 200,
+    marginBottom: 16,
+    borderRadius: 8,
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -141,6 +157,13 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 16,
     backgroundColor: '#E66901',
+    padding: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  button2: {
+    marginTop: 16,
+    backgroundColor: '#00786A',
     padding: 10,
     borderRadius: 8,
     alignItems: 'center',
