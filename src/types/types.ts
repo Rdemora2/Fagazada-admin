@@ -17,6 +17,7 @@ export type RootStackParamList = {
   IdentificationScreen: undefined;
   Menu: {userId: number};
   Authentication: undefined;
+  AddReservation: undefined;
 };
 
 export interface Court {
@@ -129,4 +130,9 @@ export type ReservationDetailScreenNavigationProp = StackNavigationProp<
 export type ReservationDetailScreenRouteProp = RouteProp<
   RootStackParamList,
   'ReservationDetail'
+>;
+
+export type AddReservationScreenRouteProp = RouteProp<
+  RootStackParamList,
+  'AddReservation'
 >;

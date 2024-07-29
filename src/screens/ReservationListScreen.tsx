@@ -163,6 +163,10 @@ const ReservationListScreen: React.FC<Props> = ({navigation}) => {
     );
   };
 
+  const handleAddReservation = () => {
+    navigation.navigate('AddReservation');
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.filterContainer}>
@@ -220,6 +224,9 @@ const ReservationListScreen: React.FC<Props> = ({navigation}) => {
           keyExtractor={item => item.id.toString()}
         />
       )}
+      <TouchableOpacity style={styles.addButton} onPress={handleAddReservation}>
+        <Text style={styles.addButtonText}>+</Text>
+      </TouchableOpacity>
       <Modal
         visible={showConfirmation}
         transparent={true}
@@ -312,6 +319,26 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  addButton: {
+    position: 'absolute',
+    bottom: 24,
+    right: 24,
+    backgroundColor: '#E66901',
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.4,
+    shadowRadius: 2,
+    elevation: 4,
+  },
+  addButtonText: {
+    fontSize: 24,
+    color: '#fff',
   },
   modalBackground: {
     flex: 1,

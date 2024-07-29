@@ -342,3 +342,17 @@ export const fetchClientDetails = async (clientId: number) => {
   }
   return client;
 };
+
+export const addClient = async (client: Omit<Client, 'id'>) => {
+  await new Promise(resolve => setTimeout(resolve, 100));
+  const newClient = {...client, id: clients.length + 1};
+  clients.push(newClient);
+  return newClient;
+};
+
+export const addReservation = async (reservation: Omit<Reservation, 'id'>) => {
+  await new Promise(resolve => setTimeout(resolve, 100));
+  const newReservation = {...reservation, id: reservations.length + 1};
+  reservations.push(newReservation);
+  return newReservation;
+};

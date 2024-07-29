@@ -18,6 +18,7 @@ import ReservationListScreen from './screens/ReservationListScreen';
 import ReservationDetailScreen from './screens/ReservationDetailScreen';
 import MenuScreen from './screens/MenuScreen';
 import AuthenticationScreen from './screens/authScreen';
+import AddReservationScreen from './screens/AddReservationScreen';
 import {RootStackParamList} from './types/types';
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -127,6 +128,11 @@ const App = () => {
             name="Menu"
             component={MenuScreen}
             options={{title: 'Menu'}}
+          />
+          <Stack.Screen
+            name="AddReservation"
+            component={AddReservationScreen}
+            options={{title: 'Adicionar Reserva'}}
           />
         </Stack.Navigator>
       </NavigationContainer>
