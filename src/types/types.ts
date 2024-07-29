@@ -19,7 +19,7 @@ export type RootStackParamList = {
   AddCourt: undefined;
   EditCourt: {courtId: number};
   ReservationList: undefined;
-  ReservationDetail: {reservationId: number};
+  ReservationDetail: {reservationId: number; onGoBack: () => void};
   IdentificationScreen: undefined;
   Menu: {userId: number};
   Authentication: undefined;

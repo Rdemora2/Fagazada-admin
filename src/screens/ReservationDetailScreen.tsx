@@ -14,11 +14,11 @@ import {
 } from '../types/types';
 
 type Props = {
-  route: ReservationDetailScreenRouteProp;
+  route: ReservationDetailScreenRouteProp & {params: {onGoBack: () => void}};
 };
 
 const ReservationDetailScreen: React.FC<Props> = ({route}) => {
-  const {reservationId} = route.params;
+  const {reservationId, onGoBack} = route.params;
   const [reservation, setReservation] = useState<Reservation | null>(null);
   const [court, setCourt] = useState<Court | null>(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -88,7 +88,7 @@ const ReservationDetailScreen: React.FC<Props> = ({route}) => {
         </TouchableOpacity>
       )}
       <TouchableOpacity
-        style={styles.button2}
+        style={styles.button}
         onPress={() => navigation.goBack()}>
         <Text style={styles.buttonText}>Voltar</Text>
       </TouchableOpacity>
@@ -106,6 +106,7 @@ const ReservationDetailScreen: React.FC<Props> = ({route}) => {
               style={styles.modalButton}
               onPress={() => {
                 setShowConfirmation(false);
+                onGoBack();
                 navigation.goBack();
               }}>
               <Text style={styles.modalButtonText}>OK</Text>
@@ -140,13 +141,6 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 16,
     backgroundColor: '#E66901',
-    padding: 10,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  button2: {
-    marginTop: 16,
-    backgroundColor: '#00786A',
     padding: 10,
     borderRadius: 8,
     alignItems: 'center',

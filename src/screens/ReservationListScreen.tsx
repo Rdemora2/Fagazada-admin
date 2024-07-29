@@ -127,7 +127,10 @@ const ReservationListScreen: React.FC<Props> = ({navigation}) => {
       <TouchableOpacity
         style={styles.item}
         onPress={() =>
-          navigation.navigate('ReservationDetail', {reservationId: item.id})
+          navigation.navigate('ReservationDetail', {
+            reservationId: item.id,
+            onGoBack: getData,
+          })
         }>
         <Text style={styles.title}>Reserva #{item.id}</Text>
         <Text style={styles.label}>Quadra: {courtName}</Text>
