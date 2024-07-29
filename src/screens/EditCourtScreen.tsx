@@ -12,6 +12,7 @@ import {
   Alert,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
+import {launchImageLibrary} from 'react-native-image-picker';
 import {fetchCourtDetails, updateCourt} from '../services/apiMock';
 import {
   Court,
@@ -39,6 +40,7 @@ const EditCourtScreen: React.FC<Props> = ({route, navigation}) => {
     type: '',
     description: '',
     photos: [],
+    availability: [],
     hourlyRate: 0,
     address: '',
     workingHours: '',
@@ -69,6 +71,7 @@ const EditCourtScreen: React.FC<Props> = ({route, navigation}) => {
           type: courtData.type,
           description: courtData.description,
           photos: courtData.photos,
+          availability: courtData.availability,
           hourlyRate: hourlyRate,
           address: courtData.address,
           workingHours: courtData.workingHours,
@@ -134,6 +137,22 @@ const EditCourtScreen: React.FC<Props> = ({route, navigation}) => {
   };
 
   const timeOptions = generateTimeOptions();
+
+  const selectImage = () => {
+    launchImageLibrary({mediaType: 'photo', quality: 1}, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.errorCode) {
+        console.log('ImagePicker Error: ', response.errorMessage);
+      } else if (response.assets && response.assets[0].uri) {
+        const uri = response.assets[0].uri;
+        setCourtDetails({
+          ...court,
+          photos: [...court.photos, uri],
+        });
+      }
+    });
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -251,6 +270,16 @@ const EditCourtScreen: React.FC<Props> = ({route, navigation}) => {
         {errors.description && (
           <Text style={styles.errorText}>{errors.description}</Text>
         )}
+
+        <Text style={styles.label}>Fotos da Quadra</Text>
+        <View style={styles.imageContainer}>
+          {court.photos.map((photo, index) => (
+            <Image key={index} source={{uri: photo}} style={styles.image} />
+          ))}
+        </View>
+        <TouchableOpacity style={styles.imageButton} onPress={selectImage}>
+          <Text style={styles.imageButtonText}>Adicionar Foto</Text>
+        </TouchableOpacity>
       </View>
       <TouchableOpacity style={styles.editButton} onPress={handleUpdateCourt}>
         <Text style={styles.editButtonText}>Atualizar Quadra</Text>
@@ -356,6 +385,28 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: -10,
     marginBottom: 10,
+  },
+  imageContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginBottom: 12,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    marginRight: 8,
+    marginBottom: 8,
+    borderRadius: 8,
+  },
+  imageButton: {
+    backgroundColor: '#00786A',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  imageButtonText: {
+    color: '#fff',
+    fontSize: 16,
   },
 });
 

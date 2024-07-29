@@ -9,8 +9,10 @@ import {
   StyleSheet,
   Dimensions,
   Modal,
+  Image,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
+import {launchImageLibrary} from 'react-native-image-picker';
 import {addCourt} from '../services/apiMock';
 import {Court, CourtListScreenNavigationProp} from '../types/types';
 
@@ -100,6 +102,22 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
   };
 
   const timeOptions = generateTimeOptions();
+
+  const selectImage = () => {
+    launchImageLibrary({mediaType: 'photo', quality: 1}, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.errorCode) {
+        console.log('ImagePicker Error: ', response.errorMessage);
+      } else if (response.assets && response.assets[0].uri) {
+        const uri = response.assets[0].uri;
+        setCourtDetails({
+          ...courtDetails,
+          photos: [...courtDetails.photos, uri],
+        });
+      }
+    });
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -236,6 +254,16 @@ const AddCourtScreen: React.FC<Props> = ({navigation}) => {
         {errors.workingDays && (
           <Text style={styles.errorText}>{errors.workingDays}</Text>
         )}
+
+        <Text style={styles.label}>Fotos da Quadra</Text>
+        <View style={styles.imageContainer}>
+          {courtDetails.photos.map((photo, index) => (
+            <Image key={index} source={{uri: photo}} style={styles.image} />
+          ))}
+        </View>
+        <TouchableOpacity style={styles.imageButton} onPress={selectImage}>
+          <Text style={styles.imageButtonText}>Adicionar Foto</Text>
+        </TouchableOpacity>
       </View>
 
       <TouchableOpacity style={styles.addButton} onPress={handleAddCourt}>
@@ -384,6 +412,28 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   modalButtonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  imageContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginBottom: 12,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    marginRight: 8,
+    marginBottom: 8,
+    borderRadius: 8,
+  },
+  imageButton: {
+    backgroundColor: '#00786A',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  imageButtonText: {
     color: '#fff',
     fontSize: 16,
   },
