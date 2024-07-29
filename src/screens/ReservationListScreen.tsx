@@ -107,6 +107,11 @@ const ReservationListScreen: React.FC<Props> = ({navigation}) => {
     applyFilters(reservations);
   }, [selectedCourt, selectedDate, selectedStatus]);
 
+  const formatDate = (dateString: string): string => {
+    const [year, month, day] = dateString.split('-');
+    return `${day}/${month}/${year}`;
+  };
+
   const renderItem = ({item}: {item: Reservation}) => {
     const court = courts.find(court => court.id === item.courtId);
     const courtName = court ? court.name : 'Quadra não encontrada';
@@ -115,7 +120,7 @@ const ReservationListScreen: React.FC<Props> = ({navigation}) => {
       <View style={styles.item}>
         <Text style={styles.title}>Reserva #{item.id}</Text>
         <Text style={styles.label}>Quadra: {courtName}</Text>
-        <Text style={styles.label}>Data: {item.date}</Text>
+        <Text style={styles.label}>Data: {formatDate(item.date)}</Text>
         <Text style={styles.label}>
           Horário: {item.startTime} - {item.endTime}
         </Text>
@@ -164,7 +169,7 @@ const ReservationListScreen: React.FC<Props> = ({navigation}) => {
             {[
               ...new Set(reservations.map(reservation => reservation.date)),
             ].map(date => (
-              <Picker.Item key={date} label={date} value={date} />
+              <Picker.Item key={date} label={formatDate(date)} value={date} />
             ))}
           </Picker>
         </View>
