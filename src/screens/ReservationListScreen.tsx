@@ -15,6 +15,7 @@ import {
   updateReservationStatus,
 } from '../services/apiMock';
 import {ReservationListScreenNavigationProp} from '../types/types';
+import {useUser} from '../context/UserContext';
 
 type Reservation = {
   id: number;
@@ -44,6 +45,7 @@ type Props = {
 };
 
 const ReservationListScreen: React.FC<Props> = ({navigation}) => {
+  const {userId} = useUser();
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [courts, setCourts] = useState<Court[]>([]);
   const [filteredReservations, setFilteredReservations] = useState<
@@ -56,11 +58,13 @@ const ReservationListScreen: React.FC<Props> = ({navigation}) => {
 
   const getData = async () => {
     try {
-      const reservationData: Reservation[] = await fetchReservations(1);
-      const courtData: Court[] = await fetchCourts();
-      setReservations(reservationData);
-      setCourts(courtData);
-      setFilteredReservations(reservationData);
+      if (userId !== null) {
+        const reservationData: Reservation[] = await fetchReservations(userId);
+        const courtData: Court[] = await fetchCourts(userId);
+        setReservations(reservationData);
+        setCourts(courtData);
+        setFilteredReservations(reservationData);
+      }
     } catch (error) {
       console.error('Erro ao buscar dados:', error);
     }
@@ -68,7 +72,7 @@ const ReservationListScreen: React.FC<Props> = ({navigation}) => {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [userId]);
 
   const handleConfirmReservation = async (reservationId: number) => {
     try {
