@@ -13,11 +13,13 @@ import {
 import {BlurView} from '@react-native-community/blur';
 import {checkEmail, login, register} from '../services/apiMock';
 import {useNavigation} from '@react-navigation/native';
+import {useUser} from '../context/UserContext';
 
 const {width, height} = Dimensions.get('window');
 
 const AuthenticationScreen = () => {
   const navigation = useNavigation();
+  const {setUserId} = useUser();
   const [step, setStep] = useState('welcome'); // 'welcome', 'identification', 'login', 'register'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -44,13 +46,8 @@ const AuthenticationScreen = () => {
   const handleLogin = async () => {
     try {
       const user = await login(email, password);
-      navigation.navigate('Home', {
-        screen: 'Menu',
-        params: {
-          userName: user.fullName,
-          userId: user.id,
-        },
-      });
+      setUserId(user.id);
+      navigation.navigate('Home');
     } catch (error) {
       if (error instanceof Error) {
         console.error('Erro ao fazer login:', error.message);
@@ -62,10 +59,10 @@ const AuthenticationScreen = () => {
 
   const handleRegister = async () => {
     try {
-      await register(
-        fullName,
+      const user = await register(
         email,
         password,
+        fullName,
         nickname,
         phoneNumber,
         cpf,
@@ -73,13 +70,8 @@ const AuthenticationScreen = () => {
         photo,
         role,
       );
-      navigation.navigate('Home', {
-        screen: 'Menu',
-        params: {
-          userName: fullName,
-          userId: id,
-        },
-      });
+      setUserId(user.id);
+      navigation.navigate('Home');
     } catch (error) {
       if (error instanceof Error) {
         console.error('Erro ao registrar usuário:', error.message);

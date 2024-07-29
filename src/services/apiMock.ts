@@ -30,6 +30,7 @@ const users: User[] = [
 const courts: Court[] = [
   {
     id: 1,
+    companyId: 1,
     name: 'Quadra 1',
     type: 'tenis',
     description: 'Descrição da quadra de tênis',
@@ -45,6 +46,7 @@ const courts: Court[] = [
   },
   {
     id: 2,
+    companyId: 2,
     name: 'Quadra 2',
     type: 'basquete',
     description: 'Descrição da quadra de basquete',
@@ -57,6 +59,38 @@ const courts: Court[] = [
     workingHours: '10:00-22:00',
     workingDays: 'Segunda a Domingo',
     optionalServices: ['aluguel de bolas'],
+  },
+  {
+    id: 3,
+    companyId: 1,
+    name: 'Quadra 2',
+    type: 'basquete',
+    description: 'Descrição da quadra de basquete',
+    photos: [
+      'https://static1.squarespace.com/static/5cee719a52ab760001a563d8/5d12491fca4ce20001fb0e24/5d1249faca4ce20001fb4028/1561479674612/56d450bbd5fd513636077becc9f843d50db0ee97a826b.jpg?format=original',
+      'https://www.sescpr.com.br/wp-content/uploads/2020/11/20201001_173756.jpg',
+    ],
+    hourlyRate: 60,
+    address: 'Rua B, 456',
+    workingHours: '10:00-22:00',
+    workingDays: 'Segunda a Domingo',
+    optionalServices: ['aluguel de bolas'],
+  },
+  {
+    id: 4,
+    companyId: 2,
+    name: 'Quadra 1',
+    type: 'tenis',
+    description: 'Descrição da quadra de tênis',
+    photos: [
+      'https://www.pardinisport.com.br/img/servicos/quadra-de-tenis.jpg',
+      'https://www.construtoraplaneta.com.br/wp-content/uploads/2021/03/DRONE-S-DIJON.00_15_52_33.Still003-scaled.jpg',
+    ],
+    hourlyRate: 50,
+    address: 'Rua A, 123',
+    workingHours: '8:00-18:00',
+    workingDays: 'Segunda a Sexta',
+    optionalServices: ['professor', 'aluguel de bolas'],
   },
 ];
 
@@ -83,7 +117,7 @@ const reservations: Reservation[] = [
   },
   {
     id: 3,
-    courtId: 2,
+    courtId: 3,
     userId: 1,
     value: 200,
     date: '2023-07-09',
@@ -93,7 +127,7 @@ const reservations: Reservation[] = [
   },
   {
     id: 4,
-    courtId: 2,
+    courtId: 4,
     userId: 2,
     value: 100,
     date: '2023-07-09',
@@ -192,9 +226,9 @@ export const updateProfile = async (userId: number, profile: Partial<User>) => {
   return users[userIndex];
 };
 
-export const fetchCourts = async () => {
+export const fetchCourts = async (companyId: number) => {
   await new Promise(resolve => setTimeout(resolve, 100));
-  return courts;
+  return courts.filter(court => court.companyId === companyId);
 };
 
 export const fetchCourtDetails = async (courtId: number) => {
@@ -246,14 +280,19 @@ export const deleteCourt = async (courtId: number) => {
   courts.splice(courtIndex, 1);
 };
 
-export const fetchReservations = async (userId: number) => {
+export const fetchReservations = async (companyId: number) => {
   await new Promise(resolve => setTimeout(resolve, 100));
-  return reservations.filter(reservation => reservation.userId === userId);
+  const companyCourts = courts
+    .filter(court => court.companyId === companyId)
+    .map(court => court.id);
+  return reservations.filter(reservation =>
+    companyCourts.includes(reservation.courtId),
+  );
 };
 
 export const updateReservationStatus = async (
   reservationId: number,
-  status: 'pending' | 'confirmed',
+  status: 'pending' | 'confirmed' | 'canceled',
 ) => {
   await new Promise(resolve => setTimeout(resolve, 100));
   const reservation = reservations.find(res => res.id === reservationId);

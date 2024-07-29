@@ -1,26 +1,25 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
-import {useNavigation, useIsFocused, RouteProp} from '@react-navigation/native';
+import {useNavigation, useIsFocused} from '@react-navigation/native';
 import {RootStackParamList} from '../types/types';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {fetchProfile} from '../services/apiMock';
+import {useUser} from '../context/UserContext';
 
 type MenuScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Menu'>;
-type MenuScreenRouteProp = RouteProp<RootStackParamList, 'Menu'>;
 
 type Props = {
   navigation: MenuScreenNavigationProp;
-  route: MenuScreenRouteProp;
 };
 
-const MenuScreen: React.FC<Props> = ({route, navigation}) => {
-  const {userId} = route.params;
+const MenuScreen: React.FC<Props> = ({navigation}) => {
+  const {userId} = useUser();
   const [profile, setProfile] = useState<any>(null);
   const isFocused = useIsFocused();
 
   const loadProfile = async () => {
     try {
-      if (userId) {
+      if (typeof userId === 'number') {
         const data = await fetchProfile(userId);
         setProfile(data);
       } else {
@@ -46,16 +45,18 @@ const MenuScreen: React.FC<Props> = ({route, navigation}) => {
   ];
 
   const handleNavigation = (navigateTo: keyof RootStackParamList) => {
-    switch (navigateTo) {
-      case 'Profile':
-      case 'EditProfile':
-        navigation.navigate(navigateTo, {userId});
-        break;
-      case 'Menu':
-        navigation.navigate(navigateTo, {userId});
-        break;
-      default:
-        navigation.navigate(navigateTo as never);
+    if (typeof userId === 'number') {
+      switch (navigateTo) {
+        case 'Profile':
+        case 'EditProfile':
+          navigation.navigate(navigateTo, {userId});
+          break;
+        case 'Menu':
+          navigation.navigate(navigateTo, {userId});
+          break;
+        default:
+          navigation.navigate(navigateTo as never);
+      }
     }
   };
 

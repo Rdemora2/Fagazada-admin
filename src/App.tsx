@@ -5,6 +5,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+import {UserProvider} from './context/UserContext';
+
 import HomeScreen from './screens/HomeScreen';
 import CourtListScreen from './screens/CourtListScreen';
 import CourtDetailScreen from './screens/CourtDetailScreen';
@@ -56,77 +58,79 @@ function MainTabs() {
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Authentication"
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: '#00786A',
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-            fontSize: 18,
-          },
-          headerTitleAlign: 'center',
-        }}>
-        <Stack.Screen
-          name="Authentication"
-          component={AuthenticationScreen}
-          options={{title: '', headerShown: false}}
-        />
-        <Stack.Screen
-          name="Home"
-          component={MainTabs}
-          options={{title: 'Fagazada gestores', headerLeft: () => null}}
-        />
-        <Stack.Screen
-          name="CourtList"
-          component={CourtListScreen}
-          options={{title: 'Lista de Quadras'}}
-        />
-        <Stack.Screen
-          name="CourtDetail"
-          component={CourtDetailScreen}
-          options={{title: 'Detalhes da Quadra'}}
-        />
-        <Stack.Screen
-          name="Profile"
-          component={ProfileScreen}
-          options={{title: 'Perfil'}}
-        />
-        <Stack.Screen
-          name="EditProfile"
-          component={EditProfileScreen}
-          options={{title: 'Editar Perfil'}}
-        />
-        <Stack.Screen
-          name="AddCourt"
-          component={AddCourtScreen}
-          options={{title: 'Adicionar Quadra'}}
-        />
-        <Stack.Screen
-          name="EditCourt"
-          component={EditCourtScreen}
-          options={{title: 'Editar Quadra'}}
-        />
-        <Stack.Screen
-          name="ReservationList"
-          component={ReservationListScreen}
-          options={{title: 'Lista de Reservas'}}
-        />
-        <Stack.Screen
-          name="ReservationDetail"
-          component={ReservationDetailScreen}
-          options={{title: 'Detalhes da Reserva'}}
-        />
-        <Stack.Screen
-          name="Menu"
-          component={MenuScreen}
-          options={{title: 'Menu'}}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <UserProvider>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="Authentication"
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: '#00786A',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+              fontSize: 18,
+            },
+            headerTitleAlign: 'center',
+          }}>
+          <Stack.Screen
+            name="Authentication"
+            component={AuthenticationScreen}
+            options={{title: '', headerShown: false}}
+          />
+          <Stack.Screen
+            name="Home"
+            component={MainTabs}
+            options={{title: 'Fagazada gestores', headerLeft: () => null}}
+          />
+          <Stack.Screen
+            name="CourtList"
+            component={CourtListScreen}
+            options={{title: 'Lista de Quadras'}}
+          />
+          <Stack.Screen
+            name="CourtDetail"
+            component={CourtDetailScreen}
+            options={{title: 'Detalhes da Quadra'}}
+          />
+          <Stack.Screen
+            name="Profile"
+            component={ProfileScreen}
+            options={{title: 'Perfil'}}
+          />
+          <Stack.Screen
+            name="EditProfile"
+            component={EditProfileScreen}
+            options={{title: 'Editar Perfil'}}
+          />
+          <Stack.Screen
+            name="AddCourt"
+            component={AddCourtScreen}
+            options={{title: 'Adicionar Quadra'}}
+          />
+          <Stack.Screen
+            name="EditCourt"
+            component={EditCourtScreen}
+            options={{title: 'Editar Quadra'}}
+          />
+          <Stack.Screen
+            name="ReservationList"
+            component={ReservationListScreen}
+            options={{title: 'Lista de Reservas'}}
+          />
+          <Stack.Screen
+            name="ReservationDetail"
+            component={ReservationDetailScreen}
+            options={{title: 'Detalhes da Reserva'}}
+          />
+          <Stack.Screen
+            name="Menu"
+            component={MenuScreen}
+            options={{title: 'Menu'}}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </UserProvider>
   );
 };
 

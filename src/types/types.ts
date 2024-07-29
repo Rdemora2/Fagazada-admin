@@ -27,6 +27,7 @@ export type RootStackParamList = {
 
 export interface Court {
   id: number;
+  companyId: number;
   name: string;
   type: string;
   description: string;

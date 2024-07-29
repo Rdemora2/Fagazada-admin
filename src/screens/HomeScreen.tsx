@@ -13,6 +13,7 @@ import {Court, RootStackParamList} from '../types/types';
 import HomeCard from '../components/HomeCard';
 import {HomeScreenNavigationProp} from '../types/types';
 import {RouteProp} from '@react-navigation/native';
+import {useUser} from '../context/UserContext';
 
 type HomeScreenRouteProp = RouteProp<RootStackParamList, 'Home'>;
 
@@ -24,13 +25,16 @@ const HomeScreen: React.FC<Props> = ({route}) => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const isFocused = useIsFocused();
   const [courts, setCourts] = useState<Court[]>([]);
+  const {userId} = useUser();
 
   const loadCourts = async () => {
-    try {
-      const data = await fetchCourts();
-      setCourts(data);
-    } catch (error) {
-      console.error('Erro ao carregar quadras:', error);
+    if (userId !== null) {
+      try {
+        const data = await fetchCourts(userId);
+        setCourts(data);
+      } catch (error) {
+        console.error('Erro ao carregar quadras:', error);
+      }
     }
   };
 
