@@ -87,8 +87,8 @@ const AddReservationScreen: React.FC<Props> = ({navigation}) => {
     }
 
     try {
-      await addClient(clientDetails);
-      await addReservation(reservationDetails);
+      const addedClient = await addClient(clientDetails);
+      await addReservation({...reservationDetails, userId: addedClient.id});
       setShowConfirmation(true);
     } catch (error) {
       console.error('Erro ao adicionar reserva:', error);
