@@ -30,16 +30,16 @@ const users: User[] = [
 const clients: Client[] = [
   {
     id: 1,
-    fullName: 'Cliente Número 1',
+    fullName: 'Roberto Fagazada',
     birthDate: '1990-01-01',
     cpf: '111.111.111-11',
     gender: 'male',
     email: 'cliente_01@fagazada.com',
-    phoneNumber: '(11) 9 9999-9999',
+    phoneNumber: '(11) 9 7387-4345',
   },
   {
     id: 2,
-    fullName: 'Cliente Número 2',
+    fullName: 'Nome cliente teste',
     birthDate: '1992-02-02',
     cpf: '222.222.222-22',
     gender: 'female',

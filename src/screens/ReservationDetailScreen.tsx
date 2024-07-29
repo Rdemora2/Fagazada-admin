@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   Modal,
   Image,
+  Alert,
+  Linking,
 } from 'react-native';
 import {RouteProp, useNavigation} from '@react-navigation/native';
 import {
@@ -86,6 +88,23 @@ const ReservationDetailScreen: React.FC<Props> = ({route}) => {
     return `${day}/${month}/${year}`;
   };
 
+  const formatPhoneNumber = (phoneNumber: string): string => {
+    const cleaned = phoneNumber.replace(/\D/g, '');
+    const phoneWithCountryCode = `+55${cleaned.slice(-11)}`;
+    return phoneWithCountryCode;
+  };
+
+  const openWhatsApp = (phoneNumber: string) => {
+    const url = `whatsapp://send?phone=${formatPhoneNumber(phoneNumber)}`;
+    Linking.openURL(url)
+      .then(() => {
+        console.log('WhatsApp Opened');
+      })
+      .catch(() => {
+        Alert.alert('Erro', 'Não foi possível abrir o WhatsApp');
+      });
+  };
+
   if (!reservation || !court || !client) {
     return (
       <View style={styles.loadingContainer}>
@@ -115,9 +134,17 @@ const ReservationDetailScreen: React.FC<Props> = ({route}) => {
           : 'Cancelado'}
       </Text>
       <Text style={styles.sectionTitle}>Detalhes do Cliente</Text>
-      <Text style={styles.label}>Nome: {client.fullName}</Text>
-      <Text style={styles.label}>Email: {client.email}</Text>
-      <Text style={styles.label}>Telefone: {client.phoneNumber}</Text>
+      <Text style={styles.label}>{client.fullName}</Text>
+      <Text style={styles.label}>{client.email}</Text>
+      <TouchableOpacity
+        style={styles.whatsappContainer}
+        onPress={() => openWhatsApp(client.phoneNumber)}>
+        <Image
+          source={require('../assets/images/whatsapp.png')}
+          style={styles.whatsappIcon}
+        />
+        <Text style={[styles.label, styles.link]}>{client.phoneNumber}</Text>
+      </TouchableOpacity>
       {reservation.status === 'pending' && (
         <TouchableOpacity
           style={styles.button}
@@ -267,6 +294,20 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  link: {
+    color: '#25d366',
+    textDecorationLine: 'none',
+  },
+  whatsappContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  whatsappIcon: {
+    width: 20,
+    height: 20,
+    marginRight: 3,
+    marginBottom: 5,
   },
   modalBackground: {
     flex: 1,
