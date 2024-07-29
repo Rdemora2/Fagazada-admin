@@ -39,7 +39,7 @@ const clients: Client[] = [
   },
   {
     id: 2,
-    fullName: 'Nome cliente teste',
+    fullName: 'cliente teste',
     birthDate: '1992-02-02',
     cpf: '222.222.222-22',
     gender: 'female',
