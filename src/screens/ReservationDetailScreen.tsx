@@ -96,10 +96,10 @@ const ReservationDetailScreen: React.FC<Props> = ({route}) => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Reserva #{reservation.id}</Text>
       {court.photos.length > 0 && (
         <Image source={{uri: court.photos[0]}} style={styles.courtImage} />
       )}
-      <Text style={styles.title}>Reserva #{reservation.id}</Text>
       <Text style={styles.label}>{court.name}</Text>
       <Text style={styles.label}>Data: {formatDate(reservation.date)}</Text>
       <Text style={styles.label}>
