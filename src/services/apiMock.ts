@@ -30,20 +30,20 @@ const users: User[] = [
 const clients: Client[] = [
   {
     id: 1,
-    fullName: 'Client One',
+    fullName: 'Cliente Número 1',
     birthDate: '1990-01-01',
     cpf: '111.111.111-11',
     gender: 'male',
-    email: 'clientone@example.com',
+    email: 'cliente_01@fagazada.com',
     phoneNumber: '(11) 9 9999-9999',
   },
   {
     id: 2,
-    fullName: 'Client Two',
+    fullName: 'Cliente Número 2',
     birthDate: '1992-02-02',
     cpf: '222.222.222-22',
     gender: 'female',
-    email: 'clienttwo@example.com',
+    email: 'cliente--02@fagazada.com',
     phoneNumber: '(11) 9 8888-8888',
   },
 ];
@@ -129,7 +129,7 @@ const reservations: Reservation[] = [
   {
     id: 2,
     courtId: 2,
-    userId: 2,
+    userId: 1,
     value: 200,
     date: '2023-07-02',
     status: 'confirmed',
@@ -139,7 +139,7 @@ const reservations: Reservation[] = [
   {
     id: 3,
     courtId: 3,
-    userId: 1,
+    userId: 2,
     value: 200,
     date: '2023-07-09',
     status: 'confirmed',

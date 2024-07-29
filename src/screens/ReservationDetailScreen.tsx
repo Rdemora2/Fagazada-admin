@@ -13,6 +13,7 @@ import {
   fetchCourtDetails,
   updateReservationStatus,
   cancelReservation,
+  fetchClientDetails,
 } from '../services/apiMock';
 import {
   ReservationDetailScreenRouteProp,
@@ -29,6 +30,7 @@ const ReservationDetailScreen: React.FC<Props> = ({route}) => {
   const {reservationId, onGoBack} = route.params;
   const [reservation, setReservation] = useState<Reservation | null>(null);
   const [court, setCourt] = useState<Court | null>(null);
+  const [client, setClient] = useState<any | null>(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showCancellation, setShowCancellation] = useState(false);
   const [showCancelConfirmation, setShowCancelConfirmation] = useState(false);
@@ -44,6 +46,8 @@ const ReservationDetailScreen: React.FC<Props> = ({route}) => {
         reservationDetails.courtId,
       );
       setCourt(courtDetails);
+      const clientDetails = await fetchClientDetails(reservationDetails.userId);
+      setClient(clientDetails);
     } catch (error) {
       console.error('Erro ao buscar detalhes da reserva:', error);
     }
@@ -82,7 +86,7 @@ const ReservationDetailScreen: React.FC<Props> = ({route}) => {
     return `${day}/${month}/${year}`;
   };
 
-  if (!reservation || !court) {
+  if (!reservation || !court || !client) {
     return (
       <View style={styles.loadingContainer}>
         <Text>Carregando...</Text>
@@ -110,11 +114,15 @@ const ReservationDetailScreen: React.FC<Props> = ({route}) => {
           ? 'Pendente'
           : 'Cancelado'}
       </Text>
+      <Text style={styles.sectionTitle}>Detalhes do Cliente</Text>
+      <Text style={styles.label}>Nome: {client.fullName}</Text>
+      <Text style={styles.label}>Email: {client.email}</Text>
+      <Text style={styles.label}>Telefone: {client.phoneNumber}</Text>
       {reservation.status === 'pending' && (
         <TouchableOpacity
           style={styles.button}
           onPress={handleConfirmReservation}>
-          <Text style={styles.buttonText}>Confirmar</Text>
+          <Text style={styles.buttonText}>Confirmar Reserva</Text>
         </TouchableOpacity>
       )}
       {reservation.status !== 'canceled' &&
@@ -122,7 +130,7 @@ const ReservationDetailScreen: React.FC<Props> = ({route}) => {
           <TouchableOpacity
             style={styles.cancelButton}
             onPress={() => setShowCancelConfirmation(true)}>
-            <Text style={styles.buttonText}>Cancelar</Text>
+            <Text style={styles.buttonText}>Cancelar Reserva</Text>
           </TouchableOpacity>
         )}
       <TouchableOpacity
@@ -226,6 +234,12 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 18,
+    marginBottom: 8,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 16,
     marginBottom: 8,
   },
   button: {
