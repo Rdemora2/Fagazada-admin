@@ -63,6 +63,16 @@ export type User = {
   role: string;
 };
 
+export type Client = {
+  id: number;
+  fullName: string;
+  birthDate: string;
+  cpf: string;
+  gender: string;
+  email: string;
+  phoneNumber: string;
+};
+
 export type WelcomeScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'Welcome'

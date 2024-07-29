@@ -1,4 +1,4 @@
-import {Court, Reservation, User} from '../types/types';
+import {Court, Reservation, User, Client} from '../types/types';
 
 const users: User[] = [
   {
@@ -24,6 +24,27 @@ const users: User[] = [
     address: 'Avenida fagazada, 321',
     photo: '',
     role: 'dono',
+  },
+];
+
+const clients: Client[] = [
+  {
+    id: 1,
+    fullName: 'Client One',
+    birthDate: '1990-01-01',
+    cpf: '111.111.111-11',
+    gender: 'male',
+    email: 'clientone@example.com',
+    phoneNumber: '(11) 9 9999-9999',
+  },
+  {
+    id: 2,
+    fullName: 'Client Two',
+    birthDate: '1992-02-02',
+    cpf: '222.222.222-22',
+    gender: 'female',
+    email: 'clienttwo@example.com',
+    phoneNumber: '(11) 9 8888-8888',
   },
 ];
 
@@ -311,4 +332,13 @@ export const cancelReservation = async (reservationId: number) => {
   }
   reservation.status = 'canceled';
   return reservation;
+};
+
+export const fetchClientDetails = async (clientId: number) => {
+  await new Promise(resolve => setTimeout(resolve, 100));
+  const client = clients.find(client => client.id === clientId);
+  if (!client) {
+    throw new Error('Cliente não encontrado');
+  }
+  return client;
 };
